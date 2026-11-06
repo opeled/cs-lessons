@@ -11,8 +11,7 @@
     --accent:#0aa8d6; --accent-ink:#06688a; --accent-soft:#e3f5fb;
     --call:#e0323c; --call-soft:#fde8e9; --ret:#1f5fd6; --ret-soft:#e6eefc;
     --stop:#1f9d55; --stop-soft:#e4f6ec; --combine:#c77a00; --combine-soft:#fff3dc;
-    --road:#3b4252; --sky1:#dff1fb; --sky2:#ffffff;
-    --radius:18px; --shadow:0 10px 30px rgba(21,35,59,.08);
+    --sky1:#dff1fb; --sky2:#ffffff; --radius:18px; --shadow:0 10px 30px rgba(21,35,59,.08);
   }
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:18px;line-height:1.6}
@@ -20,7 +19,6 @@
   header{background:linear-gradient(135deg,#0aa8d6 0%,#1f5fd6 100%);color:#fff;padding:28px 24px 22px}
   .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
   header h1{margin:0;font-size:34px;font-weight:900;letter-spacing:-.5px}
-  header p{margin:6px 0 0;opacity:.92;font-size:18px}
   .stepper{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
   .stepper button{border:0;background:rgba(255,255,255,.18);color:#fff;padding:10px 18px;border-radius:999px;font:inherit;font-weight:700;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:8px}
   .stepper button .dot{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.3);display:inline-grid;place-items:center;font-size:15px}
@@ -41,14 +39,44 @@
   .btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
   .btn:disabled{opacity:.45;cursor:default;transform:none;box-shadow:none}
   .btn.ghost{background:#fff;color:var(--accent-ink);border:2px solid var(--accent);box-shadow:none}
+  .btn.ghost.on{background:var(--accent-soft)}
   .btn.dark{background:var(--ink);box-shadow:none}
   .btn.small{padding:8px 14px;font-size:15px;border-radius:10px}
   .btnrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
   .reveal{display:none}
   .reveal.open{display:block;animation:fade .4s ease}
-  table.ways{border-collapse:collapse;margin:10px 0;font-size:17px}
-  table.ways th,table.ways td{border:1px solid var(--line);padding:8px 14px;text-align:center}
-  table.ways th{background:var(--accent-soft);color:var(--accent-ink)}
+  .ltr{direction:ltr;unicode-bidi:isolate}
+  pre.code{direction:ltr;text-align:left;background:#0f172a;color:#e2e8f0;padding:18px 22px;border-radius:14px;font-size:17px;line-height:1.55;overflow:auto;margin:10px 0}
+  pre.code .k{color:#93c5fd}.code .t{color:#fbbf24}.code .f{color:#86efac}.code .c{color:#94a3b8;font-style:italic}.code .n{color:#fca5a5}
+  pre.code .hl-stop{background:rgba(31,157,85,.25);border-radius:4px;box-shadow:0 0 0 2px rgba(31,157,85,.35)}
+  pre.code .hl-call{background:rgba(224,50,60,.25);border-radius:4px;box-shadow:0 0 0 2px rgba(224,50,60,.35)}
+  pre.code .hl-comb{background:rgba(199,122,0,.28);border-radius:4px;box-shadow:0 0 0 2px rgba(199,122,0,.4)}
+  pre.exam{direction:ltr;text-align:left;margin:0;background:#fff;color:#000;border:1px solid var(--line);border-radius:12px;padding:14px 18px;font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:15px;line-height:1.55;overflow:auto}
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0}
+  @media (max-width:800px){.three{grid-template-columns:1fr}}
+  .think{border-radius:14px;padding:16px 18px;border:2px solid;background:#fff;text-align:right;font:inherit;cursor:pointer;position:relative;transition:.15s;color:var(--ink)}
+  .think:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(21,35,59,.12)}
+  .think .num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;margin-bottom:6px}
+  .think h4{margin:0 0 6px;font-size:19px}
+  .think p{margin:0;font-size:16px;color:var(--muted)}
+  .think.stop{border-color:var(--stop);background:var(--stop-soft)}.think.stop .num{background:var(--stop)}
+  .think.call{border-color:var(--call);background:var(--call-soft)}.think.call .num{background:var(--call)}
+  .think.comb{border-color:var(--combine);background:var(--combine-soft)}.think.comb .num{background:var(--combine)}
+  .think .more{border:0;background:rgba(21,35,59,.1);color:var(--ink);font:inherit;font-weight:900;letter-spacing:2px;line-height:1;padding:2px 10px 6px;border-radius:999px;cursor:pointer;vertical-align:middle}
+  .think .more:hover{background:rgba(21,35,59,.2)}
+  .think .ans{display:none}
+  .think.open .ans{display:inline;animation:fade .3s ease}
+  .think.open .more{display:none}
+  .think .check{display:none;margin-top:10px;font-weight:700;font-size:14px}
+  .think.added .check{display:inline-block}
+  .code .part .body{display:none}
+  .code .part.added .body{display:inline;animation:fade .4s ease}
+  .code .part.added .placeholder{display:none}
+  .code .placeholder .c{opacity:.55}
+  .note{background:var(--accent-soft);border-right:5px solid var(--accent);padding:12px 16px;border-radius:10px;margin:12px 0;font-size:17px}
+  .hint{color:var(--muted);font-size:16px}
+  .street{background:linear-gradient(var(--sky1),var(--sky2));border-radius:14px;border:1px solid var(--line);overflow:hidden}
+  .street svg{display:block;width:100%;height:auto}
   .routes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
   @media (max-width:760px){.routes{grid-template-columns:1fr}}
   .route{display:grid;gap:4px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 14px 6px;cursor:pointer;transition:.15s;font:inherit;color:inherit;text-align:right}
@@ -58,60 +86,35 @@
   .route .rdesc{font-size:16px}
   .route svg{display:none;width:100%;max-width:320px;height:auto;direction:ltr;margin:4px auto 0}
   .route.shown svg{display:block;animation:fade .3s ease}
-  table.ways td.mono,.ltr{direction:ltr;unicode-bidi:isolate}
-  pre.code{direction:ltr;text-align:left;background:#0f172a;color:#e2e8f0;padding:18px 22px;border-radius:14px;font-size:17px;line-height:1.55;overflow:auto;margin:10px 0}
-  pre.code .k{color:#93c5fd}.code .t{color:#fbbf24}.code .f{color:#86efac}.code .c{color:#94a3b8;font-style:italic}.code .n{color:#fca5a5}
-  pre.code .hl-stop{background:rgba(31,157,85,.25);border-radius:4px;box-shadow:0 0 0 2px rgba(31,157,85,.35)}
-  pre.code .hl-call{background:rgba(224,50,60,.25);border-radius:4px;box-shadow:0 0 0 2px rgba(224,50,60,.35)}
-  pre.code .hl-comb{background:rgba(199,122,0,.28);border-radius:4px;box-shadow:0 0 0 2px rgba(199,122,0,.4)}
-  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0}
-  @media (max-width:800px){.three{grid-template-columns:1fr}}
-  .think{border-radius:14px;padding:16px 18px;border:2px solid;background:#fff;text-align:right;font:inherit;cursor:pointer;position:relative;transition:.15s;color:var(--ink)}
-  .think:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(21,35,59,.12)}
-  .think .check{display:none;margin-top:10px;font-weight:700;font-size:14px}
-  .think .more{border:0;background:rgba(21,35,59,.1);color:var(--ink);font:inherit;font-weight:900;letter-spacing:2px;line-height:1;padding:2px 10px 6px;border-radius:999px;cursor:pointer;vertical-align:middle}
-  .think .more:hover{background:rgba(21,35,59,.2)}
-  .think .ans{display:none}
-  .think.open .ans{display:inline;animation:fade .3s ease}
-  .think.open .more{display:none}
-  .think.added .check{display:inline-block}
-  .think.added{box-shadow:0 0 0 3px #fff inset}
-  .think:not(.added){opacity:.92}
-  .code .part .body{display:none}
-  .code .part.added .body{display:inline;animation:fade .4s ease}
-  .code .part.added .placeholder{display:none}
-  .code .placeholder .c{opacity:.55}
-  .think .num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;margin-bottom:6px}
-  .think h4{margin:0 0 6px;font-size:19px}
-  .think p{margin:0;font-size:16px;color:var(--muted)}
-  .think.stop{border-color:var(--stop);background:var(--stop-soft)}.think.stop .num{background:var(--stop)}
-  .think.call{border-color:var(--call);background:var(--call-soft)}.think.call .num{background:var(--call)}
-  .think.comb{border-color:var(--combine);background:var(--combine-soft)}.think.comb .num{background:var(--combine)}
-  .note{background:var(--accent-soft);border-right:5px solid var(--accent);padding:12px 16px;border-radius:10px;margin:12px 0;font-size:17px}
-  .hint{color:var(--muted);font-size:16px}
-  /* street */
-  .street{background:linear-gradient(var(--sky1),var(--sky2));border-radius:14px;border:1px solid var(--line);overflow:hidden}
-  .street svg{display:block;width:100%;height:auto}
-  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:15px;color:var(--muted);margin-top:8px}
-  .legend span::before{content:"";display:inline-block;width:14px;height:14px;border-radius:4px;margin-left:6px;vertical-align:-2px;background:var(--c)}
+  /* exam sheet */
+  .sheet{background:#fff;color:#000;max-width:820px;margin:0 auto 18px;padding:34px 48px 44px;border:1px solid #cfd4dd;box-shadow:0 10px 30px rgba(21,35,59,.1);font-family:"Times New Roman","David",Times,serif;font-size:19px;line-height:1.75}
+  .sheet p{margin:10px 0}
+  .sheet-head{display:flex;justify-content:space-between;font-size:15px;color:#333;border-bottom:1px solid #999;padding-bottom:4px;margin-bottom:22px}
+  .sheet-head span:first-child{text-decoration:underline}
+  .sheet-table{border-collapse:collapse;margin:8px 40px}
+  .sheet-table td{border:1px solid #000;padding:3px 18px;text-align:center}
+  .sheet-code{font-family:"Courier New",monospace;font-size:17px;white-space:nowrap}
+  .sheet-sections{list-style:none;padding:0;margin:18px 0 0}
+  .sheet-sections>li{margin:12px 0;padding-right:34px;position:relative}
+  .sec-letter{position:absolute;right:0;top:0;font-weight:700}
+  .sheet-sub{list-style:none;padding:0;margin:0}
+  @media (max-width:700px){.sheet{padding:22px 18px}}
   /* trace */
-  .stage-wrap{overflow:auto;border-radius:14px;border:1px solid var(--line);background:
-     linear-gradient(0deg,transparent 24%,rgba(21,35,59,.035) 25%,rgba(21,35,59,.035) 26%,transparent 27%,transparent 74%,rgba(21,35,59,.035) 75%,rgba(21,35,59,.035) 76%,transparent 77%),
+  .trace-top{display:grid;grid-template-columns:1fr 330px;gap:14px;align-items:stretch}
+  @media (max-width:900px){.trace-top{grid-template-columns:1fr}}
+  .stage-wrap{position:relative;overflow:auto;direction:ltr;border-radius:14px;border:1px solid var(--line);background-color:#fbfcfe;
+     background-image:linear-gradient(0deg,transparent 24%,rgba(21,35,59,.035) 25%,rgba(21,35,59,.035) 26%,transparent 27%,transparent 74%,rgba(21,35,59,.035) 75%,rgba(21,35,59,.035) 76%,transparent 77%),
      linear-gradient(90deg,transparent 24%,rgba(21,35,59,.035) 25%,rgba(21,35,59,.035) 26%,transparent 27%,transparent 74%,rgba(21,35,59,.035) 75%,rgba(21,35,59,.035) 76%,transparent 77%);
-     background-size:40px 40px;background-color:#fbfcfe}
-  .stage{position:relative;width:900px;height:760px;direction:ltr;transform-origin:top left}
-  .stage-wrap{overflow:hidden;direction:ltr}
-  .stage svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
-  .node{position:absolute;width:210px;background:#fff;border:2px solid var(--line);border-radius:12px;box-shadow:0 6px 18px rgba(21,35,59,.08);font-family:"JetBrains Mono",monospace;font-size:14.5px;direction:ltr;text-align:left;opacity:0;transform:scale(.9);transition:.25s}
+     background-size:40px 40px}
+  .stage{position:relative;direction:ltr;transform-origin:top left}
+  .stage svg.arrows{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+  .node{position:absolute;background:#fff;border:2px solid var(--line);border-radius:12px;box-shadow:0 6px 18px rgba(21,35,59,.08);font-family:"JetBrains Mono",monospace;font-size:14.5px;direction:ltr;text-align:left;opacity:0;transform:scale(.9);transition:.25s}
   .node.show{opacity:1;transform:none}
   .node.active{border-color:var(--ink);box-shadow:0 0 0 4px rgba(21,35,59,.12),0 10px 24px rgba(21,35,59,.15)}
   .node.done{opacity:.8}
-  .node .head{background:var(--ink);color:#fff;padding:7px 12px;border-radius:9px 9px 0 0;font-weight:700;font-size:15px;display:flex;justify-content:space-between}
-  .trace-top{display:grid;grid-template-columns:1fr 330px;gap:14px;align-items:stretch}
-  @media (max-width:900px){.trace-top{grid-template-columns:1fr}}
-  pre.exam{direction:ltr;text-align:left;margin:0;background:#fff;color:#000;border:1px solid var(--line);border-radius:12px;padding:14px 18px;font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:15px;line-height:1.55;overflow:auto}
+  .node .head{background:var(--ink);color:#fff;padding:7px 12px;border-radius:9px 9px 0 0;font-weight:700;font-size:15px}
   .node.done .head{background:#4b5a75}
-  .node .ln{padding:4px 12px;color:#7c8aa3;display:flex;justify-content:space-between;gap:8px;display:none;white-space:nowrap}
+  .node .ln{padding:4px 12px;color:#7c8aa3;display:none;justify-content:space-between;gap:8px;white-space:nowrap}
   .node .ln.show{display:flex}
   .node .ln.cur{background:#fff7d6;color:var(--ink);font-weight:700}
   .node .ln.stop-hit{color:var(--stop);font-weight:700}
@@ -119,18 +122,24 @@
   .node .ln .x{color:var(--call)}
   .node .ln .ok{color:var(--stop)}
   .node .ln.ret{color:var(--ret);font-weight:700;border-top:1px dashed var(--line);margin-top:3px;padding-top:6px;padding-bottom:7px}
-  .main-box{position:absolute;left:380px;top:-2px;width:140px;text-align:center;font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--muted)}
+  .node.memo{border-style:dashed;border-color:var(--ret);background:var(--ret-soft)}
+  .node.memo .memo-line{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 12px;font-weight:700;color:var(--ret)}
+  .node.memo .tag-known{font-family:Heebo,sans-serif;font-size:12px;background:var(--ret);color:#fff;border-radius:999px;padding:1px 8px}
+  .main-box{position:absolute;top:-2px;width:140px;text-align:center;font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--muted)}
   .ctrl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:14px 0 10px}
   .ctrl .counter{color:var(--muted);font-weight:700;margin-inline-start:auto}
   .desc{min-height:62px;border-radius:12px;padding:12px 16px;font-size:18px;display:flex;gap:12px;align-items:center;border:2px solid var(--line);background:#fff}
-  .desc .pill{font-size:14px;font-weight:900;padding:3px 10px;border-radius:999px;color:#fff;white-space:nowrap}
+  .desc .pill{font-size:14px;font-weight:900;padding:3px 10px;border-radius:999px;color:#fff;white-space:nowrap;background:#7c8aa3}
   .desc.call{border-color:var(--call);background:var(--call-soft)}.desc.call .pill{background:var(--call)}
   .desc.ret{border-color:var(--ret);background:var(--ret-soft)}.desc.ret .pill{background:var(--ret)}
+  .desc.memo{border-color:var(--ret);background:var(--ret-soft)}.desc.memo .pill{background:var(--ret)}
   .desc.if{border-color:#b9a000;background:#fff7d6}.desc.if .pill{background:#b9a000}
   .desc.stop{border-color:var(--stop);background:var(--stop-soft)}.desc.stop .pill{background:var(--stop)}
   .desc.done{border-color:var(--accent);background:var(--accent-soft)}.desc.done .pill{background:var(--accent)}
-  .result{font-size:22px;font-weight:900;color:var(--accent-ink)}
+  .result{font-size:22px;font-weight:900;color:var(--accent-ink);margin-inline-start:auto}
   kbd{background:#eef2f7;border:1px solid #d5dde8;border-bottom-width:2px;border-radius:6px;padding:1px 7px;font-size:14px;font-family:inherit}
+  .switch{display:inline-flex;align-items:center;gap:8px;font-size:16px;cursor:pointer;background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px 14px}
+  .switch input{width:18px;height:18px;accent-color:var(--accent)}
   /* complexity */
   .pyr{display:flex;flex-direction:column;gap:8px;align-items:center;margin:10px 0}
   .pyr .row{display:flex;gap:6px;align-items:center}
@@ -146,24 +155,9 @@
   #sec-c .qitem.on{background:var(--accent-soft);box-shadow:inset 4px 0 0 var(--accent)}
   #sec-c .answer{display:none}
   #sec-c .answer.open{display:block;animation:fade .35s ease}
+  .fulltree{background:#fbfcfe;border:1px solid var(--line);border-radius:12px;padding:10px;margin-top:10px}
   .next{display:flex;justify-content:flex-start;margin-top:10px}
   footer{color:var(--muted);font-size:14px;text-align:center;padding:20px}
-  /* exam-style sheet */
-  .sheet{background:#fff;color:#000;max-width:820px;margin:0 auto 18px;padding:34px 48px 44px;border:1px solid #cfd4dd;box-shadow:0 10px 30px rgba(21,35,59,.1);font-family:"Times New Roman","David",Times,serif;font-size:19px;line-height:1.75}
-  .sheet p{margin:10px 0}
-  .sheet-head{display:flex;justify-content:space-between;font-size:15px;color:#333;border-bottom:1px solid #999;padding-bottom:4px;margin-bottom:22px}
-  .sheet-head span:first-child{text-decoration:underline}
-  .sheet-title{margin:0 0 8px}
-  .sheet-table{border-collapse:collapse;margin:8px 40px}
-  .sheet-table td{border:1px solid #000;padding:3px 18px;text-align:center}
-  .sheet-table td.ltr{font-family:"Courier New",monospace;font-size:17px}
-  .sheet-code{font-family:"Courier New",monospace;font-size:17px;white-space:nowrap}
-  .sheet-sections{list-style:none;padding:0;margin:18px 0 0}
-  .sheet-sections>li{margin:12px 0;padding-right:34px;position:relative}
-  .sec-letter{position:absolute;right:0;top:0;font-weight:700}
-  .sheet-sub{list-style:none;padding:0;margin:0}
-  .sheet-sub li{margin:4px 0}
-  @media (max-width:700px){.sheet{padding:22px 18px}}
 </style>
 </head>
 <body>
@@ -173,8 +167,9 @@
     <nav class="stepper" id="stepper">
       <button data-sec="q" class="active"><span class="dot">?</span> השאלה</button>
       <button data-sec="a" class="locked"><span class="dot">א</span> הבעיה והקוד</button>
-      <button data-sec="b" class="locked"><span class="dot">ב</span> דוגמת הרצה</button>
-      <button data-sec="c" class="locked"><span class="dot">ג</span> סוג הרקורסיה וסיבוכיות</button>
+      <button data-sec="b" class="locked"><span class="dot">ב</span> הרחבה: גם 5</button>
+      <button data-sec="d" class="locked"><span class="dot">ג</span> דוגמת הרצה</button>
+      <button data-sec="c" class="locked"><span class="dot">ד</span> סוג וסיבוכיות</button>
       <a href="slides.html" style="margin-inline-start:auto;color:#fff;opacity:.85;font-size:15px;align-self:center;text-decoration:none;border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:6px 14px">▶ מצב מצגת</a>
     </nav>
   </div>
@@ -182,26 +177,27 @@
 
 <main class="wrap">
 
-<!-- ===================== דף השאלה (בסגנון שאלון) ===================== -->
+<!-- ===================== דף השאלה ===================== -->
 <section class="panel active" id="sec-q">
   <div class="sheet">
     <div class="sheet-head"><span>מדעי המחשב, שאלה לדוגמה</span><span>- 1 -</span><span>רקורסיה</span></div>
-    <p class="sheet-title"><b>שאלה 1</b> (25 נקודות)</p>
+    <p><b>שאלה 1</b> (25 נקודות)</p>
     <p>שליח נמצא בתחילת רחוב ובו n בניינים, הממוספרים 1 עד n. השליח עומד לפני בניין 1, בנקודת ההתחלה (מסומנת 0). בכל נסיעה הוא יכול להתקדם בניין אחד או שני בניינים קדימה. המשלוח צריך להגיע בדיוק לבניין n.</p>
     <p>שימו לב שלשליח יש כמה דרכים שונות להגיע לבניין. למשל, אל בניין 3 יש לו 3 דרכי הגעה שונות:</p>
     <table class="sheet-table">
-      <tr><td>דרך 1</td><td class="ltr">0 → 1 → 2 → 3</td></tr>
-      <tr><td>דרך 2</td><td class="ltr">0 → 1 → 3</td></tr>
-      <tr><td>דרך 3</td><td class="ltr">0 → 2 → 3</td></tr>
+      <tr><td>דרך 1</td><td class="ltr sheet-code">0 → 1 → 2 → 3</td></tr>
+      <tr><td>דרך 2</td><td class="ltr sheet-code">0 → 1 → 3</td></tr>
+      <tr><td>דרך 3</td><td class="ltr sheet-code">0 → 2 → 3</td></tr>
     </table>
     <p>שימו לב: דרך 2 ודרך 3 שונות זו מזו, מכיוון שהשליח עוצר בבניינים שונים.</p>
     <ol class="sheet-sections">
-      <li><span class="sec-letter">א.</span> כתבו פעולה רקורסיבית <span class="ltr sheet-code">public static int Ways(int n)</span>, המקבלת את מספר הבניין n ומחזירה את מספר הדרכים השונות שבהן השליח יכול להגיע מנקודת ההתחלה אל בניין n.</li>
-      <li><span class="sec-letter">ב.</span> כתבו מה תחזיר הפעולה <span class="ltr sheet-code">Ways(4)</span>. עליכם להראות מעקב.</li>
-      <li><span class="sec-letter">ג.</span>
+      <li><span class="sec-letter">א.</span> כתבו פעולה רקורסיבית <span class="ltr sheet-code">public static int Ways(int n)</span>, המקבלת את מספר הבניין n ומחזירה את מספר דרכי ההגעה השונות שבהן השליח יכול להגיע מנקודת ההתחלה אל בניין n.</li>
+      <li><span class="sec-letter">ב.</span> לשליח נוספה אפשרות: בנסיעה אחת הוא יכול להתקדם בניין אחד, שני בניינים <u>או חמישה בניינים</u>. כתבו פעולה רקורסיבית <span class="ltr sheet-code">public static int Ways5(int n)</span>, המחזירה את מספר דרכי ההגעה השונות אל בניין n במצב החדש.</li>
+      <li><span class="sec-letter">ג.</span> כתבו מה תחזיר הפעולה <span class="ltr sheet-code">Ways5(5)</span>. עליכם להראות מעקב. אם ערכה של קריאה כבר חושב במעקב, מותר להשתמש בו שוב, בתנאי שתציינו זאת.</li>
+      <li><span class="sec-letter">ד.</span>
         <ol class="sheet-sub">
           <li>(1) מהו סוג הרקורסיה בפעולה <span class="ltr sheet-code">Ways</span>? נמקו.</li>
-          <li>(2) מהי סיבוכיות זמן הריצה של <span class="ltr sheet-code">Ways(n)</span>? נמקו.</li>
+          <li>(2) מהי סיבוכיות זמן הריצה של <span class="ltr sheet-code">Ways(n)</span>? ומהי של <span class="ltr sheet-code">Ways5(n)</span>? נמקו.</li>
         </ol>
       </li>
     </ol>
@@ -236,11 +232,9 @@
     <div class="note">
       כתבו פעולה רקורסיבית:
       <div class="mono" dir="ltr" style="text-align:left;font-size:18px;font-weight:700;background:#fff;border-radius:8px;padding:8px 14px;margin:8px 0">public static int Ways(int n)</div>
-      הפעולה מקבלת את מספר הבניין n ומחזירה את מספר הדרכים השונות שבהן השליח יכול להגיע מנקודת ההתחלה אל בניין n.
+      הפעולה מקבלת את מספר הבניין n ומחזירה את מספר דרכי ההגעה השונות שבהן השליח יכול להגיע מנקודת ההתחלה אל בניין n.
     </div>
-    <div class="btnrow">
-      <button class="btn" id="btn-sol-a">הצגת פתרון</button>
-    </div>
+    <div class="btnrow"><button class="btn" id="btn-sol-a">הצגת פתרון</button></div>
   </div>
 
   <div class="card reveal" id="sol-a">
@@ -257,9 +251,9 @@
     </div>
     <p class="hint">לחצו על כל אחד משלושת הכרטיסים כדי להוסיף את החלק שלו לקוד.</p>
     <div class="three">
-      <div class="think stop" data-part="stop" role="button" tabindex="0"><div class="num">1</div><h4>תנאי עצירה</h4><p>מתי התשובה ידועה בלי רקורסיה? <button class="more" title="הצגת התשובה">…</button><span class="ans">אל בניין 1 יש דרך אחת, אל בניין 2 יש שתיים (1+1 או 2). בלי שני תנאים, הקריאה תגיע ל־Ways(0) ול־Ways(−1) ולא תעצור.</span></p><span class="check">✓ נוסף לקוד</span></div>
-      <div class="think call" data-part="call" role="button" tabindex="0"><div class="num">2</div><h4>קריאה רקורסיבית</h4><p>מה הפרמטרים של הקריאה הרקורסיבית? <button class="more" title="הצגת התשובה">…</button><span class="ans"><span class="ltr">n − 1</span> ו־<span class="ltr">n − 2</span>: בעיה <b>קטנה יותר</b> מאותו סוג – הדרכים אל הבניין הקודם ואל הבניין שלפניו.</span></p><span class="check">✓ נוסף לקוד</span></div>
-      <div class="think comb" data-part="comb" role="button" tabindex="0"><div class="num">3</div><h4>שילוב התוצאות</h4><p>מה עושים עם מה שחזר? <button class="more" title="הצגת התשובה">…</button><span class="ans">כאן <b>מחברים</b>, כי כל דרך אל n שייכת בדיוק לאחת משתי הקבוצות.</span></p><span class="check">✓ נוסף לקוד</span></div>
+      <div class="think stop" data-part="stop" data-code="build-code" role="button" tabindex="0"><div class="num">1</div><h4>תנאי עצירה</h4><p>מתי התשובה ידועה בלי רקורסיה? <button class="more" title="הצגת התשובה">…</button><span class="ans">אל בניין 1 יש דרך אחת, אל בניין 2 יש שתיים (1+1 או 2). בלי שני תנאים, הקריאה תגיע ל־Ways(0) ול־Ways(−1) ולא תעצור.</span></p><span class="check">✓ נוסף לקוד</span></div>
+      <div class="think call" data-part="call" data-code="build-code" role="button" tabindex="0"><div class="num">2</div><h4>קריאה רקורסיבית</h4><p>מה הפרמטרים של הקריאה הרקורסיבית? <button class="more" title="הצגת התשובה">…</button><span class="ans"><span class="ltr">n − 1</span> ו־<span class="ltr">n − 2</span>: בעיה <b>קטנה יותר</b> מאותו סוג – הדרכים אל הבניין הקודם ואל הבניין שלפניו.</span></p><span class="check">✓ נוסף לקוד</span></div>
+      <div class="think comb" data-part="comb" data-code="build-code" role="button" tabindex="0"><div class="num">3</div><h4>שילוב התוצאות</h4><p>מה עושים עם מה שחזר? <button class="more" title="הצגת התשובה">…</button><span class="ans">כאן <b>מחברים</b>, כי כל דרך אל n שייכת בדיוק לאחת משתי הקבוצות.</span></p><span class="check">✓ נוסף לקוד</span></div>
     </div>
 <pre class="code" id="build-code"><span class="k">public static int</span> <span class="f">Ways</span>(<span class="k">int</span> n)
 {
@@ -272,38 +266,211 @@
     <span class="k">int</span> p2 = <span class="f">Ways</span>(n - <span class="n">2</span>);  <span class="c">// <bdi>הגיע מבניין n−2</bdi></span></span></span></span>
 <span class="part" data-part="comb"><span class="placeholder">    <span class="c">// 3. שילוב התוצאות</span></span><span class="body">    <span class="hl-comb"><span class="k">return</span> p1 + p2;</span></span></span>
 }</pre>
-    <div class="next"><button class="btn dark" data-goto="b">המשך לסעיף ב׳: דוגמת הרצה ←</button></div>
+    <div class="next"><button class="btn dark" data-goto="b">המשך לסעיף ב׳: הרחבה ←</button></div>
   </div>
 </section>
 
-<!-- ===================== סעיף ב ===================== -->
+<!-- ===================== סעיף ב: הרחבה ===================== -->
 <section class="panel" id="sec-b">
   <div class="card">
     <span class="tag">סעיף ב׳</span>
-    <h2>דוגמת הרצה</h2>
-    <div class="note">
-      כתבו מה תחזיר הפעולה <code dir="ltr">Ways(4)</code>. עליכם להראות מעקב.<br>
-      <span class="hint">במעקב יש להראות את ערך הפרמטר n בכניסה לכל קריאה, את הקריאות הרקורסיביות היוצאות ממנה ואת הערך שהיא מחזירה.</span>
+    <h2>הרחבה: גם קפיצה של 5</h2>
+    <div class="two">
+      <div>
+        <p style="margin-top:0">לשליח נוספה אפשרות: בנסיעה אחת הוא יכול להתקדם <b>בניין אחד</b>, <b>שני בניינים</b> <u>או חמישה בניינים</u>.</p>
+        <div class="note">
+          כתבו פעולה רקורסיבית:
+          <div class="mono" dir="ltr" style="text-align:left;font-size:18px;font-weight:700;background:#fff;border-radius:8px;padding:8px 14px;margin:8px 0">public static int Ways5(int n)</div>
+          הפעולה מחזירה את מספר דרכי ההגעה השונות אל בניין n במצב החדש.
+        </div>
+      </div>
+      <div class="street" id="street-b"></div>
     </div>
-    <div class="btnrow">
-      <button class="btn" id="btn-sol-b">הצגת תשובה</button>
-    </div>
+    <div class="btnrow"><button class="btn" id="btn-sol-b">הצגת פתרון</button></div>
   </div>
 
   <div class="card reveal" id="sol-b">
+    <span class="tag">פתרון</span>
+    <h2>מה משתנה?</h2>
+    <p>הקריאה הרקורסיבית משתנה בצורה צפויה: הנסיעה האחרונה יכולה להיות גם של 5, ולכן נוספת קריאה שלישית, <span class="mono ltr">Ways5(n − 5)</span>, ומחברים שלושה ערכים. השאלה האמיתית היא <b>תנאי העצירה</b>.</p>
+    <p class="hint">לחצו על כל אחד מהכרטיסים כדי להוסיף את החלק שלו לקוד.</p>
+    <div class="three">
+      <div class="think stop" data-part="stop" data-code="build-code-b" role="button" tabindex="0"><div class="num">1</div><h4>תנאי עצירה</h4><p>למה <span class="ltr">n == 1</span> ו־<span class="ltr">n == 2</span> כבר לא מספיקים? <button class="more" title="הצגת התשובה">…</button><span class="ans">כי <span class="ltr">Ways5(3)</span> קוראת ל־<span class="ltr">Ways5(−2)</span>, ושום תנאי לא עוצר אותה. אפשר היה למנות ידנית את <span class="ltr">Ways5(1)…Ways5(5)</span>, אבל עדיף כלל כללי: <b><span class="ltr">n == 0</span></b> – הגענו בדיוק ליעד, זו דרך אחת; <b><span class="ltr">n &lt; 0</span></b> – קפצנו מעבר ליעד, אין דרך. בדיקה: <span class="ltr">Ways5(1) = Ways5(0) + Ways5(−1) + Ways5(−4) = 1</span>.</span></p><span class="check">✓ נוסף לקוד</span></div>
+      <div class="think call" data-part="call" data-code="build-code-b" role="button" tabindex="0"><div class="num">2</div><h4>קריאה רקורסיבית</h4><p>מה הפרמטרים עכשיו? <button class="more" title="הצגת התשובה">…</button><span class="ans"><span class="ltr">n − 1</span>, <span class="ltr">n − 2</span> ו־<span class="ltr">n − 5</span>: הבניין שממנו הגיע השליח בנסיעה האחרונה.</span></p><span class="check">✓ נוסף לקוד</span></div>
+      <div class="think comb" data-part="comb" data-code="build-code-b" role="button" tabindex="0"><div class="num">3</div><h4>שילוב התוצאות</h4><p>מה עושים עם מה שחזר? <button class="more" title="הצגת התשובה">…</button><span class="ans">כמו קודם, <b>מחברים</b>: כל דרך אל n מסתיימת בדיוק באחת משלוש הנסיעות.</span></p><span class="check">✓ נוסף לקוד</span></div>
+    </div>
+<pre class="code" id="build-code-b"><span class="k">public static int</span> <span class="f">Ways5</span>(<span class="k">int</span> n)
+{
+<span class="part" data-part="stop"><span class="placeholder">    <span class="c">// 1. תנאי עצירה</span></span><span class="body">    <span class="hl-stop"><span class="k">if</span> (n == <span class="n">0</span>)
+        <span class="k">return</span> <span class="n">1</span>;        <span class="c">// <bdi>הגענו בדיוק ליעד: דרך אחת</bdi></span>
+    <span class="k">if</span> (n &lt; <span class="n">0</span>)
+        <span class="k">return</span> <span class="n">0</span>;        <span class="c">// <bdi>קפצנו מעבר ליעד: אין דרך</bdi></span></span></span></span>
+
+<span class="part" data-part="call"><span class="placeholder">    <span class="c">// 2. קריאה רקורסיבית</span></span><span class="body">    <span class="hl-call"><span class="k">int</span> p1 = <span class="f">Ways5</span>(n - <span class="n">1</span>);
+    <span class="k">int</span> p2 = <span class="f">Ways5</span>(n - <span class="n">2</span>);
+    <span class="k">int</span> p3 = <span class="f">Ways5</span>(n - <span class="n">5</span>);</span></span></span>
+<span class="part" data-part="comb"><span class="placeholder">    <span class="c">// 3. שילוב התוצאות</span></span><span class="body">    <span class="hl-comb"><span class="k">return</span> p1 + p2 + p3;</span></span></span>
+}</pre>
+    <p class="hint">שימו לב: תנאי העצירה החדשים היו עובדים גם לפעולה <span class="mono ltr">Ways</span> מסעיף א׳. הם כלליים יותר, ולכן בדרך כלל עדיף להתחיל מהם.</p>
+    <div class="next"><button class="btn dark" data-goto="d">המשך לסעיף ג׳: דוגמת הרצה ←</button></div>
+  </div>
+</section>
+
+<!-- ===================== סעיף ד: סוג וסיבוכיות ===================== -->
+<section class="panel" id="sec-c">
+  <div class="card">
+    <span class="tag">סעיף ד׳</span>
+    <h2>סוג הרקורסיה וסיבוכיות</h2>
+    <p class="hint">לחיצה על שאלה מציגה את התשובה שלה.</p>
+    <ol style="font-size:18px" id="q-list">
+      <li class="qitem" data-q="1">מהו סוג הרקורסיה בפעולה <code dir="ltr">Ways</code>? נמקו.</li>
+      <li class="qitem" data-q="2">מהי סיבוכיות זמן הריצה של <code dir="ltr">Ways(n)</code>? ומהי של <code dir="ltr">Ways5(n)</code>? נמקו.</li>
+      <li class="qitem bonus" data-q="3"><span class="tag" style="margin:0 0 0 6px;background:var(--combine-soft);color:var(--combine)">בונוס</span> בעץ הקריאות הפעולה <code dir="ltr">Ways5(3)</code> מופיעה פעמיים. הסבירו מדוע זה קורה, ומה זה אומר על גודל העץ כאשר n גדל.</li>
+    </ol>
+    <div class="btnrow"><button class="btn ghost" id="btn-bonus-c">שאלת בונוס</button></div>
+  </div>
+
+  <div class="card reveal" id="sol-c">
+    <span class="tag">תשובות</span>
+    <div class="answer" data-a="1">
+      <b class="q">1. סוג הרקורסיה:</b> <b>הלוך־חזור</b>.<br>
+      אחרי שהקריאה הרקורסיבית חוזרת נותרה עבודה: צריך לחבר את הערכים שחזרו (<span class="mono ltr">p1 + p2</span>). לכן זו אינה רקורסיית זנב, שבה הקריאה הרקורסיבית היא הפעולה האחרונה והערך שלה מוחזר כמו שהוא. זו גם אינה רקורסיה הדדית, כי יש כאן פעולה אחת שקוראת לעצמה ולא שתי פעולות שקוראות זו לזו.
+    </div>
+    <div class="answer" data-a="2">
+      <b class="q">2. סיבוכיות:</b> <span class="mono ltr">Ways(n)</span> היא <b class="mono ltr">O(2<sup>n</sup>)</b>, ו־<span class="mono ltr">Ways5(n)</span> היא <b class="mono ltr">O(3<sup>n</sup>)</b>.<br>
+      סיבוכיות של רקורסיה היא <b>מספר הקריאות</b>. ב־<span class="mono ltr">Ways</span> כל קריאה (שאינה תנאי עצירה) פותחת <b>שתי</b> קריאות חדשות, וזה חוזר על עצמו עד העומק n: הכפלה בתוך הכפלה, n פעמים, <span class="ltr mono">2 · 2 · … · 2 = 2<sup>n</sup></span>. ב־<span class="mono ltr">Ways5</span> כל קריאה פותחת <b>שלוש</b>, ולכן <span class="ltr mono">3<sup>n</sup></span>.
+      <div class="two" style="margin-top:10px">
+        <div class="pyr" id="pyr"></div>
+        <div class="hint">
+          <p style="margin:0 0 6px"><b>למה לא <span class="ltr">n<sup>2</sup></span>?</b> <span class="ltr">n<sup>2</sup></span> מתאים למשל לפעולה רקורסיבית על מערך שבה יש n קריאות, וכל קריאה עוברת על כל המערך: n קריאות כפול n פעולות בכל אחת. כאן כל קריאה מבצעת מספר קבוע של פעולות; מה שגדל הוא מספר הקריאות עצמו.</p>
+          <p style="margin:0"><b>למה לא n?</b> O(n) מתאים לרקורסיה שבה כל קריאה פותחת <b>קריאה אחת</b>, למשל מעבר על מערך מאינדקס לאינדקס: שרשרת של n קריאות. כאן כל קריאה פותחת שתיים (או שלוש), ולכן מספר הקריאות מוכפל בכל רמה: 1, 2, 4, 8, …</p>
+        </div>
+      </div>
+      <div class="fulltree">
+        <p class="hint" style="margin:0 0 6px">כך נראה העץ המלא של <span class="mono ltr">Ways5(5)</span> בלי שום קיצור: <b id="fulltree-count"></b> קריאות, כדי לחשב את התשובה 9.</p>
+        <div id="fulltree"></div>
+      </div>
+    </div>
+    <div class="answer bonus" data-a="3">
+      <b class="q">3. בונוס, חישוב חוזר:</b> <span class="mono ltr">Ways5(3)</span> נדרשת גם על ידי <span class="mono ltr">Ways5(5)</span> וגם על ידי <span class="mono ltr">Ways5(4)</span>, וכל קריאה מחשבת אותה מחדש בלי ״לזכור״ שכבר חושבה. ככל ש־n גדל, אותם ערכים קטנים חוזרים ומופיעים בחלקים רבים של העץ, וזה מקור הגידול המעריכי: רוב העבודה בעץ היא חזרה על חישובים שכבר נעשו. במעקב בסעיף ג׳ אנחנו מרשים לעצמנו לקצר – ״חושב כבר״ – בדיוק את מה שהמחשב לא עושה. אם הפעולה הייתה שומרת כל תוצאה פעם אחת, היו רק n ערכים שונים לחשב.
+    </div>
+  </div>
+</section>
+
+<!-- ===================== סעיף ג: מעקב ===================== -->
+<section class="panel" id="sec-d">
+  <div class="card">
+    <span class="tag">סעיף ג׳</span>
+    <h2>דוגמת הרצה</h2>
+    <div class="note">
+      כתבו מה תחזיר הפעולה <code dir="ltr">Ways5(5)</code>. עליכם להראות מעקב.<br>
+      <span class="hint">אם ערכה של קריאה כבר חושב במעקב, מותר להשתמש בו שוב, בתנאי שתציינו זאת.</span>
+    </div>
+    <div class="btnrow"><button class="btn" id="btn-sol-d">הצגת תשובה</button></div>
+  </div>
+
+  <div class="card reveal" id="sol-d">
     <span class="tag">מעקב</span>
-    <h2>עץ הקריאות של <span class="mono" dir="ltr">Ways(4)</span></h2>
-    <p class="hint">כל לחיצה מקדמת מהלך אחד. <span style="color:var(--call);font-weight:700">חץ אדום</span>: קריאה רקורסיבית יוצאת. <span style="color:var(--ret);font-weight:700">חץ כחול</span>: הקריאה הסתיימה ומחזירה ערך. אפשר גם עם <kbd>רווח</kbd> / <kbd>→</kbd> קדימה ו־<kbd>←</kbd> אחורה.</p>
+    <h2>עץ הקריאות</h2>
+    <div class="ctrl">
+      <button class="btn ghost small on" data-preset="ways5">Ways5(5) – קפיצות 1, 2, 5</button>
+      <button class="btn ghost small" data-preset="ways4">Ways(4) – קפיצות 1, 2</button>
+      <label class="switch"><input type="checkbox" id="memo-toggle" checked> קיצור ריצות כפולות</label>
+    </div>
     <div class="ctrl">
       <button class="btn" id="t-next">המהלך הבא ◂</button>
       <button class="btn ghost" id="t-prev">▸ חזרה</button>
       <button class="btn ghost small" id="t-reset">מההתחלה</button>
       <button class="btn ghost small" id="t-all">הכל</button>
+      <button class="btn ghost small" id="t-zoom" title="הצגת כל העץ / מעקב אחרי הקריאה הפעילה">🔍 כל העץ</button>
       <span class="counter" id="t-counter"></span>
     </div>
     <div class="trace-top">
-      <div class="desc" id="t-desc"><span class="pill">התחלה</span><span>לחצו על ״המהלך הבא״ כדי להתחיל את המעקב.</span></div>
-<pre class="exam" id="ref-code">public static int Ways(int n)
+      <div class="desc" id="t-desc"><span class="pill">התחלה</span><span>לחיצה מקדמת מהלך אחד.</span></div>
+<pre class="exam" id="ref-code"></pre>
+    </div>
+    <div class="stage-wrap" style="margin-top:12px"><div class="stage" id="stage">
+      <svg class="arrows" id="arrows"><defs>
+        <marker id="m-call" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker>
+        <marker id="m-ret" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f5fd6"/></marker>
+      </defs></svg>
+    </div></div>
+    <p class="hint" style="margin-top:10px">אפשר גם עם <kbd>רווח</kbd> / <kbd>→</kbd> קדימה ו־<kbd>←</kbd> אחורה. <span style="color:var(--call);font-weight:700">חץ אדום</span>: קריאה יוצאת · <span style="color:var(--ret);font-weight:700">חץ כחול</span>: החזרת ערך · <span style="color:var(--ret);font-weight:700">מקווקו</span>: ערך שכבר חושב.</p>
+    <div class="next"><button class="btn dark" data-goto="c">המשך לסעיף ד׳: סוג הרקורסיה וסיבוכיות ←</button></div>
+  </div>
+</section>
+
+</main>
+<footer>חומר הוראה לכיתה י״ב · רקורסיה</footer>
+
+<script src="lesson.js"></script>
+<script>
+/* ---------- navigation ---------- */
+const unlocked={q:true,a:false,b:false,c:false,d:false};
+let current='q';
+function goTo(s){
+  unlocked[s]=true;
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='sec-'+s));
+  document.querySelectorAll('#stepper button').forEach(b=>{b.classList.toggle('active',b.dataset.sec===s);b.classList.toggle('locked',!unlocked[b.dataset.sec]);});
+  window.scrollTo({top:0,behavior:'smooth'});current=s;
+  if(s==='d'&&document.getElementById('sol-d').classList.contains('open'))trace.render();
+}
+document.querySelectorAll('#stepper button').forEach(b=>b.addEventListener('click',()=>goTo(b.dataset.sec)));
+document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>goTo(b.dataset.goto)));
+function toggleReveal(id,btn,showLabel,hideLabel){
+  const el=document.getElementById(id),open=!el.classList.contains('open');
+  el.classList.toggle('open',open);btn.textContent=open?hideLabel:showLabel;
+  if(open)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),50);
+  return open;
+}
+document.getElementById('btn-sol-a').onclick=e=>toggleReveal('sol-a',e.target,'הצגת פתרון','הסתרת פתרון');
+document.getElementById('btn-sol-b').onclick=e=>toggleReveal('sol-b',e.target,'הצגת פתרון','הסתרת פתרון');
+document.getElementById('btn-sol-d').onclick=e=>{if(toggleReveal('sol-d',e.target,'הצגת תשובה','הסתרת תשובה'))trace.render();};
+
+/* think cards: … opens the answer, clicking the card adds its part to the code */
+document.querySelectorAll('.think[data-part]').forEach(b=>{
+  const toggle=()=>{const on=!b.classList.contains('added');b.classList.toggle('added',on);
+    document.querySelector(`#${b.dataset.code} .part[data-part="${b.dataset.part}"]`).classList.toggle('added',on);};
+  b.addEventListener('click',toggle);
+  b.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}});
+  b.querySelector('.more').addEventListener('click',e=>{e.stopPropagation();b.classList.add('open');});
+});
+
+/* section C: each question toggles its own answer */
+document.querySelectorAll('#q-list .qitem').forEach(li=>li.addEventListener('click',()=>{
+  const a=document.querySelector(`#sol-c .answer[data-a="${li.dataset.q}"]`),on=!a.classList.contains('open');
+  a.classList.toggle('open',on);li.classList.toggle('on',on);
+  document.getElementById('sol-c').classList.toggle('open',!!document.querySelector('#sol-c .answer.open'));
+  if(on)setTimeout(()=>a.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
+}));
+document.getElementById('btn-bonus-c').onclick=e=>{document.getElementById('sec-c').classList.add('bonus-on');e.target.disabled=true;};
+
+/* streets & routes */
+const streetA=document.getElementById('street-a');buildStreet(streetA,3);
+(function(){const list=document.getElementById('routes-list');
+  const ROUTES=[[[1,1,1],'שלוש נסיעות של 1'],[[1,2],'נסיעה של 1 ואחריה נסיעה של 2'],[[2,1],'נסיעה של 2 ואחריה נסיעה של 1']];
+  ROUTES.forEach(([r,label],i)=>{const d=document.createElement('button');d.className='route';d.type='button';
+    d.innerHTML=`<span class="name">דרך ${i+1}</span><span class="rdesc">${label}</span>${routeSVG(r)}`;
+    d.onclick=()=>{list.querySelectorAll('.route').forEach(x=>x.classList.remove('playing'));d.classList.add('playing','shown');showRoute(streetA,r);};
+    list.appendChild(d);});})();
+const streetSol=document.getElementById('street-sol');buildStreet(streetSol,4);lastRidesArcs(streetSol,false);
+// section B street: 6 buildings, the three possible last rides into building 6
+const streetB=document.getElementById('street-b');buildStreet(streetB,6);
+(function(){const g=streetB.querySelector(`#routes-${streetB.id}`),bx=streetB._bx,y=streetB._ground-14;
+  const arc=(from,to,lift,c,lbl)=>`<path d="${arcPath(bx(from),bx(to),y,lift)}" fill="none" stroke="${c}" stroke-width="4"/><text x="${(bx(from)+bx(to))/2}" y="${y-lift+16}" text-anchor="middle" font-size="14" font-weight="900" fill="${c}" font-family="Heebo,sans-serif">${lbl}</text>`;
+  g.innerHTML=arc(5,6,50,'#1f5fd6','+1')+arc(4,6,85,'#e0323c','+2')+arc(1,6,140,'#c77a00','+5');
+  streetB.querySelector('.scooter').setAttribute('transform',`translate(${bx(6)},${y+2}) scale(.85)`);})();
+
+/* complexity visuals */
+(function(){const p=document.getElementById('pyr');[[0,1],[1,2],[2,4],[3,8]].forEach(([lvl,k])=>{
+  const row=document.createElement('div');row.className='row';
+  row.innerHTML=`<span class="lbl">רמה ${lvl}: ${k===1?'קריאה אחת':k+' קריאות'}</span>`+'<span class="b"></span>'.repeat(k);p.appendChild(row);});
+  const cap=document.createElement('div');cap.className='hint';cap.innerHTML='ב־Ways כל רמה מכפילה את הקודמת; אחרי n רמות: <span class="ltr">2<sup>n</sup></span>. ב־Ways5 כל רמה משלשת.';p.appendChild(cap);})();
+document.getElementById('fulltree-count').textContent=staticTree(document.getElementById('fulltree'),{...TRACE_PRESETS.ways5,memo:false});
+
+/* trace */
+const CODE={
+ ways4:`public static int Ways(int n)
 {
     if (n == 1)
         return 1;
@@ -312,355 +479,35 @@
     int p1 = Ways(n - 1);
     int p2 = Ways(n - 2);
     return p1 + p2;
-}</pre>
-    </div>
-    <div class="stage-wrap" style="margin-top:12px">
-      <div class="stage" id="stage">
-        <svg id="arrows">
-          <defs>
-            <marker id="m-call" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker>
-            <marker id="m-ret" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f5fd6"/></marker>
-          </defs>
-        </svg>
-        <div class="main-box">Main: Ways(4)</div>
-      </div>
-    </div>
-    <div class="next"><button class="btn dark" data-goto="c">המשך לסעיף ג׳: סוג הרקורסיה וסיבוכיות ←</button></div>
-  </div>
-</section>
-
-<!-- ===================== סעיף ג ===================== -->
-<section class="panel" id="sec-c">
-  <div class="card">
-    <span class="tag">סעיף ג׳</span>
-    <h2>סוג הרקורסיה וסיבוכיות</h2>
-    <p class="hint">לחיצה על שאלה מציגה את התשובה שלה.</p>
-    <ol style="font-size:18px" id="q-list">
-      <li class="qitem" data-q="1">מהו סוג הרקורסיה בפעולה <code dir="ltr">Ways</code>? נמקו.</li>
-      <li class="qitem" data-q="2">מהי סיבוכיות זמן הריצה של <code dir="ltr">Ways(n)</code>? נמקו.</li>
-      <li class="qitem bonus" data-q="3"><span class="tag" style="margin:0 0 0 6px;background:var(--combine-soft);color:var(--combine)">בונוס</span> בעץ הקריאות מסעיף ב׳ הפעולה <code dir="ltr">Ways(2)</code> חושבה יותר מפעם אחת. הסבירו מדוע זה קורה, ומה זה אומר על גודל העץ כאשר n גדל.</li>
-    </ol>
-    <div class="btnrow">
-      <button class="btn ghost" id="btn-bonus-c">שאלת בונוס</button>
-    </div>
-  </div>
-
-  <div class="card reveal" id="sol-c">
-    <span class="tag">תשובות</span>
-    <div class="answer" data-a="1">
-      <b class="q">1. סוג הרקורסיה:</b> <b>הלוך־חזור</b>.<br>
-      אחרי שהקריאה הרקורסיבית חוזרת נותרה עבודה: צריך לחבר את שני הערכים שחזרו (<span class="mono" dir="ltr">p1 + p2</span>). לכן זו אינה רקורסיית זנב, שבה הקריאה הרקורסיבית היא הפעולה האחרונה והערך שלה מוחזר כמו שהוא. זו גם אינה רקורסיה הדדית, כי יש כאן פעולה אחת שקוראת לעצמה ולא שתי פעולות שקוראות זו לזו.
-    </div>
-    <div class="answer" data-a="2">
-      <b class="q">2. סיבוכיות:</b> <b class="mono ltr">O(2<sup>n</sup>)</b>.<br>
-      סיבוכיות של רקורסיה היא <b>מספר הקריאות</b>. כל קריאה (שאינה תנאי עצירה) פותחת <b>שתי</b> קריאות חדשות, וזה חוזר על עצמו עד העומק n. הכפלה בתוך הכפלה, n פעמים: <span class="ltr mono">2 · 2 · … · 2 = 2<sup>n</sup></span>.
-      <div class="two" style="margin-top:10px">
-        <div class="pyr" id="pyr"></div>
-        <div class="hint">
-          <p style="margin:0 0 6px"><b>למה לא <span class="ltr">n<sup>2</sup></span>?</b> <span class="ltr">n<sup>2</sup></span> מתאים למשל לפעולה רקורסיבית על מערך שבה יש n קריאות, וכל קריאה עוברת על כל המערך: n קריאות כפול n פעולות בכל אחת. כאן כל קריאה מבצעת מספר קבוע של פעולות; מה שגדל הוא מספר הקריאות עצמו.</p>
-          <p style="margin:0"><b>למה לא n?</b> O(n) מתאים לרקורסיה שבה כל קריאה פותחת <b>קריאה אחת</b>, למשל מעבר על מערך מאינדקס לאינדקס: שרשרת של n קריאות. כאן כל קריאה פותחת <b>שתיים</b>, ולכן מספר הקריאות מוכפל בכל רמה: 1, 2, 4, 8, …</p>
-        </div>
-      </div>
-    </div>
-    <div class="answer bonus" data-a="3">
-      <b class="q">3. בונוס, חישוב חוזר:</b> <span class="mono" dir="ltr">Ways(2)</span> נדרשת גם על ידי <span class="mono" dir="ltr">Ways(4)</span> וגם על ידי <span class="mono" dir="ltr">Ways(3)</span>, וכל קריאה מחשבת אותה מחדש בלי ״לזכור״ שכבר חושבה. ככל ש־n גדל, אותם ערכים קטנים חוזרים ומופיעים בחלקים רבים של העץ, וזה מקור הגידול המעריכי: רוב העבודה בעץ היא חזרה על חישובים שכבר נעשו. אם היינו שומרים כל תוצאה פעם אחת, היו רק n ערכים שונים לחשב.
-    </div>
-  </div>
-</section>
-
-</main>
-<footer>חומר הוראה לכיתה י״ב · רקורסיה · ניתן להפעיל עם מקלדת או מצביע מצגות</footer>
-
-<script>
-/* ---------- navigation ---------- */
-const sections = ['q','a','b','c'];
-const unlocked = {q:true,a:false,b:false,c:false};
-function goTo(s){
-  unlocked[s]=true;
-  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='sec-'+s));
-  document.querySelectorAll('#stepper button').forEach(b=>{
-    b.classList.toggle('active',b.dataset.sec===s);
-    b.classList.toggle('locked',!unlocked[b.dataset.sec]);
-  });
-  window.scrollTo({top:0,behavior:'smooth'});
-  current = s;
-}
-let current='q';
-document.querySelectorAll('#stepper button').forEach(b=>b.addEventListener('click',()=>goTo(b.dataset.sec)));
-document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>goTo(b.dataset.goto)));
-// show/hide a solution card; the button text flips accordingly
-function toggleReveal(id,btn,showLabel,hideLabel){
-  const el=document.getElementById(id),open=!el.classList.contains('open');
-  el.classList.toggle('open',open);btn.textContent=open?hideLabel:showLabel;
-  if(open)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),50);
-  return open;
-}
-document.getElementById('btn-sol-a').onclick=e=>toggleReveal('sol-a',e.target,'הצגת פתרון','הסתרת פתרון');
-document.querySelectorAll('.think[data-part]').forEach(b=>{
-  const toggle=()=>{const p=b.dataset.part,on=!b.classList.contains('added');
-    b.classList.toggle('added',on);
-    document.querySelector(`#build-code .part[data-part="${p}"]`).classList.toggle('added',on);};
-  b.addEventListener('click',toggle);
-  b.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}});
-  // the "…" opens the card's answer without adding code
-  b.querySelector('.more').addEventListener('click',e=>{e.stopPropagation();b.classList.add('open');});
-});
-document.getElementById('btn-sol-b').onclick=e=>{if(toggleReveal('sol-b',e.target,'הצגת תשובה','הסתרת תשובה'))renderTrace();};
-// section C: each question toggles its own answer
-document.querySelectorAll('#q-list .qitem').forEach(li=>li.addEventListener('click',()=>{
-  const a=document.querySelector(`#sol-c .answer[data-a="${li.dataset.q}"]`),on=!a.classList.contains('open');
-  a.classList.toggle('open',on);li.classList.toggle('on',on);
-  const any=document.querySelector('#sol-c .answer.open');
-  document.getElementById('sol-c').classList.toggle('open',!!any);
-  if(on)setTimeout(()=>a.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
-}));
-document.getElementById('btn-bonus-c').onclick=e=>{document.getElementById('sec-c').classList.add('bonus-on');e.target.disabled=true;};
-
-/* ---------- street drawing ---------- */
-const BUILD_COLORS=['#9fd3e8','#f7c59f','#b8e0b0','#d9c3f2','#f9d976'];
-function scooterSVG(x,y,scale=1){
-  return `<g class="scooter" transform="translate(${x},${y}) scale(${scale})">
-    <circle cx="-16" cy="0" r="9" fill="#2b2f3a"/><circle cx="-16" cy="0" r="4" fill="#cfd4dd"/>
-    <circle cx="18" cy="0" r="9" fill="#2b2f3a"/><circle cx="18" cy="0" r="4" fill="#cfd4dd"/>
-    <path d="M-14,-4 L-2,-4 L4,-20 L18,-20 L18,-6" fill="none" stroke="#0aa8d6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-    <rect x="-26" y="-38" width="24" height="21" rx="4" fill="#0aa8d6"/>
-    <rect x="-23" y="-32" width="18" height="10" rx="2" fill="#fff" fill-opacity=".95"/>
-    <text x="-14" y="-24" text-anchor="middle" font-family="Heebo,Arial,sans-serif" font-weight="900" font-size="7.5" fill="#0aa8d6">WOLT</text>
-    <path d="M10,-20 L-4,-20" stroke="#0aa8d6" stroke-width="5" stroke-linecap="round"/>
-    <path d="M2,-21 L0,-36 L10,-42" fill="none" stroke="#15233b" stroke-width="4" stroke-linecap="round"/>
-    <circle cx="6" cy="-50" r="8" fill="#15233b"/><rect x="-2" y="-50" width="16" height="5" rx="2" fill="#0aa8d6"/>
-    <path d="M12,-38 L22,-32" stroke="#15233b" stroke-width="4" stroke-linecap="round"/>
-    <path d="M22,-32 L30,-28" stroke="#15233b" stroke-width="4" stroke-linecap="round"/>
-    <path d="M28,-30 L20,-18" stroke="#0aa8d6" stroke-width="5" stroke-linecap="round"/>
-  </g>`;
-}
-function buildStreet(container,n,opts={}){
-  const W=560,H=250,ground=200,startX=50,gap=(W-100)/n;
-  const bx=i=>startX+i*gap; // i=0..n
-  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
-  s+=`<rect x="0" y="${ground}" width="${W}" height="${H-ground}" fill="#3b4252"/>`;
-  s+=`<path d="M0,${ground+22} H${W}" stroke="#f5f5f5" stroke-width="3" stroke-dasharray="18 14"/>`;
-  s+=`<rect x="0" y="${ground-8}" width="${W}" height="8" fill="#c9ced8"/>`;
-  for(let i=1;i<=n;i++){
-    const h=70+((i*37)%50), x=bx(i)-28, c=BUILD_COLORS[(i-1)%BUILD_COLORS.length];
-    s+=`<rect x="${x}" y="${ground-8-h}" width="56" height="${h}" rx="3" fill="${c}" stroke="#15233b" stroke-opacity=".25"/>`;
-    for(let r=0;r<Math.floor(h/22);r++)for(let k=0;k<2;k++)s+=`<rect x="${x+12+k*22}" y="${ground-8-h+10+r*22}" width="10" height="11" rx="1.5" fill="#fff" fill-opacity=".8"/>`;
-    s+=`<rect x="${bx(i)-14}" y="${ground-8-h-24}" width="28" height="22" rx="6" fill="#15233b"/>`;
-    s+=`<text x="${bx(i)}" y="${ground-8-h-8}" text-anchor="middle" font-size="15" font-weight="700" fill="#fff" font-family="Heebo,sans-serif">${i}</text>`;
-  }
-  s+=`<text x="${bx(0)}" y="${ground+45}" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="Heebo,sans-serif">0</text>`;
-  for(let i=1;i<=n;i++)s+=`<text x="${bx(i)}" y="${ground+45}" text-anchor="middle" font-size="14" fill="#cfd4dd" font-family="Heebo,sans-serif">${i}</text>`;
-  s+=`<circle cx="${bx(0)}" cy="${ground-10}" r="5" fill="#e0323c"/>`;
-  s+=`<g id="routes-${container.id}"></g>`;
-  s+=scooterSVG(bx(0),ground-12,.85);
-  s+=`</svg>`;
-  container.innerHTML=s;
-  container._bx=bx;container._ground=ground;
-}
-function arcPath(x1,x2,y,lift){const mx=(x1+x2)/2;return `M${x1},${y} Q${mx},${y-lift} ${x2},${y}`;}
-function showRoute(container,steps){
-  const g=container.querySelector(`#routes-${container.id}`);
-  const bx=container._bx,y=container._ground-14;
-  let pos=0,paths=[];
-  g.innerHTML='';
-  steps.forEach(st=>{const a=bx(pos),b=bx(pos+st);const lift=st===1?55:95;
-    g.innerHTML+=`<path d="${arcPath(a,b,y,lift)}" fill="none" stroke="${st===1?'#1f5fd6':'#e0323c'}" stroke-width="4" stroke-dasharray="6 6" opacity=".9"/>
-      <text x="${(a+b)/2}" y="${y-lift/2-6}" text-anchor="middle" font-size="16" font-weight="900" fill="${st===1?'#1f5fd6':'#e0323c'}" font-family="Heebo,sans-serif">+${st}</text>`;
-    paths.push([a,b,lift]);pos+=st;});
-  animateScooter(container,paths);
-}
-function animateScooter(container,segs){
-  const sc=container.querySelector('.scooter');if(!sc)return;
-  const y=container._ground-12;const total=segs.length;let i=0;
-  if(container._anim)cancelAnimationFrame(container._anim);
-  function run(){
-    if(i>=total){return;}
-    const [a,b,lift]=segs[i];const t0=performance.now(),dur=700;
-    function frame(now){
-      const t=Math.min(1,(now-t0)/dur);const e=t<.5?2*t*t:-1+(4-2*t)*t;
-      const x=a+(b-a)*e;const yy=y-4*lift*.6*e*(1-e);
-      sc.setAttribute('transform',`translate(${x},${yy}) scale(.85)`);
-      if(t<1)container._anim=requestAnimationFrame(frame);else{i++;setTimeout(run,150);}
-    }
-    container._anim=requestAnimationFrame(frame);
-  }
-  sc.setAttribute('transform',`translate(${container._bx(0)},${y}) scale(.85)`);
-  setTimeout(run,100);
-}
-// small station diagram: circles 0..n, arcs above with the hop size
-function routeSVG(steps,n=3){
-  const W=300,H=74,y=58,x0=22,gap=(W-44)/n,bx=i=>x0+i*gap;
-  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-    <defs><marker id="rm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#15233b"/></marker></defs>
-    <line x1="${bx(0)}" y1="${y}" x2="${bx(n)}" y2="${y}" stroke="#c9ced8" stroke-width="3"/>`;
-  let pos=0;const visited=new Set([0]);
-  steps.forEach(st=>{const a=bx(pos),b=bx(pos+st),lift=st===1?30:48,c=st===1?'#1f5fd6':'#e0323c';
-    s+=`<path d="M${a},${y-9} Q${(a+b)/2},${y-lift-9} ${b-4},${y-10}" fill="none" stroke="${c}" stroke-width="2.5" marker-end="url(#rm)"/>
-        <circle cx="${(a+b)/2}" cy="${y-lift/2-12}" r="10" fill="${c}"/><text x="${(a+b)/2}" y="${y-lift/2-8}" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="Heebo,sans-serif">${st}</text>`;
-    pos+=st;visited.add(pos);});
-  for(let i=0;i<=n;i++){const v=visited.has(i);
-    s+=`<circle cx="${bx(i)}" cy="${y}" r="${v?10:7}" fill="${v?'#15233b':'#fff'}" stroke="#15233b" stroke-width="2"/>
-        <text x="${bx(i)}" y="${y+4.5}" text-anchor="middle" font-size="12" font-weight="700" fill="${v?'#fff':'#5b6b85'}" font-family="JetBrains Mono,monospace">${i}</text>`;}
-  return s+'</svg>';
-}
-const streetA=document.getElementById('street-a');buildStreet(streetA,3);
-(function(){const list=document.getElementById('routes-list');
-  const ROUTES=[[[1,1,1],'שלוש נסיעות של 1'],[[1,2],'נסיעה של 1 ואחריה נסיעה של 2'],[[2,1],'נסיעה של 2 ואחריה נסיעה של 1']];
-  ROUTES.forEach(([r,label],i)=>{
-    const d=document.createElement('button');d.className='route';d.type='button';
-    d.innerHTML=`<span class="name">דרך ${i+1}</span><span class="rdesc">${label}</span>${routeSVG(r)}`;
-    d.onclick=()=>{list.querySelectorAll('.route').forEach(x=>x.classList.remove('playing'));d.classList.add('playing','shown');showRoute(streetA,r);};
-    list.appendChild(d);});})();
-const streetSol=document.getElementById('street-sol');buildStreet(streetSol,4);
-(function(){ // "last ride" illustration: arcs into building 4 from 3 and from 2
-  const g=streetSol.querySelector(`#routes-${streetSol.id}`),bx=streetSol._bx,y=streetSol._ground-14;
-  g.innerHTML=`<path d="${arcPath(bx(3),bx(4),y,55)}" fill="none" stroke="#1f5fd6" stroke-width="4"/>
-   <text x="${(bx(3)+bx(4))/2}" y="${y-40}" text-anchor="middle" font-size="14" font-weight="900" fill="#1f5fd6" font-family="Heebo,sans-serif">+1</text>
-   <path d="${arcPath(bx(2),bx(4),y,120)}" fill="none" stroke="#e0323c" stroke-width="4"/>
-   <text x="${(bx(2)+bx(4))/2}" y="${y-98}" text-anchor="middle" font-size="14" font-weight="900" fill="#e0323c" font-family="Heebo,sans-serif">+2</text>
-   <rect x="${bx(3)-46}" y="${y+28}" width="92" height="22" rx="6" fill="#1f5fd6"/><text x="${bx(3)}" y="${y+44}" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="Heebo,sans-serif">Ways(n−1)</text>
-   <rect x="${bx(2)-46}" y="${y+28}" width="92" height="22" rx="6" fill="#e0323c"/><text x="${bx(2)}" y="${y+44}" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="Heebo,sans-serif">Ways(n−2)</text>`;
-  // move scooter near building 4 & hide start dot
-  const sc=streetSol.querySelector('.scooter');sc.setAttribute('transform',`translate(${bx(4)},${y+2}) scale(.85)`);
-})();
-
-/* ---------- trace model ---------- */
-// nodes: id, n, parent, slot (p1/p2), position
-const NODES={
-  A:{n:4,parent:null,slot:null,x:345,y:30,depth:0},
-  B:{n:3,parent:'A',slot:'p1',x:130,y:300,depth:1},
-  C:{n:2,parent:'A',slot:'p2',x:640,y:300,depth:1},
-  D:{n:2,parent:'B',slot:'p1',x:0,y:590,depth:2},
-  E:{n:1,parent:'B',slot:'p2',x:300,y:590,depth:2},
-};
-// steps: each is one "move"
-const STEPS=[
-  {t:'call',id:'A',text:'קוראים ל־Ways עם n = 4. נפתחת קריאה חדשה.'},
-  {t:'if',id:'A',line:'if1',res:false,text:'בודקים: האם n == 1? הערך 4 ≠ 1, התנאי לא מתקיים, ממשיכים.'},
-  {t:'if',id:'A',line:'if2',res:false,text:'בודקים: האם n == 2? הערך 4 ≠ 2, לא מתקיים. אין תנאי עצירה, עוברים לקריאות הרקורסיביות.'},
-  {t:'call',id:'B',text:'קריאה רקורסיבית: p1 = Ways(3). הקריאה Ways(4) ״מחכה״ עד שתחזור תשובה.'},
-  {t:'if',id:'B',line:'if1',res:false,text:'ב־Ways(3): האם n == 1? לא.'},
-  {t:'if',id:'B',line:'if2',res:false,text:'ב־Ways(3): האם n == 2? לא. עוברים לקריאות הרקורסיביות.'},
-  {t:'call',id:'D',text:'קריאה רקורסיבית: p1 = Ways(2). עכשיו שתי קריאות מחכות: Ways(4) ו־Ways(3).'},
-  {t:'if',id:'D',line:'if1',res:false,text:'ב־Ways(2): האם n == 1? לא.'},
-  {t:'if',id:'D',line:'if2',res:true,text:'ב־Ways(2): האם n == 2? כן! תנאי עצירה: מחזירים 2 בלי קריאה נוספת.'},
-  {t:'ret',id:'D',val:2,text:'Ways(2) מחזירה 2 אל Ways(3). שם p1 = 2.'},
-  {t:'call',id:'E',text:'Ways(3) ממשיכה לשורה הבאה: p2 = Ways(1).'},
-  {t:'if',id:'E',line:'if1',res:true,text:'ב־Ways(1): האם n == 1? כן! תנאי עצירה: מחזירים 1.'},
-  {t:'ret',id:'E',val:1,text:'Ways(1) מחזירה 1 אל Ways(3). שם p2 = 1.'},
-  {t:'ret',id:'B',val:3,text:'ל־Ways(3) יש את שני הערכים: מחזירה p1 + p2 = 2 + 1 = 3 אל Ways(4). שם p1 = 3.'},
-  {t:'call',id:'C',text:'Ways(4) ממשיכה לשורה הבאה: p2 = Ways(2). שימו לב: זו קריאה חדשה, היא לא ״זוכרת״ את Ways(2) הקודמת.'},
-  {t:'if',id:'C',line:'if1',res:false,text:'ב־Ways(2): האם n == 1? לא.'},
-  {t:'if',id:'C',line:'if2',res:true,text:'ב־Ways(2): האם n == 2? כן! תנאי עצירה: מחזירים 2.'},
-  {t:'ret',id:'C',val:2,text:'Ways(2) מחזירה 2 אל Ways(4). שם p2 = 2.'},
-  {t:'ret',id:'A',val:5,text:'Ways(4) מחזירה p1 + p2 = 3 + 2 = 5. זו התשובה הסופית.'},
-];
-let step=0; // number of steps applied
-const stage=document.getElementById('stage'),arrows=document.getElementById('arrows');
-function nodeEl(id){return document.getElementById('node-'+id);}
-function buildNodes(){
-  Object.entries(NODES).forEach(([id,nd])=>{
-    const el=document.createElement('div');el.className='node';el.id='node-'+id;el.style.left=nd.x+'px';el.style.top=nd.y+'px';
-    const base=nd.n<=2;
-    el.innerHTML=`<div class="head"><span>Ways(n = ${nd.n})</span></div>
-      <div class="ln" data-l="if1"><span>if (n == 1)</span><span class="r"></span></div>
-      <div class="ln" data-l="if2"><span>if (n == 2)</span><span class="r"></span></div>
-      ${base?'':`<div class="ln" data-l="p1"><span>p1 = Ways(${nd.n-1})</span><span class="r"></span></div>
-      <div class="ln" data-l="p2"><span>p2 = Ways(${nd.n-2})</span><span class="r"></span></div>`}
-      <div class="ln ret" data-l="ret"><span></span><span class="r"></span></div>`;
-    stage.appendChild(el);
-  });
-}
-buildNodes();
-function center(id){const el=nodeEl(id);return {x:el.offsetLeft+el.offsetWidth/2,top:el.offsetTop,bottom:el.offsetTop+el.offsetHeight};}
-function line(x1,y1,x2,y2,cls,label){
-  const ns='http://www.w3.org/2000/svg';
-  const p=document.createElementNS(ns,'line');
-  p.setAttribute('x1',x1);p.setAttribute('y1',y1);p.setAttribute('x2',x2);p.setAttribute('y2',y2);
-  p.setAttribute('stroke',cls==='call'?'#e0323c':'#1f5fd6');p.setAttribute('stroke-width','3');
-  p.setAttribute('marker-end',`url(#m-${cls})`);arrows.appendChild(p);
-  if(label!==undefined){
-    const t=document.createElementNS(ns,'text');t.setAttribute('x',x1+(x2-x1)*.38+24);t.setAttribute('y',y1+(y2-y1)*.38+7);
-    t.setAttribute('fill','#1f5fd6');t.setAttribute('font-size','20');t.setAttribute('font-weight','900');t.setAttribute('font-family','JetBrains Mono,monospace');
-    t.setAttribute('text-anchor','middle');t.setAttribute('paint-order','stroke');t.setAttribute('stroke','#fff');t.setAttribute('stroke-width','6');
-    t.textContent=label;arrows.appendChild(t);
-  }
-}
-function renderTrace(){
-  // reset
-  Object.keys(NODES).forEach(id=>{const el=nodeEl(id);el.className='node';el.querySelectorAll('.ln').forEach(l=>{l.className='ln'+(l.dataset.l==='ret'?' ret':'');l.querySelector('.r').textContent='';if(l.dataset.l==='ret')l.firstElementChild.textContent='';});});
-  arrows.querySelectorAll('line,text').forEach(e=>e.remove());
-  let last=null,activeId=null;const finished=new Set();const pendingArrows=[];
-  for(let i=0;i<step;i++){
-    const s=STEPS[i],nd=NODES[s.id],el=nodeEl(s.id);last=s;
-    el.classList.add('show');
-    el.querySelectorAll('.ln.cur').forEach(l=>l.classList.remove('cur'));
-    if(s.t==='call'){
-      activeId=s.id;
-      if(nd.parent){const pel=nodeEl(nd.parent);pel.querySelectorAll('.ln.cur').forEach(l=>l.classList.remove('cur'));const pl=pel.querySelector(`[data-l="${nd.slot}"]`);pl.classList.add('show','cur');
-        pendingArrows.push({kind:'call',parent:nd.parent,child:s.id,slot:nd.slot});
-      }
-    }else if(s.t==='if'){
-      const l=el.querySelector(`[data-l="${s.line}"]`);l.classList.add('show','cur');
-      l.querySelector('.r').innerHTML=s.res?'<span class="ok">✓</span>':'<span class="x">✗</span>';
-      if(s.res)l.classList.add('stop-hit');
-      activeId=s.id;
-    }else if(s.t==='ret'){
-      const r=el.querySelector('[data-l="ret"]');r.classList.add('show','cur');
-      const base=nd.n<=2;
-      r.firstElementChild.textContent=base?'return '+s.val:`return p1 + p2`;
-      r.querySelector('.r').textContent=base?'':`= ${s.val}`;
-      finished.add(s.id);
-      if(nd.parent){
-        const pl=nodeEl(nd.parent).querySelector(`[data-l="${nd.slot}"]`);pl.querySelector('.r').innerHTML=`<span class="v">→ ${s.val}</span>`;
-        nodeEl(nd.parent).querySelectorAll('.ln.cur').forEach(l=>l.classList.remove('cur'));pl.classList.add('cur');
-        pendingArrows.push({kind:'ret',parent:nd.parent,child:s.id,slot:nd.slot,val:s.val});
-        activeId=nd.parent;
-      }else{activeId=null;}
-    }
-  }
-  Object.keys(NODES).forEach(id=>{const el=nodeEl(id);if(finished.has(id))el.classList.add('done');if(id===activeId)el.classList.add('active');});
-  // arrows are drawn only now, after every box has its final size
-  pendingArrows.forEach(a=>{
-    const pc=center(a.parent),cc=center(a.child),off=a.slot==='p1'?-40:40;
-    if(a.kind==='call')line(pc.x+off-14,pc.bottom+2,cc.x-14,cc.top-2,'call');
-    else line(cc.x+14,cc.top-2,pc.x+off+14,pc.bottom+2,'ret',String(a.val));
-  });
-  // description
-  const d=document.getElementById('t-desc');
-  if(!last){d.className='desc';d.innerHTML='<span class="pill" style="background:#7c8aa3">התחלה</span><span>לחצו על ״המהלך הבא״ כדי להתחיל את המעקב.</span>';}
-  else{
-    let cls=last.t,pill={call:'קריאה רקורסיבית',if:'בדיקת תנאי',ret:'החזרת ערך'}[last.t];
-    if(last.t==='if'&&last.res){cls='stop';pill='תנאי עצירה';}
-    if(last.t==='ret'&&!NODES[last.id].parent){cls='done';pill='סיום';}
-    d.className='desc '+cls;d.innerHTML=`<span class="pill">${pill}</span><span>${last.text}</span>`+(cls==='done'?`<span class="result" style="margin-inline-start:auto">Ways(4) = 5</span>`:'');
-  }
-  // scale the stage to the available width
-  const wrap=stage.parentElement,sc=Math.min(1,(wrap.clientWidth-2)/900);
-  stage.style.transform=`scale(${sc})`;wrap.style.height=(760*sc)+'px';
-  document.getElementById('t-counter').textContent=step===0?`${STEPS.length} מהלכים`:`מהלך ${step} מתוך ${STEPS.length}`;
-  document.getElementById('t-prev').disabled=step===0;document.getElementById('t-next').disabled=step===STEPS.length;
-}
-function next(){if(step<STEPS.length){step++;renderTrace();}}
-function prev(){if(step>0){step--;renderTrace();}}
-document.getElementById('t-next').onclick=next;document.getElementById('t-prev').onclick=prev;
-document.getElementById('t-reset').onclick=()=>{step=0;renderTrace();};
-document.getElementById('t-all').onclick=()=>{step=STEPS.length;renderTrace();};
+}`,
+ ways5:`public static int Ways5(int n)
+{
+    if (n == 0)
+        return 1;
+    if (n < 0)
+        return 0;
+    int p1 = Ways5(n - 1);
+    int p2 = Ways5(n - 2);
+    int p3 = Ways5(n - 5);
+    return p1 + p2 + p3;
+}`};
+const trace=makeTrace({stage:document.getElementById('stage'),arrows:document.getElementById('arrows'),desc:document.getElementById('t-desc'),counter:document.getElementById('t-counter'),maxHeight:760});
+let presetKey='ways5';
+function loadPreset(){const p=TRACE_PRESETS[presetKey];trace.load({...p,memo:document.getElementById('memo-toggle').checked});document.getElementById('ref-code').textContent=CODE[presetKey];
+  document.querySelectorAll('[data-preset]').forEach(b=>b.classList.toggle('on',b.dataset.preset===presetKey));}
+document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>{presetKey=b.dataset.preset;document.getElementById('memo-toggle').checked=TRACE_PRESETS[presetKey].memo;loadPreset();});
+document.getElementById('memo-toggle').onchange=loadPreset;
+loadPreset();
+document.getElementById('t-next').onclick=()=>trace.next();document.getElementById('t-prev').onclick=()=>trace.prev();
+document.getElementById('t-reset').onclick=()=>trace.reset();document.getElementById('t-all').onclick=()=>trace.all();
+document.getElementById('t-zoom').onclick=e=>{trace.fitAll=!trace.fitAll;e.target.classList.toggle('on',trace.fitAll);trace.render();};
 document.addEventListener('keydown',e=>{
-  if(current!=='b'||!document.getElementById('sol-b').classList.contains('open'))return;
-  if(['ArrowRight',' ','PageDown','Enter'].includes(e.key)){e.preventDefault();next();}
-  if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();prev();}
+  if(current!=='d'||!document.getElementById('sol-d').classList.contains('open'))return;
+  if(['ArrowRight',' ','PageDown','Enter'].includes(e.key)){e.preventDefault();trace.next();}
+  if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();trace.prev();}
 });
-// re-draw arrows if fonts load late / resize changes box sizes
-window.addEventListener('resize',()=>{if(step)renderTrace();});
-if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{if(step)renderTrace();});
-
-/* ---------- complexity pyramid ---------- */
-(function(){const p=document.getElementById('pyr');[[0,1],[1,2],[2,4],[3,8]].forEach(([lvl,k])=>{
-  const row=document.createElement('div');row.className='row';
-  row.innerHTML=`<span class="lbl">רמה ${lvl}: ${k===1?'קריאה אחת':k+' קריאות'}</span>`+'<span class="b"></span>'.repeat(k);p.appendChild(row);});
-  const cap=document.createElement('div');cap.className='hint';cap.style.marginTop='4px';cap.innerHTML='כל רמה מכפילה את הקודמת; אחרי n רמות: <span class="ltr">2<sup>n</sup></span>.';p.appendChild(cap);
-})();
+window.addEventListener('resize',()=>trace.render());
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>trace.render());
 </script>
 </body>
 </html>
