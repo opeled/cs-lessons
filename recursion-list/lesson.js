@@ -44,18 +44,19 @@ function simWhat(vals,R,parent=null,parentLi=null,i=0){
   R.ret(id,'return 1',1,{focus:i},`What(${v}) מחזירה 1: הרצף העולה שמתחיל ב־${v} הוא רק החוליה עצמה.`);return 1;
 }
 
-/* --- Secret(lst): What is a known value --- */
+/* --- Secret(lst): What is a known value. 3 moves per entry: call (+null check), What value + recursive call, return --- */
 function simSecret(vals,R,parent=null,parentLi=null,i=0){
   const isNull=i===vals.length;
   const id=R.call(isNull?'Secret(null)':`Secret(lst → ${vals[i]})`,parent,parentLi,{focus:isNull?undefined:i},
-    parent===null?`קוראים ל־Secret עם השרשרת כולה.`:isNull?`קריאה רקורסיבית: Secret על null (אחרי החוליה האחרונה).`:`קריאה רקורסיבית: Secret על השרשרת שמתחילה בחוליה ${vals[i]}.`);
-  R.line(id,'if (lst == null)',{kind:'if',res:isNull,focus:isNull?undefined:i,
-    text:isNull?`השרשרת ריקה: תנאי עצירה.`:`lst אינה null, ממשיכים.`});
-  if(isNull){R.ret(id,'return 0',0,{},`Secret(null) מחזירה 0.`);return 0;}
+    parent===null?`קוראים ל־Secret עם השרשרת כולה. lst אינה null, ממשיכים.`:isNull?`קריאה רקורסיבית: Secret על null, אחרי החוליה האחרונה.`:`קריאה רקורסיבית: Secret על השרשרת שמתחילה בחוליה ${vals[i]}. lst אינה null, ממשיכים.`);
+  if(isNull){
+    R.line(id,'if (lst == null)',{kind:'if',res:true,text:`השרשרת ריקה: תנאי עצירה.`});
+    R.ret(id,'return 0',0,{},`Secret(null) מחזירה 0.`);return 0;}
+  R.line(id,'if (lst == null)',{kind:'if',res:false,silent:'prev'});
   const w=whatValue(vals,i);
-  R.line(id,'What(lst)',{kind:'inner',val:w,focus:i,range:[i,i+w-1],
-    text:`אין צורך לעקוב אחרי What. מסעיף א׳ אנחנו יודעים מה היא מחזירה: אורך הרצף העולה שמתחיל בחוליה ${vals[i]}, כלומר ${w}.`});
-  const li=R.line(id,'Secret(lst.GetNext())',{kind:'sub',focus:i,text:`עכשיו קוראים ל־Secret על שאר השרשרת.`});
+  R.line(id,'What(lst)',{kind:'inner',val:w,silent:'next'});
+  const li=R.line(id,'Secret(lst.GetNext())',{kind:'sub',focus:i,range:[i,i+w-1],
+    text:`אין צורך לעקוב אחרי What: מסעיף א׳ ידוע שהיא מחזירה את אורך הרצף העולה שמתחיל בחוליה ${vals[i]}, כלומר ${w}. עכשיו קוראים ל־Secret על שאר השרשרת.`});
   const s=simSecret(vals,R,id,li,i+1);
   const m=Math.max(w,s);
   R.ret(id,`return Math.Max(${w}, ${s})`,m,{focus:i},
