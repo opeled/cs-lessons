@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>רקורסיה: שליח ברחוב – מצגת</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b1220; --card:#ffffff; --ink:#15233b; --muted:#5b6b85; --line:#dfe6f0;
+    --accent:#0aa8d6; --accent-ink:#06688a; --accent-soft:#e3f5fb;
+    --call:#e0323c; --call-soft:#fde8e9; --ret:#1f5fd6; --ret-soft:#e6eefc;
+    --stop:#1f9d55; --stop-soft:#e4f6ec; --combine:#c77a00; --combine-soft:#fff3dc;
+    --sky1:#dff1fb; --sky2:#ffffff; --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:20px;line-height:1.55;overflow:hidden}
+  code,pre,.mono{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  body{position:relative;direction:ltr}
+  .deck{position:absolute;left:50%;top:50%;width:1280px;height:720px;margin:-360px 0 0 -640px;transform-origin:center center;direction:rtl}
+  .slide{position:absolute;inset:0;padding:44px 64px 60px;display:none;flex-direction:column;gap:14px}
+  .slide.active{display:flex;animation:fade .3s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .slide h1{margin:0;color:#fff;font-size:40px;font-weight:900;letter-spacing:-.5px}
+  .slide h1 small{display:block;font-size:17px;font-weight:500;opacity:.65;margin-top:2px}
+  .card{background:var(--card);border-radius:var(--radius);padding:24px 28px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+  .fill{flex:1;min-height:0}
+  .two{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;align-items:start}
+  .center{display:flex;align-items:center;justify-content:center;text-align:center}
+  .frag{visibility:hidden;opacity:0;transition:opacity .35s ease}
+  .frag.on{visibility:visible;opacity:1}
+  /* chrome */
+  .hud{position:absolute;left:0;right:0;bottom:16px;display:flex;align-items:center;justify-content:center;gap:8px;color:rgba(255,255,255,.55);font-size:14px}
+  .hud .dots{display:flex;gap:6px;direction:ltr}
+  .hud .dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.22)}
+  .hud .dot.done{background:rgba(255,255,255,.55)}
+  .hud .dot.cur{background:var(--accent);transform:scale(1.25)}
+  .hud .dot.bonus{border:1px dashed rgba(255,255,255,.4);background:transparent}
+  .hud .counter{position:absolute;left:28px;font-variant-numeric:tabular-nums}
+  .hud .fs{position:absolute;right:24px;top:-8px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);font-size:18px;line-height:1;padding:5px 9px;border-radius:8px;cursor:pointer}
+  .hud .fs:hover{background:rgba(255,255,255,.18)}
+  kbd{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:5px;padding:0 6px;font-family:inherit;font-size:13px}
+  .tag{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);font-weight:700;font-size:14px;padding:3px 12px;border-radius:999px}
+  .hint{color:var(--muted);font-size:16px}
+  .note{background:var(--accent-soft);border-right:6px solid var(--accent);padding:18px 22px;border-radius:12px;font-size:22px}
+  /* exam sheet */
+  .sheet{background:#fff;color:#000;width:860px;margin:0 auto;text-align:right;padding:26px 44px 30px;border:1px solid #cfd4dd;font-family:"Times New Roman","David",Times,serif;font-size:18px;line-height:1.65;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+  .sheet p{margin:8px 0}
+  .sheet-head{display:flex;justify-content:space-between;font-size:14px;color:#333;border-bottom:1px solid #999;padding-bottom:3px;margin-bottom:16px}
+  .sheet-head span:first-child{text-decoration:underline}
+  .sheet-table{border-collapse:collapse;margin:6px 40px}
+  .sheet-table td{border:1px solid #000;padding:2px 16px;text-align:center}
+  .ltr{direction:ltr;unicode-bidi:isolate}
+  .sheet-code{font-family:"Courier New",monospace;font-size:16px;white-space:nowrap}
+  .sheet-sections{list-style:none;padding:0;margin:14px 0 0}
+  .sheet-sections>li{margin:9px 0;padding-right:32px;position:relative}
+  .sec-letter{position:absolute;right:0;top:0;font-weight:700}
+  .sheet-sub{list-style:none;padding:0;margin:0}
+  /* street */
+  .street{background:linear-gradient(var(--sky1),var(--sky2));border-radius:14px;overflow:hidden}
+  .street svg{display:block;width:100%;height:auto}
+  /* route cards */
+  .routes{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .route{display:grid;gap:4px;background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 18px 10px;cursor:pointer;font:inherit;color:inherit;text-align:right;transition:.15s}
+  .route:hover{border-color:var(--accent)}
+  .route.playing{border-color:var(--accent);background:var(--accent-soft)}
+  .route .name{font-weight:900;color:var(--accent-ink);font-size:22px}
+  .route .rdesc{font-size:18px}
+  .route svg{display:none;width:100%;max-width:340px;height:auto;direction:ltr;margin:6px auto 0}
+  .route.shown svg{display:block;animation:fade .3s ease}
+  /* think cards + code */
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .think{border-radius:14px;padding:14px 18px;border:2px solid;background:#fff;text-align:right;font:inherit;cursor:pointer;position:relative;color:var(--ink)}
+  .think .num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;margin-bottom:4px}
+  .think h4{margin:0 0 4px;font-size:21px}
+  .think p{margin:0;font-size:17px;color:var(--muted)}
+  .think.stop{border-color:var(--stop);background:var(--stop-soft)}.think.stop .num{background:var(--stop)}
+  .think.call{border-color:var(--call);background:var(--call-soft)}.think.call .num{background:var(--call)}
+  .think.comb{border-color:var(--combine);background:var(--combine-soft)}.think.comb .num{background:var(--combine)}
+  .think .more{border:0;background:rgba(21,35,59,.1);color:var(--ink);font:inherit;font-weight:900;letter-spacing:2px;line-height:1;padding:2px 10px 6px;border-radius:999px;cursor:pointer;vertical-align:middle}
+  .think .ans{display:none}
+  .think.open .ans{display:inline}
+  .think.open .more{display:none}
+  .think .check{display:none;margin-top:8px;font-weight:700;font-size:14px}
+  .think.added .check{display:inline-block}
+  pre.code{direction:ltr;text-align:left;background:#0f172a;color:#e2e8f0;padding:16px 22px;border-radius:14px;font-size:18px;line-height:1.5;margin:0;border:1px solid rgba(255,255,255,.08)}
+  .code .k{color:#93c5fd}.code .f{color:#86efac}.code .c{color:#94a3b8;font-style:italic}.code .n{color:#fca5a5}
+  .code .hl-stop{background:rgba(31,157,85,.25);border-radius:4px;box-shadow:0 0 0 2px rgba(31,157,85,.35)}
+  .code .hl-call{background:rgba(224,50,60,.25);border-radius:4px;box-shadow:0 0 0 2px rgba(224,50,60,.35)}
+  .code .hl-comb{background:rgba(199,122,0,.28);border-radius:4px;box-shadow:0 0 0 2px rgba(199,122,0,.4)}
+  .code .part .body{display:none}
+  .code .part.added .body{display:inline}
+  .code .part.added .placeholder{display:none}
+  .code .placeholder .c{opacity:.55}
+  pre.exam{direction:ltr;text-align:left;margin:0;background:#fff;color:#000;border-radius:12px;padding:14px 18px;font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:15px;line-height:1.55}
+  /* trace */
+  .trace{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start}
+  .stage-wrap{overflow:hidden;direction:ltr;border-radius:14px;background:#fbfcfe;
+     background-image:linear-gradient(0deg,transparent 24%,rgba(21,35,59,.035) 25%,rgba(21,35,59,.035) 26%,transparent 27%,transparent 74%,rgba(21,35,59,.035) 75%,rgba(21,35,59,.035) 76%,transparent 77%),
+     linear-gradient(90deg,transparent 24%,rgba(21,35,59,.035) 25%,rgba(21,35,59,.035) 26%,transparent 27%,transparent 74%,rgba(21,35,59,.035) 75%,rgba(21,35,59,.035) 76%,transparent 77%);
+     background-size:40px 40px;height:462px}
+  #s-trace{gap:10px}
+  #s-trace h1{font-size:30px;line-height:1.25}
+  .stage{position:relative;width:900px;height:760px;direction:ltr;transform-origin:top left}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+  .node{position:absolute;width:210px;background:#fff;border:2px solid var(--line);border-radius:12px;box-shadow:0 6px 18px rgba(21,35,59,.08);font-family:"JetBrains Mono",monospace;font-size:14.5px;direction:ltr;text-align:left;opacity:0;transform:scale(.9);transition:.25s}
+  .node.show{opacity:1;transform:none}
+  .node.active{border-color:var(--ink);box-shadow:0 0 0 4px rgba(21,35,59,.12),0 10px 24px rgba(21,35,59,.15)}
+  .node.done{opacity:.8}
+  .node .head{background:var(--ink);color:#fff;padding:7px 12px;border-radius:9px 9px 0 0;font-weight:700;font-size:15px}
+  .node.done .head{background:#4b5a75}
+  .node .ln{padding:4px 12px;color:#7c8aa3;display:none;justify-content:space-between;gap:8px;white-space:nowrap}
+  .node .ln.show{display:flex}
+  .node .ln.cur{background:#fff7d6;color:var(--ink);font-weight:700}
+  .node .ln.stop-hit{color:var(--stop);font-weight:700}
+  .node .ln .v{color:var(--ret);font-weight:700}
+  .node .ln .x{color:var(--call)}
+  .node .ln .ok{color:var(--stop)}
+  .node .ln.ret{color:var(--ret);font-weight:700;border-top:1px dashed var(--line);margin-top:3px;padding-top:6px;padding-bottom:7px}
+  .main-box{position:absolute;left:380px;top:-2px;width:140px;text-align:center;font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--muted)}
+  .desc{min-height:60px;border-radius:12px;padding:12px 16px;font-size:19px;display:flex;gap:12px;align-items:center;border:2px solid var(--line);background:#fff}
+  .desc .pill{font-size:14px;font-weight:900;padding:3px 10px;border-radius:999px;color:#fff;white-space:nowrap;background:#7c8aa3}
+  .desc.call{border-color:var(--call);background:var(--call-soft)}.desc.call .pill{background:var(--call)}
+  .desc.ret{border-color:var(--ret);background:var(--ret-soft)}.desc.ret .pill{background:var(--ret)}
+  .desc.if{border-color:#b9a000;background:#fff7d6}.desc.if .pill{background:#b9a000}
+  .desc.stop{border-color:var(--stop);background:var(--stop-soft)}.desc.stop .pill{background:var(--stop)}
+  .desc.done{border-color:var(--accent);background:var(--accent-soft)}.desc.done .pill{background:var(--accent)}
+  .result{font-size:24px;font-weight:900;color:var(--accent-ink);margin-inline-start:auto}
+  .counter-s{color:var(--muted);font-size:15px;margin-top:8px}
+  /* answers */
+  .answer{border-radius:14px;border:1px solid var(--line);padding:18px 22px;background:#fff;font-size:21px}
+  .answer b.q{color:var(--accent-ink)}
+  .pyr{display:flex;flex-direction:column;gap:8px;align-items:center}
+  .pyr .row{display:flex;gap:6px;align-items:center}
+  .pyr .row .lbl{width:150px;font-size:14px;color:var(--muted);text-align:right}
+  .pyr .b{width:26px;height:26px;border-radius:6px;background:var(--call);opacity:.85}
+  .pyr .row:nth-child(1) .b{background:var(--ink)}
+  .q-big{font-size:34px;font-weight:700;color:#fff;line-height:1.4}
+  .q-big code{background:rgba(255,255,255,.1);padding:2px 10px;border-radius:8px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<!-- 1 שאלון -->
+<section class="slide" data-title="השאלה">
+  <div class="fill center">
+  <div class="sheet">
+    <div class="sheet-head"><span>מדעי המחשב, שאלה לדוגמה</span><span>- 1 -</span><span>רקורסיה</span></div>
+    <p><b>שאלה 1</b> (25 נקודות)</p>
+    <p>שליח נמצא בתחילת רחוב ובו n בניינים, הממוספרים 1 עד n. השליח עומד לפני בניין 1, בנקודת ההתחלה (מסומנת 0). בכל נסיעה הוא יכול להתקדם בניין אחד או שני בניינים קדימה. המשלוח צריך להגיע בדיוק לבניין n.</p>
+    <p>למשל, אל בניין 3 יש לשליח 3 דרכים שונות להגיע:</p>
+    <table class="sheet-table">
+      <tr><td>דרך 1</td><td class="ltr sheet-code">0 → 1 → 2 → 3</td></tr>
+      <tr><td>דרך 2</td><td class="ltr sheet-code">0 → 1 → 3</td></tr>
+      <tr><td>דרך 3</td><td class="ltr sheet-code">0 → 2 → 3</td></tr>
+    </table>
+    <p>שימו לב: דרך 2 ודרך 3 שונות זו מזו, מכיוון שהשליח עוצר בבניינים שונים.</p>
+    <ol class="sheet-sections">
+      <li><span class="sec-letter">א.</span> כתבו פעולה רקורסיבית <span class="ltr sheet-code">public static int Ways(int n)</span>, המקבלת את מספר הבניין n ומחזירה את מספר הדרכים השונות שבהן השליח יכול להגיע מנקודת ההתחלה אל בניין n.</li>
+      <li><span class="sec-letter">ב.</span> כתבו מה תחזיר הפעולה <span class="ltr sheet-code">Ways(4)</span>. עליכם להראות מעקב.</li>
+      <li><span class="sec-letter">ג.</span>
+        <ol class="sheet-sub">
+          <li>(1) מהו סוג הרקורסיה בפעולה <span class="ltr sheet-code">Ways</span>? נמקו.</li>
+          <li>(2) מהי סיבוכיות זמן הריצה של <span class="ltr sheet-code">Ways(n)</span>? נמקו.</li>
+        </ol>
+      </li>
+    </ol>
+  </div>
+  </div>
+</section>
+
+<!-- 2 הסיפור -->
+<section class="slide" data-title="הבעיה">
+  <h1>שליח ברחוב <small>סעיף א׳</small></h1>
+  <div class="card fill two" style="align-items:center">
+    <div style="font-size:24px;line-height:1.7">
+      <p style="margin:0">שליח של וולט נמצא בתחילת רחוב ובו <b>n</b> בניינים, הממוספרים 1 עד n.</p>
+      <p>השליח עומד לפני בניין 1, ב<b>נקודת ההתחלה</b> (מסומנת 0).</p>
+      <p>בכל נסיעה הוא יכול להתקדם <b>בניין אחד</b> או <b>שני בניינים</b> קדימה.</p>
+      <p style="margin-bottom:0">המשלוח צריך להגיע <b>בדיוק</b> לבניין n.</p>
+    </div>
+    <div class="street" id="street-1"></div>
+  </div>
+</section>
+
+<!-- 3 הדוגמה -->
+<section class="slide" data-title="דוגמה" id="s-example">
+  <h1>אל בניין 3 יש 3 דרכים</h1>
+  <div class="card fill" style="display:grid;grid-template-rows:auto 1fr;gap:16px">
+    <div class="street" id="street-2" style="max-width:720px;margin:0 auto;width:100%"></div>
+    <div class="routes" id="routes-list"></div>
+  </div>
+</section>
+
+<!-- 4 משימה א -->
+<section class="slide" data-title="משימה א׳">
+  <h1>סעיף א׳</h1>
+  <div class="fill center">
+    <div class="note" style="max-width:900px;width:100%">
+      כתבו פעולה רקורסיבית:
+      <div class="mono ltr" style="text-align:left;font-size:26px;font-weight:700;background:#fff;border-radius:10px;padding:12px 18px;margin:12px 0">public static int Ways(int n)</div>
+      הפעולה מקבלת את מספר הבניין n ומחזירה את מספר הדרכים השונות שבהן השליח יכול להגיע מנקודת ההתחלה אל בניין n.
+    </div>
+  </div>
+</section>
+
+<!-- 5 הרעיון -->
+<section class="slide" data-title="הרעיון">
+  <h1>איך ניגשים לבעיה? <small>חושבים על הנסיעות האחרונות</small></h1>
+  <div class="card fill two" style="align-items:center">
+    <div class="street" id="street-3"></div>
+    <div style="font-size:23px;line-height:1.7">
+      <p class="frag" style="margin:0">השליח הגיע לבניין n בנסיעה של <b style="color:var(--ret)">בניין אחד</b>, ואז לפני כן היה בבניין <span class="ltr">n − 1</span>.</p>
+      <p class="frag">או בנסיעה של <b style="color:var(--call)">שני בניינים</b>, ואז היה בבניין <span class="ltr">n − 2</span>.</p>
+      <p class="frag">אם נחשב את מספר הדרכים להגיע לבניין הקודם ולבניין שלפניו, ונסכום אותן, נגיע לפתרון:</p>
+      <p class="frag mono ltr" style="text-align:center;font-size:24px;font-weight:700;background:var(--accent-soft);border-radius:10px;padding:12px;margin:0">Ways(n) = Ways(n−1) + Ways(n−2)</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6 שלושת הדברים -->
+<section class="slide" data-title="הקוד" id="s-code">
+  <h1>שלושה דברים שצריך לחשוב עליהם</h1>
+  <div class="three">
+    <div class="think stop" data-part="stop"><div class="num">1</div><h4>תנאי עצירה</h4><p>מתי התשובה ידועה בלי רקורסיה? <button class="more">…</button><span class="ans">אל בניין 1 יש דרך אחת, אל בניין 2 יש שתיים (1+1 או 2). בלי שני תנאים, הקריאה תגיע ל־Ways(0) ול־Ways(−1) ולא תעצור.</span></p><span class="check">✓ נוסף לקוד</span></div>
+    <div class="think call" data-part="call"><div class="num">2</div><h4>קריאה רקורסיבית</h4><p>מה הפרמטרים של הקריאה הרקורסיבית? <button class="more">…</button><span class="ans"><span class="ltr">n − 1</span> ו־<span class="ltr">n − 2</span>: בעיה <b>קטנה יותר</b> מאותו סוג – הדרכים אל הבניין הקודם ואל הבניין שלפניו.</span></p><span class="check">✓ נוסף לקוד</span></div>
+    <div class="think comb" data-part="comb"><div class="num">3</div><h4>שילוב התוצאות</h4><p>מה עושים עם מה שחזר? <button class="more">…</button><span class="ans">כאן <b>מחברים</b>, כי כל דרך אל n שייכת בדיוק לאחת משתי הקבוצות.</span></p><span class="check">✓ נוסף לקוד</span></div>
+  </div>
+<pre class="code fill" id="build-code"><span class="k">public static int</span> <span class="f">Ways</span>(<span class="k">int</span> n)
+{
+<span class="part" data-part="stop"><span class="placeholder">    <span class="c">// 1. תנאי עצירה</span></span><span class="body">    <span class="hl-stop"><span class="k">if</span> (n == <span class="n">1</span>)
+        <span class="k">return</span> <span class="n">1</span>;        <span class="c">// <bdi>דרך אחת: נסיעה של 1</bdi></span>
+    <span class="k">if</span> (n == <span class="n">2</span>)
+        <span class="k">return</span> <span class="n">2</span>;        <span class="c">// <bdi>שתי דרכים: 1+1 או 2</bdi></span></span></span></span>
+
+<span class="part" data-part="call"><span class="placeholder">    <span class="c">// 2. קריאה רקורסיבית</span></span><span class="body">    <span class="hl-call"><span class="k">int</span> p1 = <span class="f">Ways</span>(n - <span class="n">1</span>);  <span class="c">// <bdi>הגיע מבניין n−1</bdi></span>
+    <span class="k">int</span> p2 = <span class="f">Ways</span>(n - <span class="n">2</span>);  <span class="c">// <bdi>הגיע מבניין n−2</bdi></span></span></span></span>
+<span class="part" data-part="comb"><span class="placeholder">    <span class="c">// 3. שילוב התוצאות</span></span><span class="body">    <span class="hl-comb"><span class="k">return</span> p1 + p2;</span></span></span>
+}</pre>
+</section>
+
+<!-- 7 משימה ב -->
+<section class="slide" data-title="משימה ב׳">
+  <h1>סעיף ב׳</h1>
+  <div class="fill center">
+    <div class="note" style="max-width:900px;width:100%;font-size:26px">
+      כתבו מה תחזיר הפעולה <code class="ltr">Ways(4)</code>.<br>עליכם להראות מעקב.
+    </div>
+  </div>
+</section>
+
+<!-- 8 מעקב -->
+<section class="slide" data-title="מעקב" id="s-trace">
+  <h1>עץ הקריאות של <span class="mono ltr">Ways(4)</span></h1>
+  <div class="trace fill">
+    <div>
+<pre class="exam">public static int Ways(int n)
+{
+    if (n == 1)
+        return 1;
+    if (n == 2)
+        return 2;
+    int p1 = Ways(n - 1);
+    int p2 = Ways(n - 2);
+    return p1 + p2;
+}</pre>
+      <div class="counter-s" id="t-counter" style="color:rgba(255,255,255,.6)"></div>
+    </div>
+    <div class="stage-wrap"><div class="stage" id="stage">
+      <svg id="arrows"><defs>
+        <marker id="m-call" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker>
+        <marker id="m-ret" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f5fd6"/></marker>
+      </defs></svg>
+      <div class="main-box">Main: Ways(4)</div>
+    </div></div>
+  </div>
+  <div class="desc" id="t-desc"><span class="pill">התחלה</span><span>לחיצה מקדמת מהלך אחד.</span></div>
+</section>
+
+<!-- 9 ג1 -->
+<section class="slide" data-title="ג(1)">
+  <h1>סעיף ג׳ <small>(1)</small></h1>
+  <div class="fill" style="display:flex;flex-direction:column;gap:22px;justify-content:center">
+    <p class="q-big" style="margin:0">מהו סוג הרקורסיה בפעולה <code class="ltr">Ways</code>? נמקו.</p>
+    <div class="answer frag">
+      <b class="q">הלוך־חזור.</b><br>
+      אחרי שהקריאה הרקורסיבית חוזרת נותרה עבודה: צריך לחבר את שני הערכים שחזרו (<span class="mono ltr">p1 + p2</span>). לכן זו אינה רקורסיית זנב, שבה הקריאה הרקורסיבית היא הפעולה האחרונה והערך שלה מוחזר כמו שהוא. זו גם אינה רקורסיה הדדית, כי יש כאן פעולה אחת שקוראת לעצמה ולא שתי פעולות שקוראות זו לזו.
+    </div>
+  </div>
+</section>
+
+<!-- 10 ג2 -->
+<section class="slide" data-title="ג(2)">
+  <h1>סעיף ג׳ <small>(2)</small></h1>
+  <div class="fill" style="display:flex;flex-direction:column;gap:16px;justify-content:center">
+    <p class="q-big" style="margin:0">מהי סיבוכיות זמן הריצה של <code class="ltr">Ways(n)</code>? נמקו.</p>
+    <div class="answer frag">
+      <b class="q mono ltr">O(2<sup>n</sup>)</b><br>
+      סיבוכיות של רקורסיה היא <b>מספר הקריאות</b>. כל קריאה (שאינה תנאי עצירה) פותחת <b>שתי</b> קריאות חדשות, וזה חוזר על עצמו עד העומק n. הכפלה בתוך הכפלה, n פעמים: <span class="ltr mono">2 · 2 · … · 2 = 2<sup>n</sup></span>.
+    </div>
+    <div class="answer frag two" style="align-items:center">
+      <div class="pyr" id="pyr"></div>
+      <div style="font-size:18px;color:var(--muted)">
+        <p style="margin:0 0 8px"><b>למה לא <span class="ltr">n<sup>2</sup></span>?</b> <span class="ltr">n<sup>2</sup></span> מתאים למשל לפעולה רקורסיבית על מערך שבה יש n קריאות, וכל קריאה עוברת על כל המערך: n קריאות כפול n פעולות בכל אחת. כאן כל קריאה מבצעת מספר קבוע של פעולות; מה שגדל הוא מספר הקריאות עצמו.</p>
+        <p style="margin:0"><b>למה לא n?</b> O(n) מתאים לרקורסיה שבה כל קריאה פותחת <b>קריאה אחת</b>, למשל מעבר על מערך מאינדקס לאינדקס: שרשרת של n קריאות. כאן כל קריאה פותחת <b>שתיים</b>, ולכן מספר הקריאות מוכפל בכל רמה: 1, 2, 4, 8, …</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 בונוס -->
+<section class="slide bonus" data-title="בונוס">
+  <h1>בונוס <small>סעיף ג׳</small></h1>
+  <div class="fill" style="display:flex;flex-direction:column;gap:22px;justify-content:center">
+    <p class="q-big" style="margin:0">בעץ הקריאות הפעולה <code class="ltr">Ways(2)</code> חושבה יותר מפעם אחת. הסבירו מדוע זה קורה, ומה זה אומר על גודל העץ כאשר n גדל.</p>
+    <div class="answer frag">
+      <span class="mono ltr">Ways(2)</span> נדרשת גם על ידי <span class="mono ltr">Ways(4)</span> וגם על ידי <span class="mono ltr">Ways(3)</span>, וכל קריאה מחשבת אותה מחדש בלי ״לזכור״ שכבר חושבה. ככל ש־n גדל, אותם ערכים קטנים חוזרים ומופיעים בחלקים רבים של העץ, וזה מקור הגידול המעריכי: רוב העבודה בעץ היא חזרה על חישובים שכבר נעשו. אם היינו שומרים כל תוצאה פעם אחת, היו רק n ערכים שונים לחשב.
+    </div>
+  </div>
+</section>
+
+<div class="hud">
+  <span class="counter" id="hud-counter"></span>
+  <div class="dots" id="hud-dots"></div>
+  <button class="fs" id="hud-fs" title="מסך מלא (F)">⛶</button>
+</div>
+</div>
+
+<script>
+/* ---------- shared drawing (same as index.html) ---------- */
+const BUILD_COLORS=['#9fd3e8','#f7c59f','#b8e0b0','#d9c3f2','#f9d976'];
+function scooterSVG(x,y,scale=1){
+  return `<g class="scooter" transform="translate(${x},${y}) scale(${scale})">
+    <circle cx="-16" cy="0" r="9" fill="#2b2f3a"/><circle cx="-16" cy="0" r="4" fill="#cfd4dd"/>
+    <circle cx="18" cy="0" r="9" fill="#2b2f3a"/><circle cx="18" cy="0" r="4" fill="#cfd4dd"/>
+    <path d="M-14,-4 L-2,-4 L4,-20 L18,-20 L18,-6" fill="none" stroke="#0aa8d6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="-26" y="-38" width="24" height="21" rx="4" fill="#0aa8d6"/>
+    <rect x="-23" y="-32" width="18" height="10" rx="2" fill="#fff" fill-opacity=".95"/>
+    <text x="-14" y="-24" text-anchor="middle" font-family="Heebo,Arial,sans-serif" font-weight="900" font-size="7.5" fill="#0aa8d6">WOLT</text>
+    <path d="M10,-20 L-4,-20" stroke="#0aa8d6" stroke-width="5" stroke-linecap="round"/>
+    <path d="M2,-21 L0,-36 L10,-42" fill="none" stroke="#15233b" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="6" cy="-50" r="8" fill="#15233b"/><rect x="-2" y="-50" width="16" height="5" rx="2" fill="#0aa8d6"/>
+    <path d="M12,-38 L22,-32" stroke="#15233b" stroke-width="4" stroke-linecap="round"/>
+    <path d="M22,-32 L30,-28" stroke="#15233b" stroke-width="4" stroke-linecap="round"/>
+    <path d="M28,-30 L20,-18" stroke="#0aa8d6" stroke-width="5" stroke-linecap="round"/>
+  </g>`;
+}
+function buildStreet(container,n){
+  const W=560,H=250,ground=200,startX=50,gap=(W-100)/n,bx=i=>startX+i*gap;
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  s+=`<rect x="0" y="${ground}" width="${W}" height="${H-ground}" fill="#3b4252"/>`;
+  s+=`<path d="M0,${ground+22} H${W}" stroke="#f5f5f5" stroke-width="3" stroke-dasharray="18 14"/>`;
+  s+=`<rect x="0" y="${ground-8}" width="${W}" height="8" fill="#c9ced8"/>`;
+  for(let i=1;i<=n;i++){
+    const h=70+((i*37)%50),x=bx(i)-28,c=BUILD_COLORS[(i-1)%BUILD_COLORS.length];
+    s+=`<rect x="${x}" y="${ground-8-h}" width="56" height="${h}" rx="3" fill="${c}" stroke="#15233b" stroke-opacity=".25"/>`;
+    for(let r=0;r<Math.floor(h/22);r++)for(let k=0;k<2;k++)s+=`<rect x="${x+12+k*22}" y="${ground-8-h+10+r*22}" width="10" height="11" rx="1.5" fill="#fff" fill-opacity=".8"/>`;
+    s+=`<rect x="${bx(i)-14}" y="${ground-8-h-24}" width="28" height="22" rx="6" fill="#15233b"/>`;
+    s+=`<text x="${bx(i)}" y="${ground-8-h-8}" text-anchor="middle" font-size="15" font-weight="700" fill="#fff" font-family="Heebo,sans-serif">${i}</text>`;
+  }
+  s+=`<text x="${bx(0)}" y="${ground+45}" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="Heebo,sans-serif">0</text>`;
+  for(let i=1;i<=n;i++)s+=`<text x="${bx(i)}" y="${ground+45}" text-anchor="middle" font-size="14" fill="#cfd4dd" font-family="Heebo,sans-serif">${i}</text>`;
+  s+=`<circle cx="${bx(0)}" cy="${ground-10}" r="5" fill="#e0323c"/>`;
+  s+=`<g id="routes-${container.id}"></g>`;
+  s+=scooterSVG(bx(0),ground-12,.85);
+  s+=`</svg>`;
+  container.innerHTML=s;container._bx=bx;container._ground=ground;
+}
+function arcPath(x1,x2,y,lift){const mx=(x1+x2)/2;return `M${x1},${y} Q${mx},${y-lift} ${x2},${y}`;}
+function showRoute(container,steps){
+  const g=container.querySelector(`#routes-${container.id}`),bx=container._bx,y=container._ground-14;
+  let pos=0,paths=[];g.innerHTML='';
+  steps.forEach(st=>{const a=bx(pos),b=bx(pos+st),lift=st===1?55:95;
+    g.innerHTML+=`<path d="${arcPath(a,b,y,lift)}" fill="none" stroke="${st===1?'#1f5fd6':'#e0323c'}" stroke-width="4" stroke-dasharray="6 6" opacity=".9"/>
+      <text x="${(a+b)/2}" y="${y-lift/2-6}" text-anchor="middle" font-size="16" font-weight="900" fill="${st===1?'#1f5fd6':'#e0323c'}" font-family="Heebo,sans-serif">+${st}</text>`;
+    paths.push([a,b,lift]);pos+=st;});
+  animateScooter(container,paths);
+}
+function animateScooter(container,segs){
+  const sc=container.querySelector('.scooter');if(!sc)return;
+  const y=container._ground-12;let i=0;
+  if(container._anim)cancelAnimationFrame(container._anim);
+  function run(){
+    if(i>=segs.length)return;
+    const [a,b,lift]=segs[i],t0=performance.now(),dur=700;
+    function frame(now){
+      const t=Math.min(1,(now-t0)/dur),e=t<.5?2*t*t:-1+(4-2*t)*t;
+      sc.setAttribute('transform',`translate(${a+(b-a)*e},${y-4*lift*.6*e*(1-e)}) scale(.85)`);
+      if(t<1)container._anim=requestAnimationFrame(frame);else{i++;setTimeout(run,150);}
+    }
+    container._anim=requestAnimationFrame(frame);
+  }
+  sc.setAttribute('transform',`translate(${container._bx(0)},${y}) scale(.85)`);setTimeout(run,100);
+}
+function routeSVG(steps,n=3){
+  const W=300,H=74,y=58,x0=22,gap=(W-44)/n,bx=i=>x0+i*gap;
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+    <defs><marker id="rm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#15233b"/></marker></defs>
+    <line x1="${bx(0)}" y1="${y}" x2="${bx(n)}" y2="${y}" stroke="#c9ced8" stroke-width="3"/>`;
+  let pos=0;const visited=new Set([0]);
+  steps.forEach(st=>{const a=bx(pos),b=bx(pos+st),lift=st===1?30:48,c=st===1?'#1f5fd6':'#e0323c';
+    s+=`<path d="M${a},${y-9} Q${(a+b)/2},${y-lift-9} ${b-4},${y-10}" fill="none" stroke="${c}" stroke-width="2.5" marker-end="url(#rm)"/>
+        <circle cx="${(a+b)/2}" cy="${y-lift/2-12}" r="10" fill="${c}"/><text x="${(a+b)/2}" y="${y-lift/2-8}" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="Heebo,sans-serif">${st}</text>`;
+    pos+=st;visited.add(pos);});
+  for(let i=0;i<=n;i++){const v=visited.has(i);
+    s+=`<circle cx="${bx(i)}" cy="${y}" r="${v?10:7}" fill="${v?'#15233b':'#fff'}" stroke="#15233b" stroke-width="2"/>
+        <text x="${bx(i)}" y="${y+4.5}" text-anchor="middle" font-size="12" font-weight="700" fill="${v?'#fff':'#5b6b85'}" font-family="JetBrains Mono,monospace">${i}</text>`;}
+  return s+'</svg>';
+}
+
+/* ---------- slide content setup ---------- */
+buildStreet(document.getElementById('street-1'),3);
+const street2=document.getElementById('street-2');buildStreet(street2,3);
+const ROUTES=[[[1,1,1],'שלוש נסיעות של 1'],[[1,2],'נסיעה של 1 ואחריה נסיעה של 2'],[[2,1],'נסיעה של 2 ואחריה נסיעה של 1']];
+const routeEls=[];
+(function(){const list=document.getElementById('routes-list');ROUTES.forEach(([r,label],i)=>{
+  const d=document.createElement('button');d.className='route';d.type='button';
+  d.innerHTML=`<span class="name">דרך ${i+1}</span><span class="rdesc">${label}</span>${routeSVG(r)}`;
+  d.onclick=e=>{e.stopPropagation();playRoute(i);};list.appendChild(d);routeEls.push(d);});})();
+function playRoute(i){routeEls.forEach(x=>x.classList.remove('playing'));routeEls[i].classList.add('playing','shown');showRoute(street2,ROUTES[i][0]);}
+
+// slide 5: street with the two "last ride" arcs, revealed as fragments
+const street3=document.getElementById('street-3');buildStreet(street3,4);
+(function(){const g=street3.querySelector(`#routes-${street3.id}`),bx=street3._bx,y=street3._ground-14;
+  g.innerHTML=`<g class="arc1" opacity="0"><path d="${arcPath(bx(3),bx(4),y,55)}" fill="none" stroke="#1f5fd6" stroke-width="4"/>
+   <text x="${(bx(3)+bx(4))/2}" y="${y-40}" text-anchor="middle" font-size="14" font-weight="900" fill="#1f5fd6" font-family="Heebo,sans-serif">+1</text>
+   <rect x="${bx(3)-46}" y="${y+28}" width="92" height="22" rx="6" fill="#1f5fd6"/><text x="${bx(3)}" y="${y+44}" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="Heebo,sans-serif">Ways(n−1)</text></g>
+   <g class="arc2" opacity="0"><path d="${arcPath(bx(2),bx(4),y,120)}" fill="none" stroke="#e0323c" stroke-width="4"/>
+   <text x="${(bx(2)+bx(4))/2}" y="${y-98}" text-anchor="middle" font-size="14" font-weight="900" fill="#e0323c" font-family="Heebo,sans-serif">+2</text>
+   <rect x="${bx(2)-46}" y="${y+28}" width="92" height="22" rx="6" fill="#e0323c"/><text x="${bx(2)}" y="${y+44}" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="Heebo,sans-serif">Ways(n−2)</text></g>`;
+  street3.querySelector('.scooter').setAttribute('transform',`translate(${bx(4)},${y+2}) scale(.85)`);
+})();
+
+// slide 6: think cards
+const thinkEls=[...document.querySelectorAll('.think[data-part]')];
+function setPart(b,on){b.classList.toggle('added',on);document.querySelector(`#build-code .part[data-part="${b.dataset.part}"]`).classList.toggle('added',on);}
+thinkEls.forEach(b=>{
+  b.addEventListener('click',e=>{e.stopPropagation();setPart(b,!b.classList.contains('added'));});
+  b.querySelector('.more').addEventListener('click',e=>{e.stopPropagation();b.classList.add('open');});
+});
+
+// slide 10: pyramid
+(function(){const p=document.getElementById('pyr');[[0,1],[1,2],[2,4],[3,8]].forEach(([lvl,k])=>{
+  const row=document.createElement('div');row.className='row';
+  row.innerHTML=`<span class="lbl">רמה ${lvl}: ${k===1?'קריאה אחת':k+' קריאות'}</span>`+'<span class="b"></span>'.repeat(k);p.appendChild(row);});
+  const cap=document.createElement('div');cap.className='hint';cap.innerHTML='כל רמה מכפילה את הקודמת; אחרי n רמות: <span class="ltr">2<sup>n</sup></span>.';p.appendChild(cap);})();
+
+/* ---------- trace model (same as index.html) ---------- */
+const NODES={
+  A:{n:4,parent:null,slot:null,x:345,y:30},
+  B:{n:3,parent:'A',slot:'p1',x:130,y:300},
+  C:{n:2,parent:'A',slot:'p2',x:640,y:300},
+  D:{n:2,parent:'B',slot:'p1',x:0,y:590},
+  E:{n:1,parent:'B',slot:'p2',x:300,y:590},
+};
+const STEPS=[
+  {t:'call',id:'A',text:'קוראים ל־Ways עם n = 4. נפתחת קריאה חדשה.'},
+  {t:'if',id:'A',line:'if1',res:false,text:'בודקים: האם n == 1? הערך 4 ≠ 1, התנאי לא מתקיים, ממשיכים.'},
+  {t:'if',id:'A',line:'if2',res:false,text:'בודקים: האם n == 2? הערך 4 ≠ 2, לא מתקיים. אין תנאי עצירה, עוברים לקריאות הרקורסיביות.'},
+  {t:'call',id:'B',text:'קריאה רקורסיבית: p1 = Ways(3). הקריאה Ways(4) ״מחכה״ עד שתחזור תשובה.'},
+  {t:'if',id:'B',line:'if1',res:false,text:'ב־Ways(3): האם n == 1? לא.'},
+  {t:'if',id:'B',line:'if2',res:false,text:'ב־Ways(3): האם n == 2? לא. עוברים לקריאות הרקורסיביות.'},
+  {t:'call',id:'D',text:'קריאה רקורסיבית: p1 = Ways(2). עכשיו שתי קריאות מחכות: Ways(4) ו־Ways(3).'},
+  {t:'if',id:'D',line:'if1',res:false,text:'ב־Ways(2): האם n == 1? לא.'},
+  {t:'if',id:'D',line:'if2',res:true,text:'ב־Ways(2): האם n == 2? כן! תנאי עצירה: מחזירים 2 בלי קריאה נוספת.'},
+  {t:'ret',id:'D',val:2,text:'Ways(2) מחזירה 2 אל Ways(3). שם p1 = 2.'},
+  {t:'call',id:'E',text:'Ways(3) ממשיכה לשורה הבאה: p2 = Ways(1).'},
+  {t:'if',id:'E',line:'if1',res:true,text:'ב־Ways(1): האם n == 1? כן! תנאי עצירה: מחזירים 1.'},
+  {t:'ret',id:'E',val:1,text:'Ways(1) מחזירה 1 אל Ways(3). שם p2 = 1.'},
+  {t:'ret',id:'B',val:3,text:'ל־Ways(3) יש את שני הערכים: מחזירה p1 + p2 = 2 + 1 = 3 אל Ways(4). שם p1 = 3.'},
+  {t:'call',id:'C',text:'Ways(4) ממשיכה לשורה הבאה: p2 = Ways(2). שימו לב: זו קריאה חדשה, היא לא ״זוכרת״ את Ways(2) הקודמת.'},
+  {t:'if',id:'C',line:'if1',res:false,text:'ב־Ways(2): האם n == 1? לא.'},
+  {t:'if',id:'C',line:'if2',res:true,text:'ב־Ways(2): האם n == 2? כן! תנאי עצירה: מחזירים 2.'},
+  {t:'ret',id:'C',val:2,text:'Ways(2) מחזירה 2 אל Ways(4). שם p2 = 2.'},
+  {t:'ret',id:'A',val:5,text:'Ways(4) מחזירה p1 + p2 = 3 + 2 = 5. זו התשובה הסופית.'},
+];
+let step=0;
+const stage=document.getElementById('stage'),arrows=document.getElementById('arrows');
+function nodeEl(id){return document.getElementById('node-'+id);}
+Object.entries(NODES).forEach(([id,nd])=>{
+  const el=document.createElement('div');el.className='node';el.id='node-'+id;el.style.left=nd.x+'px';el.style.top=nd.y+'px';
+  const base=nd.n<=2;
+  el.innerHTML=`<div class="head">Ways(n = ${nd.n})</div>
+    <div class="ln" data-l="if1"><span>if (n == 1)</span><span class="r"></span></div>
+    <div class="ln" data-l="if2"><span>if (n == 2)</span><span class="r"></span></div>
+    ${base?'':`<div class="ln" data-l="p1"><span>p1 = Ways(${nd.n-1})</span><span class="r"></span></div>
+    <div class="ln" data-l="p2"><span>p2 = Ways(${nd.n-2})</span><span class="r"></span></div>`}
+    <div class="ln ret" data-l="ret"><span></span><span class="r"></span></div>`;
+  stage.appendChild(el);
+});
+function center(id){const el=nodeEl(id);return {x:el.offsetLeft+el.offsetWidth/2,top:el.offsetTop,bottom:el.offsetTop+el.offsetHeight};}
+function line(x1,y1,x2,y2,cls,label){
+  const ns='http://www.w3.org/2000/svg',p=document.createElementNS(ns,'line');
+  p.setAttribute('x1',x1);p.setAttribute('y1',y1);p.setAttribute('x2',x2);p.setAttribute('y2',y2);
+  p.setAttribute('stroke',cls==='call'?'#e0323c':'#1f5fd6');p.setAttribute('stroke-width','3');p.setAttribute('marker-end',`url(#m-${cls})`);arrows.appendChild(p);
+  if(label!==undefined){const t=document.createElementNS(ns,'text');t.setAttribute('x',x1+(x2-x1)*.38+24);t.setAttribute('y',y1+(y2-y1)*.38+7);
+    t.setAttribute('fill','#1f5fd6');t.setAttribute('font-size','20');t.setAttribute('font-weight','900');t.setAttribute('font-family','JetBrains Mono,monospace');
+    t.setAttribute('text-anchor','middle');t.setAttribute('paint-order','stroke');t.setAttribute('stroke','#fff');t.setAttribute('stroke-width','6');t.textContent=label;arrows.appendChild(t);}
+}
+function renderTrace(){
+  Object.keys(NODES).forEach(id=>{const el=nodeEl(id);el.className='node';el.querySelectorAll('.ln').forEach(l=>{l.className='ln'+(l.dataset.l==='ret'?' ret':'');l.querySelector('.r').textContent='';if(l.dataset.l==='ret')l.firstElementChild.textContent='';});});
+  arrows.querySelectorAll('line,text').forEach(e=>e.remove());
+  let last=null,activeId=null;const finished=new Set(),pendingArrows=[];
+  for(let i=0;i<step;i++){
+    const s=STEPS[i],nd=NODES[s.id],el=nodeEl(s.id);last=s;el.classList.add('show');
+    el.querySelectorAll('.ln.cur').forEach(l=>l.classList.remove('cur'));
+    if(s.t==='call'){activeId=s.id;
+      if(nd.parent){const pel=nodeEl(nd.parent);pel.querySelectorAll('.ln.cur').forEach(l=>l.classList.remove('cur'));pel.querySelector(`[data-l="${nd.slot}"]`).classList.add('show','cur');pendingArrows.push({kind:'call',parent:nd.parent,child:s.id,slot:nd.slot});}
+    }else if(s.t==='if'){const l=el.querySelector(`[data-l="${s.line}"]`);l.classList.add('show','cur');
+      l.querySelector('.r').innerHTML=s.res?'<span class="ok">✓</span>':'<span class="x">✗</span>';if(s.res)l.classList.add('stop-hit');activeId=s.id;
+    }else if(s.t==='ret'){const r=el.querySelector('[data-l="ret"]');r.classList.add('show','cur');const base=nd.n<=2;
+      r.firstElementChild.textContent=base?'return '+s.val:'return p1 + p2';r.querySelector('.r').textContent=base?'':`= ${s.val}`;finished.add(s.id);
+      if(nd.parent){const pl=nodeEl(nd.parent).querySelector(`[data-l="${nd.slot}"]`);pl.querySelector('.r').innerHTML=`<span class="v">→ ${s.val}</span>`;
+        nodeEl(nd.parent).querySelectorAll('.ln.cur').forEach(l=>l.classList.remove('cur'));pl.classList.add('cur');
+        pendingArrows.push({kind:'ret',parent:nd.parent,child:s.id,slot:nd.slot,val:s.val});activeId=nd.parent;}else activeId=null;
+    }
+  }
+  Object.keys(NODES).forEach(id=>{const el=nodeEl(id);if(finished.has(id))el.classList.add('done');if(id===activeId)el.classList.add('active');});
+  pendingArrows.forEach(a=>{const pc=center(a.parent),cc=center(a.child),off=a.slot==='p1'?-40:40;
+    if(a.kind==='call')line(pc.x+off-14,pc.bottom+2,cc.x-14,cc.top-2,'call');else line(cc.x+14,cc.top-2,pc.x+off+14,pc.bottom+2,'ret',String(a.val));});
+  const d=document.getElementById('t-desc');
+  if(!last){d.className='desc';d.innerHTML='<span class="pill">התחלה</span><span>לחיצה מקדמת מהלך אחד.</span>';}
+  else{let cls=last.t,pill={call:'קריאה רקורסיבית',if:'בדיקת תנאי',ret:'החזרת ערך'}[last.t];
+    if(last.t==='if'&&last.res){cls='stop';pill='תנאי עצירה';}
+    if(last.t==='ret'&&!NODES[last.id].parent){cls='done';pill='סיום';}
+    d.className='desc '+cls;d.innerHTML=`<span class="pill">${pill}</span><span>${last.text}</span>`+(cls==='done'?`<span class="result">Ways(4) = 5</span>`:'');}
+  const wrap=stage.parentElement,sc=Math.min(wrap.clientWidth/900,wrap.clientHeight/760);
+  stage.style.transform=`scale(${sc})`;stage.style.left=((wrap.clientWidth-900*sc)/2)+'px';
+  document.getElementById('t-counter').textContent=step===0?`${STEPS.length} מהלכים`:`מהלך ${step} מתוך ${STEPS.length}`;
+}
+
+/* ---------- slide engine ---------- */
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0,bonusOn=false;
+const dots=document.getElementById('hud-dots');
+slides.forEach(s=>{const d=document.createElement('span');d.className='dot'+(s.classList.contains('bonus')?' bonus':'');dots.appendChild(d);});
+function isAllowed(i){return i>=0&&i<slides.length&&(bonusOn||!slides[i].classList.contains('bonus'));}
+function go(i){
+  if(!isAllowed(i))return;
+  slides[cur].classList.remove('active');cur=i;slides[cur].classList.add('active');
+  if(slides[cur].id==='s-trace')renderTrace();
+  [...dots.children].forEach((d,k)=>{d.classList.toggle('cur',k===cur);d.classList.toggle('done',k<cur);});
+  const visible=slides.filter((s,k)=>isAllowed(k)).length,pos=slides.slice(0,cur+1).filter((s,k)=>isAllowed(k)).length;
+  document.getElementById('hud-counter').textContent=`${pos} / ${visible} · ${slides[cur].dataset.title}`;
+}
+// per-slide "next" behaviours: return true when the slide consumed the click
+function slideNext(){
+  const s=slides[cur];
+  if(s.id==='s-trace'){if(step<STEPS.length){step++;renderTrace();return true;}return false;}
+  if(s.id==='s-example'){const i=routeEls.findIndex(r=>!r.classList.contains('shown'));if(i>=0){playRoute(i);return true;}return false;}
+  if(s.id==='s-code'){const b=thinkEls.find(x=>!x.classList.contains('added'));if(b){b.classList.add('open');setPart(b,true);return true;}return false;}
+  const f=s.querySelector('.frag:not(.on)');
+  if(f){f.classList.add('on');
+    if(s.querySelector('#street-3')){const n=s.querySelectorAll('.frag.on').length;if(n===1)street3.querySelector('.arc1').setAttribute('opacity',1);if(n===2)street3.querySelector('.arc2').setAttribute('opacity',1);}
+    return true;}
+  return false;
+}
+function slidePrev(){
+  const s=slides[cur];
+  if(s.id==='s-trace'){if(step>0){step--;renderTrace();return true;}return false;}
+  if(s.id==='s-code'){const b=[...thinkEls].reverse().find(x=>x.classList.contains('added'));if(b){setPart(b,false);return true;}return false;}
+  const on=[...s.querySelectorAll('.frag.on')];
+  if(on.length){on[on.length-1].classList.remove('on');
+    if(s.querySelector('#street-3')){const n=on.length-1;if(n<1)street3.querySelector('.arc1').setAttribute('opacity',0);if(n<2)street3.querySelector('.arc2').setAttribute('opacity',0);}
+    return true;}
+  return false;
+}
+function next(){if(!slideNext()){let i=cur+1;while(i<slides.length&&!isAllowed(i))i++;go(i);}}
+function prev(){if(!slidePrev()){let i=cur-1;while(i>=0&&!isAllowed(i))i--;go(i);}}
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight',' ','PageDown','Enter','ArrowDown'].includes(e.key)){e.preventDefault();next();}
+  else if(['ArrowLeft','PageUp','Backspace','ArrowUp'].includes(e.key)){e.preventDefault();prev();}
+  else if(e.key==='b'||e.key==='B'||e.key==='נ'){bonusOn=!bonusOn;go(cur);if(bonusOn&&slides[cur+1]&&slides[cur+1].classList.contains('bonus'))go(cur+1);}
+  else if(e.key==='f'||e.key==='F'||e.key==='כ'){toggleFullscreen();}
+  else if(e.key==='Escape'){if(document.referrer&&history.length>1)history.back();else location.href='index.html';}
+  else if(e.key==='Home'){go(0);}
+});
+function toggleFullscreen(){
+  const el=document.documentElement;
+  if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}
+  else{const req=el.requestFullscreen||el.webkitRequestFullscreen;if(req)req.call(el).catch?.(()=>{});}
+}
+document.getElementById('hud-fs').addEventListener('click',e=>{e.stopPropagation();toggleFullscreen();});
+// click on empty slide area = next (interactive widgets stop propagation)
+document.getElementById('deck').addEventListener('click',e=>{if(e.target.closest('button,.route,.think'))return;next();});
+// fit the 1280x720 deck to the window
+function fit(){const s=Math.min(window.innerWidth/1280,window.innerHeight/720);document.getElementById('deck').style.transform=`scale(${s})`;if(slides[cur].id==='s-trace')renderTrace();}
+window.addEventListener('resize',fit);fit();go(0);
+</script>
+</body>
+</html>
