@@ -1,7 +1,7 @@
 /* Lesson: רקורסיה על שרשרת חוליות – הרצף העולה (What / Secret)
    Simulations that record a run for the shared trace engine (lib/trace.js). */
 
-const LIST_DEFAULT=[3,1,2,4];
+const LIST_DEFAULT=[1,4,2,3,5];
 
 const CODE_WHAT=`public static int What(Node<int> lst)
 {
