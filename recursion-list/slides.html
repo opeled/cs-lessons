@@ -85,7 +85,7 @@
   <div class="trace fill">
     <div class="side">
       <pre class="exam" id="code-what-t"></pre>
-      <div class="ctrl-s"><input data-t="vals" value="3, 5, 8, 2, 4, 6, 9, 1" aria-label="ערכי השרשרת"><button data-t="run">הרצה</button><button data-vals="3,5,8,2,4,6,9,1">מהשאלה</button><span class="err" data-t="err"></span></div>
+      <div class="ctrl-s"><input data-t="vals" value="3, 5, 2, 4, 6, 1" aria-label="ערכי השרשרת"><button data-t="run">הרצה</button><button data-vals="3,5,2,4,6,1">מהשאלה</button><span class="err" data-t="err"></span></div>
       <div class="counter-s" id="cnt-a"></div>
     </div>
     <div class="frames-wrap" id="wrap-a" style="height:360px"><div class="frames" id="frames-a"><svg class="arrows" data-marker="arr-a"><defs><marker id="arr-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker></defs></svg></div></div>
@@ -101,9 +101,9 @@
     <div class="answer frag">
       <b class="q">What מחזירה את אורך הרצף העולה ממש שמתחיל בחוליה הראשונה</b> של השרשרת.<br>
       רצף שמתחיל בחוליה האחרונה הוא באורך 1. חוליה מצטרפת לרצף שמתחיל אחריה רק אם הערך שלה <b>קטן ממש</b> מהערך הבא (ואז <code dir="ltr">len + 1</code>). אם לא, הרצף שמתחיל בה הוא באורך 1, בלי קשר למה שקרה בהמשך.<br>
-      בדוגמה: 3 &lt; 5 &lt; 8, ואז 8 &gt; 2 שובר את הרצף. לכן <code dir="ltr">What(lst) = 3</code>.
+      בדוגמה: 3 &lt; 5, ואז 5 &gt; 2 שובר את הרצף. לכן <code dir="ltr">What(lst) = 2</code>.
     </div>
-    <div class="answer frag trap" style="border:0">⚠ תשובה כמו ״מחזירה את אורך הרצף העולה הארוך ביותר״ שגויה: What לא מסתכלת על רצפים שמתחילים באמצע. הרצף 2, 4, 6, 9 ארוך יותר, והיא מחזירה 3.</div>
+    <div class="answer frag trap" style="border:0">⚠ תשובה כמו ״מחזירה את אורך הרצף העולה הארוך ביותר״ שגויה: What לא מסתכלת על רצפים שמתחילים באמצע. הרצף 2, 4, 6 ארוך יותר, והיא מחזירה 2.</div>
   </div>
 </section>
 
@@ -131,7 +131,7 @@
   <div class="trace fill">
     <div class="side">
       <pre class="exam" id="code-secret-t"></pre>
-      <div class="ctrl-s"><input data-t="vals" value="3, 5, 8, 2, 4, 6, 9, 1" aria-label="ערכי השרשרת"><button data-t="run">הרצה</button><button data-vals="3,5,8,2,4,6,9,1">מהשאלה</button><span class="err" data-t="err"></span></div>
+      <div class="ctrl-s"><input data-t="vals" value="3, 5, 2, 4, 6, 1" aria-label="ערכי השרשרת"><button data-t="run">הרצה</button><button data-vals="3,5,2,4,6,1">מהשאלה</button><span class="err" data-t="err"></span></div>
       <div class="counter-s" id="cnt-b"></div>
     </div>
     <div class="frames-wrap" id="wrap-b" style="height:360px"><div class="frames" id="frames-b"><svg class="arrows" data-marker="arr-b"><defs><marker id="arr-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker></defs></svg></div></div>
@@ -148,7 +148,7 @@
       <b class="q">Secret מחזירה את אורך הרצף העולה ממש הארוך ביותר</b> בשרשרת.<br>
       Secret עוברת על כל חוליה, מחשבת בעזרת What את אורך הרצף העולה שמתחיל <b>בה</b>, ומחזירה את הגדול מבין כל הערכים האלה (עם 0 לשרשרת ריקה).
     </div>
-    <div class="answer frag">בדוגמה: הרצפים שמתחילים בכל חוליה הם באורך <span dir="ltr" class="mono">3, 2, 1, 4, 3, 2, 1, 1</span>, והגדול ביותר הוא <b>4</b> (הרצף 2, 4, 6, 9).</div>
+    <div class="answer frag">בדוגמה: הרצפים שמתחילים בכל חוליה הם באורך <span dir="ltr" class="mono">2, 1, 3, 2, 1, 1</span>, והגדול ביותר הוא <b>3</b> (הרצף 2, 4, 6).</div>
   </div>
 </section>
 
