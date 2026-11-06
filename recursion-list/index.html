@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>רקורסיה על שרשרת חוליות: הרצף העולה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../lib/lesson.css">
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>רקורסיה על שרשרת חוליות <small>מה עושה הפעולה? What ו־Secret</small></h1>
+    <nav class="stepper" id="stepper">
+      <button data-sec="q" class="active"><span class="dot">?</span> השאלה</button>
+      <button data-sec="a" class="locked"><span class="dot">א</span> הפעולה What</button>
+      <button data-sec="b" class="locked"><span class="dot">ב</span> הפעולה Secret</button>
+      <button data-sec="c" class="locked"><span class="dot">ג</span> חשיבה הפוכה</button>
+      <a class="deck" href="slides.html">▶ מצב מצגת</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ===================== דף השאלה ===================== -->
+<section class="panel active" id="sec-q">
+  <div class="sheet">
+    <div class="sheet-head"><span>מדעי המחשב, שאלה לדוגמה</span><span>- 1 -</span><span>רקורסיה</span></div>
+    <p><b>שאלה 2</b> (25 נקודות)</p>
+    <p><b>א.</b> לפניכם הפעולה <span class="sheet-code">What</span>, המקבלת הפניה לשרשרת חוליות <u>לא ריקה</u> של מספרים שלמים:</p>
+<pre>public static int What(Node&lt;int&gt; lst)
+{
+    if (lst.GetNext() == null)
+        return 1;
+    int len = What(lst.GetNext());
+    if (lst.GetValue() &lt; lst.GetNext().GetValue())
+        return len + 1;
+    return 1;
+}</pre>
+    <p>נתונה השרשרת <span class="sheet-code">lst</span>:</p>
+    <div class="struct-sheet" id="sheet-list"></div>
+    <ol class="sheet-sub" style="margin-right:24px">
+      <li>(1) עקבו אחר הפעולה <span class="sheet-code">What(lst)</span> וכתבו מה היא מחזירה. יש להציג את המעקב.</li>
+      <li>(2) מה עושה הפעולה <span class="sheet-code">What</span>? הסבירו את תשובתכם.</li>
+      <li>(3) מהי סיבוכיות זמן הריצה של הפעולה <span class="sheet-code">What</span>? נמקו את תשובתכם.</li>
+    </ol>
+    <p style="margin-top:16px"><b>ב.</b> לפניכם הפעולה <span class="sheet-code">Secret</span>:</p>
+<pre>public static int Secret(Node&lt;int&gt; lst)
+{
+    if (lst == null)
+        return 0;
+    return Math.Max(What(lst), Secret(lst.GetNext()));
+}</pre>
+    <ol class="sheet-sub" style="margin-right:24px">
+      <li>(1) מה תחזיר הפעולה <span class="sheet-code">Secret(lst)</span> בעבור השרשרת שלעיל? יש להציג מעקב. בסעיף זה אין צורך לעקוב אחר הפעולה <span class="sheet-code">What</span>, אלא רק לציין את הערך שהיא מחזירה.</li>
+      <li>(2) מה עושה הפעולה <span class="sheet-code">Secret</span>? הסבירו את תשובתכם.</li>
+      <li>(3) מהי סיבוכיות זמן הריצה של הפעולה <span class="sheet-code">Secret</span>? נמקו את תשובתכם.</li>
+      <li>(4) כתבו שרשרת בת 6 חוליות שעבורה <span class="sheet-code">Secret</span> תחזיר 1, ושרשרת בת 6 חוליות שעבורה היא תחזיר 6.</li>
+    </ol>
+  </div>
+  <div class="next"><button class="btn dark" data-goto="a">לפתרון המודרך: סעיף א׳ ←</button></div>
+</section>
+
+<!-- ===================== סעיף א ===================== -->
+<section class="panel" id="sec-a">
+  <div class="card">
+    <span class="tag">סעיף א׳</span>
+    <h2>הפעולה What</h2>
+    <div class="two">
+      <pre class="exam" id="code-what"></pre>
+      <div>
+        <p style="margin-top:0">הפעולה מקבלת הפניה לשרשרת חוליות <b>לא ריקה</b> של מספרים שלמים.</p>
+        <p>נתונה השרשרת <code>lst</code>:</p>
+        <div class="struct" id="list-a"></div>
+        <div class="note" style="margin-top:14px">(1) עקבו אחר <code dir="ltr">What(lst)</code> וכתבו מה היא מחזירה.</div>
+      </div>
+    </div>
+    <div class="btnrow"><button class="btn" id="btn-sol-a">הצגת המעקב</button></div>
+  </div>
+
+  <div class="card reveal" id="sol-a">
+    <span class="tag">מעקב</span>
+    <h2>קריאה אחרי קריאה</h2>
+    <p class="hint" style="margin-top:0">כל כרטיס הוא כניסה אחת לפעולה. הקריאות <b>יורדות</b> עד סוף השרשרת לפני שמתבצעת ההשוואה הראשונה, ואז התשובות <b>חוזרות</b> מהסוף להתחלה.</p>
+    <div class="ctrl">
+      <button class="btn" data-t="next">המהלך הבא ◂</button>
+      <button class="btn ghost" data-t="prev">▸ חזרה</button>
+      <button class="btn ghost small" data-t="reset">מההתחלה</button>
+      <button class="btn ghost small" data-t="all">הכל</button>
+      <span class="counter" id="cnt-a"></span>
+    </div>
+    <div class="ctrl">
+      <span class="hint">שרשרת משלכם:</span>
+      <input data-t="vals" value="3, 5, 8, 2, 4, 6, 9, 1" aria-label="ערכי השרשרת">
+      <button class="btn ghost small" data-t="run">הרצה</button>
+      <button class="btn ghost small" data-vals="3,5,8,2,4,6,9,1">השרשרת מהשאלה</button>
+      <span class="err" data-t="err"></span>
+    </div>
+    <div class="struct" id="list-trace-a" style="margin-bottom:12px"></div>
+    <div class="desc" id="desc-a"></div>
+    <div class="trace-grid">
+      <div class="frames-wrap"><div class="frames" id="frames-a"><svg class="arrows" data-marker="arr-a"><defs><marker id="arr-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker></defs></svg></div></div>
+      <pre class="exam" id="code-what-2"></pre>
+    </div>
+    <p class="hint" style="margin-top:10px">אפשר גם עם <kbd>רווח</kbd> / <kbd>→</kbd> קדימה ו־<kbd>←</kbd> אחורה. <span style="color:var(--stop);font-weight:700">✓</span> תנאי מתקיים · <span style="color:var(--call);font-weight:700">✗</span> לא מתקיים · <span style="color:var(--ret);font-weight:700">→ ערך</span> שחזר מקריאה.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">סעיף א׳ (2), (3)</span>
+    <h2>מה עושה הפעולה, ובאיזו סיבוכיות?</h2>
+    <p class="hint" style="margin-top:0">לחיצה על שאלה מציגה את התשובה שלה.</p>
+    <ol class="qlist" id="q-a">
+      <li class="qitem" data-q="a2">מה עושה הפעולה <code dir="ltr">What</code>? הסבירו.</li>
+      <li class="qitem" data-q="a3">מהי סיבוכיות זמן הריצה של <code dir="ltr">What</code>? נמקו.</li>
+    </ol>
+    <div class="answer" data-a="a2">
+      <b class="q">(2) מה עושה What:</b> הפעולה מחזירה את <b>אורך הרצף העולה ממש שמתחיל בחוליה הראשונה</b> של השרשרת.<br>
+      הסבר: רצף שמתחיל בחוליה האחרונה הוא באורך 1. חוליה מצטרפת לרצף שמתחיל אחריה רק אם הערך שלה <b>קטן ממש</b> מהערך הבא (ואז <code dir="ltr">len + 1</code>). אם לא, הרצף שמתחיל בה הוא באורך 1, בלי קשר למה שקרה בהמשך.<br>
+      בדוגמה: 3 &lt; 5 &lt; 8, ואז 8 &gt; 2 שובר את הרצף. לכן <code dir="ltr">What(lst) = 3</code>.
+      <div class="trap">⚠ תשובה כמו ״מחזירה את אורך הרצף העולה הארוך ביותר״ שגויה: What לא מסתכלת על רצפים שמתחילים באמצע. הרצף 2, 4, 6, 9 ארוך יותר, והיא מחזירה 3.</div>
+    </div>
+    <div class="answer" data-a="a3">
+      <b class="q">(3) סיבוכיות:</b> <b dir="ltr">O(n)</b>, כאשר n הוא מספר החוליות.<br>
+      יש קריאה אחת לכל חוליה, ובכל קריאה מספר קבוע של פעולות: בדיקה, קריאה אחת, השוואה אחת.
+      <div class="trap">⚠ המלכודת: What היא O(n) <b>גם כשהרצף נגמר מיד</b>. הקריאה הרקורסיבית <code dir="ltr">What(lst.GetNext())</code> מתבצעת <b>לפני</b> ההשוואה, ולכן הפעולה תמיד יורדת עד סוף השרשרת. בשרשרת <span dir="ltr">9 → 1 → 2 → 3</span> התשובה היא 1, אבל עדיין מתבצעות 4 קריאות. בדקו זאת למעלה עם ״שרשרת משלכם״.</div>
+    </div>
+    <div class="next"><button class="btn dark" data-goto="b">המשך לסעיף ב׳: Secret ←</button></div>
+  </div>
+</section>
+
+<!-- ===================== סעיף ב ===================== -->
+<section class="panel" id="sec-b">
+  <div class="card">
+    <span class="tag">סעיף ב׳</span>
+    <h2>הפעולה Secret</h2>
+    <div class="two">
+      <pre class="exam" id="code-secret"></pre>
+      <div>
+        <p style="margin-top:0">אותה שרשרת <code>lst</code>:</p>
+        <div class="struct" id="list-b"></div>
+        <div class="note" style="margin-top:14px">(1) מה תחזיר <code dir="ltr">Secret(lst)</code>? אין צורך לעקוב אחר <code dir="ltr">What</code>, אלא רק לציין את הערך שהיא מחזירה.</div>
+        <p class="hint">הרעיון: What היא עכשיו ״קופסה שחורה״ שאנחנו יודעים מה היא עושה מסעיף א׳.</p>
+      </div>
+    </div>
+    <div class="btnrow"><button class="btn" id="btn-sol-b">הצגת המעקב</button></div>
+  </div>
+
+  <div class="card reveal" id="sol-b">
+    <span class="tag">מעקב</span>
+    <h2>Secret קוראת ל־What מכל חוליה</h2>
+    <div class="ctrl">
+      <button class="btn" data-t="next">המהלך הבא ◂</button>
+      <button class="btn ghost" data-t="prev">▸ חזרה</button>
+      <button class="btn ghost small" data-t="reset">מההתחלה</button>
+      <button class="btn ghost small" data-t="all">הכל</button>
+      <span class="counter" id="cnt-b"></span>
+    </div>
+    <div class="ctrl">
+      <span class="hint">שרשרת משלכם:</span>
+      <input data-t="vals" value="3, 5, 8, 2, 4, 6, 9, 1" aria-label="ערכי השרשרת">
+      <button class="btn ghost small" data-t="run">הרצה</button>
+      <button class="btn ghost small" data-vals="3,5,8,2,4,6,9,1">השרשרת מהשאלה</button>
+      <span class="err" data-t="err"></span>
+    </div>
+    <div class="struct" id="list-trace-b" style="margin-bottom:12px"></div>
+    <div class="desc" id="desc-b"></div>
+    <div class="trace-grid">
+      <div class="frames-wrap"><div class="frames" id="frames-b"><svg class="arrows" data-marker="arr-b"><defs><marker id="arr-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker></defs></svg></div></div>
+      <div>
+        <pre class="exam" id="code-secret-2"></pre>
+        <pre class="exam dim" id="code-what-3" style="margin-top:10px"></pre>
+      </div>
+    </div>
+    <p class="hint" style="margin-top:10px">השורה הכחולה <code dir="ltr">What(lst) → 3</code> היא ערך ידוע: לא פותחים אותה, רק כותבים מה היא מחזירה. כך בדיוק כותבים את זה במחברת הבחינה.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">סעיף ב׳ (2), (3)</span>
+    <h2>מה עושה Secret, ובאיזו סיבוכיות?</h2>
+    <p class="hint" style="margin-top:0">לחיצה על שאלה מציגה את התשובה שלה.</p>
+    <ol class="qlist" id="q-b">
+      <li class="qitem" data-q="b2">מה עושה הפעולה <code dir="ltr">Secret</code>? הסבירו.</li>
+      <li class="qitem" data-q="b3">מהי סיבוכיות זמן הריצה של <code dir="ltr">Secret</code>? נמקו.</li>
+    </ol>
+    <div class="answer" data-a="b2">
+      <b class="q">(2) מה עושה Secret:</b> הפעולה מחזירה את <b>אורך הרצף העולה ממש הארוך ביותר</b> בשרשרת.<br>
+      הסבר: Secret עוברת על כל חוליה, מחשבת בעזרת What את אורך הרצף העולה שמתחיל <b>בה</b>, ומחזירה את הגדול מבין כל הערכים האלה (עם 0 לשרשרת ריקה). בדוגמה: הרצפים שמתחילים בכל חוליה הם באורך 3, 2, 1, 4, 3, 2, 1, 1, והגדול ביותר הוא 4 (הרצף 2, 4, 6, 9).
+    </div>
+    <div class="answer" data-a="b3">
+      <b class="q">(3) סיבוכיות:</b> <b dir="ltr">O(n²)</b>.<br>
+      Secret מבצעת n קריאות (אחת לכל חוליה, ועוד אחת ל־null). בכל קריאה היא קוראת ל־What על שאר השרשרת, ו־What <b>תמיד</b> עוברת עד הסוף (מסעיף א׳). מספר הכניסות ל־What הוא לכן:
+      <div class="sum" id="sum-b"></div>
+      <div class="hint">בכלליות <span dir="ltr">n + (n−1) + … + 1 ≈ n²/2</span>, ולכן O(n²). זהו הדפוס החוזר בבגרות: פעולה רקורסיבית ב־O(n) שנקראת מתוך פעולה רקורסיבית אחרת ב־O(n).</div>
+    </div>
+    <div class="next"><button class="btn dark" data-goto="c">המשך לסעיף ג׳: חשיבה הפוכה ←</button></div>
+  </div>
+</section>
+
+<!-- ===================== סעיף ג: חשיבה הפוכה ===================== -->
+<section class="panel" id="sec-c">
+  <div class="card">
+    <span class="tag">סעיף ב׳ (4)</span>
+    <h2>חשיבה הפוכה: לבנות קלט לתשובה נתונה</h2>
+    <p style="margin-top:0">כתבו שרשרת בת 6 חוליות שעבורה <code dir="ltr">Secret</code> תחזיר <b>1</b>, ושרשרת בת 6 חוליות שעבורה היא תחזיר <b>6</b>.</p>
+    <p class="hint">בשאלות 2025–2026 מופיעים סעיפים כאלה: ״כתבו זימון שיחזיר…״, ״הציגו עץ שעבורו…״. הם בודקים אם הבנתם מה הפעולה עושה, ולא רק אם אתם יודעים לעקוב.</p>
+    <div class="examples">
+      <div class="ex">
+        <b>Secret = 1</b>: שרשרת שאין בה אף זוג סמוך עולה ממש.
+        <div class="btnrow" style="margin-top:6px"><input class="mono" id="ex1-in" value="6, 5, 5, 3, 2, 1" style="font-size:15px;direction:ltr;padding:6px 10px;border:2px solid var(--line);border-radius:10px;width:200px"><button class="btn small" id="ex1-run">בדיקה</button></div>
+        <div class="struct" id="ex1-list"></div>
+        <div class="res" id="ex1-res"></div>
+        <p class="hint" style="margin:4px 0 0">שימו לב ש־5, 5 אינו ״עולה ממש״, ולכן גם חזרות מותרות.</p>
+      </div>
+      <div class="ex">
+        <b>Secret = 6</b>: כל השרשרת היא רצף עולה ממש.
+        <div class="btnrow" style="margin-top:6px"><input class="mono" id="ex2-in" value="1, 2, 3, 4, 5, 6" style="font-size:15px;direction:ltr;padding:6px 10px;border:2px solid var(--line);border-radius:10px;width:200px"><button class="btn small" id="ex2-run">בדיקה</button></div>
+        <div class="struct" id="ex2-list"></div>
+        <div class="res" id="ex2-res"></div>
+        <p class="hint" style="margin:4px 0 0">נסו גם <span dir="ltr">1, 2, 3, 4, 5, 5</span>. מה יוצא, ולמה?</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="tag warn">בונוס</span>
+    <h2>אפשר לעצור מוקדם?</h2>
+    <p style="margin-top:0">תלמידה הציעה לשנות את What כך שתבדוק את ההשוואה <b>לפני</b> הקריאה הרקורסיבית, ותעצור כשהרצף נגמר:</p>
+    <div class="two">
+<pre class="exam">public static int What2(Node&lt;int&gt; lst)
+{
+    if (lst.GetNext() == null)
+        return 1;
+    if (lst.GetValue() &lt; lst.GetNext().GetValue())
+        return 1 + What2(lst.GetNext());
+    return 1;
+}</pre>
+      <div>
+        <ol class="qlist" id="q-c">
+          <li class="qitem" data-q="c1">האם What2 מחזירה תמיד את אותו ערך כמו What?</li>
+          <li class="qitem" data-q="c2">מה הסיבוכיות של What2 בשרשרת <span dir="ltr">9 → 1 → 2 → 3</span>? ובשרשרת <span dir="ltr">1 → 2 → 3 → 9</span>?</li>
+          <li class="qitem" data-q="c3">אם Secret תשתמש ב־What2, האם הסיבוכיות שלה במקרה הגרוע תשתנה?</li>
+        </ol>
+      </div>
+    </div>
+    <div class="answer" data-a="c1"><b class="q">(1)</b> כן. שתיהן מחזירות את אורך הרצף העולה שמתחיל בחוליה הראשונה. ההבדל הוא רק בסדר: What2 מחליטה לפני שהיא קוראת, What קוראת ואז מחליטה.</div>
+    <div class="answer" data-a="c2"><b class="q">(2)</b> ב־<span dir="ltr">9 → 1 → 2 → 3</span> What2 עוצרת אחרי קריאה אחת (9 אינו קטן מ־1). ב־<span dir="ltr">1 → 2 → 3 → 9</span> היא עוברת את כל השרשרת. לכן במקרה הגרוע היא עדיין O(n), אבל במקרה הטוב היא O(1).</div>
+    <div class="answer" data-a="c3"><b class="q">(3)</b> לא. במקרה הגרוע (שרשרת עולה ממש) כל קריאה ל־What2 עוברת עד הסוף, ו־Secret נשארת <span dir="ltr">O(n²)</span>. השיפור הוא רק במקרים ״נוחים״, וסיבוכיות נמדדת לפי המקרה הגרוע.</div>
+  </div>
+</section>
+
+</main>
+<footer>חומר הוראה לכיתה י״ב · רקורסיה על שרשרת חוליות</footer>
+
+<script src="../lib/trace.js"></script>
+<script src="lesson.js"></script>
+<script>
+/* ---------- navigation ---------- */
+const unlocked={q:true,a:false,b:false,c:false};let current='q';
+function goTo(s){unlocked[s]=true;
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='sec-'+s));
+  document.querySelectorAll('#stepper button').forEach(b=>{b.classList.toggle('active',b.dataset.sec===s);b.classList.toggle('locked',!unlocked[b.dataset.sec]);});
+  window.scrollTo({top:0,behavior:'smooth'});current=s;
+  if(s==='a')traceA.render();if(s==='b')traceB.render();}
+document.querySelectorAll('#stepper button').forEach(b=>b.addEventListener('click',()=>goTo(b.dataset.sec)));
+document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>goTo(b.dataset.goto)));
+function toggleReveal(id,btn,show,hide){const el=document.getElementById(id),open=!el.classList.contains('open');el.classList.toggle('open',open);btn.textContent=open?hide:show;if(open)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),50);return open;}
+document.getElementById('btn-sol-a').onclick=e=>{if(toggleReveal('sol-a',e.target,'הצגת המעקב','הסתרת המעקב'))traceA.render();};
+document.getElementById('btn-sol-b').onclick=e=>{if(toggleReveal('sol-b',e.target,'הצגת המעקב','הסתרת המעקב'))traceB.render();};
+/* q&a toggles */
+document.querySelectorAll('.qitem').forEach(li=>li.addEventListener('click',()=>{
+  const a=document.querySelector(`.answer[data-a="${li.dataset.q}"]`),on=!a.classList.contains('open');a.classList.toggle('open',on);li.classList.toggle('on',on);
+  if(on)setTimeout(()=>a.scrollIntoView({behavior:'smooth',block:'nearest'}),50);}));
+
+/* ---------- static content ---------- */
+['code-what','code-what-2','code-what-3'].forEach(id=>document.getElementById(id).textContent=CODE_WHAT);
+['code-secret','code-secret-2'].forEach(id=>document.getElementById(id).textContent=CODE_SECRET);
+drawList(document.getElementById('sheet-list'),LIST_DEFAULT);
+drawList(document.getElementById('list-a'),LIST_DEFAULT);
+drawList(document.getElementById('list-b'),LIST_DEFAULT);
+function sumBoxes(vals){const n=vals.length,el=document.getElementById('sum-b');let s='',tot=0;for(let k=n;k>=1;k--){s+=`<span class="b">${k}</span>`+(k>1?'<span class="op">+</span>':'');tot+=k;}el.innerHTML=s+`<span class="op">=</span><span class="b" style="background:var(--ret)">${tot}</span>`;}
+sumBoxes(LIST_DEFAULT);
+
+/* ---------- traces ---------- */
+function mk(key){return makeLinearTrace({frames:document.getElementById('frames-'+key),arrows:document.querySelector('#frames-'+key+' svg.arrows'),struct:document.getElementById('list-trace-'+key),desc:document.getElementById('desc-'+key),counter:document.getElementById('cnt-'+key)},drawList);}
+const traceA=mk('a'),traceB=mk('b');
+traceA.load(LIST_DEFAULT,simWhat);traceB.load(LIST_DEFAULT,simSecret);
+wireControls(document.getElementById('sol-a'),traceA,{sim:simWhat,min:1,max:10});
+wireControls(document.getElementById('sol-b'),traceB,{sim:simSecret,min:1,max:9,onLoad:sumBoxes});
+document.addEventListener('keydown',e=>{
+  const t=current==='a'&&document.getElementById('sol-a').classList.contains('open')?traceA:current==='b'&&document.getElementById('sol-b').classList.contains('open')?traceB:null;
+  if(!t||e.target.tagName==='INPUT')return;
+  if(['ArrowRight',' ','PageDown','Enter'].includes(e.key)){e.preventDefault();t.next();}
+  if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();t.prev();}
+});
+window.addEventListener('resize',()=>{traceA.render();traceB.render();});
+
+/* ---------- section ג examples ---------- */
+function wireExample(n,target){const inp=document.getElementById(`ex${n}-in`),out=document.getElementById(`ex${n}-res`),box=document.getElementById(`ex${n}-list`);
+  const run=()=>{const v=parseValues(inp.value,1,10);if(!v){out.textContent='כתבו מספרים שלמים מופרדים בפסיקים.';return;}drawList(box,v);const s=secretValue(v);
+    out.innerHTML=`Secret = <b>${s}</b> · ${v.length} חוליות ${s===target&&v.length===6?'<span style="color:var(--stop)">✓ מתאים לדרישה</span>':'<span style="color:var(--call)">✗ עדיין לא: צריך 6 חוליות ו־Secret = '+target+'</span>'}`;};
+  document.getElementById(`ex${n}-run`).onclick=run;inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();run();}});run();}
+wireExample(1,1);wireExample(2,6);
+</script>
+</body>
+</html>
