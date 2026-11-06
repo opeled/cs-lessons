@@ -40,7 +40,7 @@
     <p>נתון המערך <span class="sheet-code">arr</span>:</p>
     <div class="struct-sheet" id="sheet-arr"></div>
     <ol class="sheet-sub" style="margin-right:24px">
-      <li>(1) מה מחזירה הפעולה <span class="sheet-code">Sod(arr, 0, 1)</span>? יש להציג מעקב.</li>
+      <li>(1) מה מחזירה הפעולה <span class="sheet-code">Sod(arr, 0, 4)</span>? יש להציג מעקב.</li>
       <li>(2) מה עושה הפעולה <span class="sheet-code">Sod</span>? הסבירו את תשובתכם.</li>
     </ol>
     <p style="margin-top:16px"><b>ב.</b> לפניכם הפעולה <span class="sheet-code">What</span>, המקבלת מערך <u>לא ריק</u> של מספרים שלמים ומקום במערך <span class="sheet-code">i</span>:</p>
@@ -57,7 +57,7 @@
       <li>(1) עקבו אחר הפעולה <span class="sheet-code">What(arr, 0)</span> בעבור המערך שלעיל וכתבו מה היא מחזירה. בסעיף זה אין צורך לעקוב אחר הפעולה <span class="sheet-code">Sod</span>, אלא רק לציין את הערך שהיא מחזירה.</li>
       <li>(2) מה עושה הפעולה <span class="sheet-code">What</span>? הסבירו את תשובתכם.</li>
       <li>(3) מהי סיבוכיות זמן הריצה של הפעולה <span class="sheet-code">What</span>? נמקו את תשובתכם.</li>
-      <li>(4) נתון המערך <span class="sheet-code ltr">{4, 7, 4, 2, 7, 9, 7, 4}</span>. מה תחזיר הפעולה <span class="sheet-code">What(arr, 0)</span>? מה קובעת הפעולה כאשר שני ערכים מופיעים אותו מספר פעמים? נמקו.</li>
+      <li>(4) נתון המערך <span class="sheet-code ltr">{7, 4, 9, 7, 4}</span>. מה תחזיר הפעולה <span class="sheet-code">What(arr, 0)</span>? מה קובעת הפעולה כאשר שני ערכים מופיעים אותו מספר פעמים? נמקו.</li>
     </ol>
   </div>
   <div class="next"><button class="btn dark" data-goto="a">לפתרון המודרך: סעיף א׳ ←</button></div>
@@ -74,7 +74,7 @@
         <p style="margin-top:0">הפעולה מקבלת מערך של מספרים שלמים, מקום במערך <code>i</code> ומספר <code>x</code>.</p>
         <p>נתון המערך <code>arr</code>:</p>
         <div class="struct" id="arr-a"></div>
-        <div class="note" style="margin-top:14px">(1) מה מחזירה <code dir="ltr">Sod(arr, 0, 1)</code>? יש להציג מעקב.</div>
+        <div class="note" style="margin-top:14px">(1) מה מחזירה <code dir="ltr">Sod(arr, 0, 4)</code>? יש להציג מעקב.</div>
       </div>
     </div>
     <div class="btnrow"><button class="btn" id="btn-sol-a">הצגת המעקב</button></div>
@@ -93,11 +93,11 @@
     </div>
     <div class="ctrl">
       <span class="hint">מערך משלכם:</span>
-      <input data-t="vals" value="3, 1, 3, 2, 1, 3" aria-label="ערכי המערך">
+      <input data-t="vals" value="4, 7, 4, 4, 9" aria-label="ערכי המערך">
       <span class="hint">x =</span>
-      <input id="x-in" value="1" aria-label="הערך x" style="width:64px">
+      <input id="x-in" value="4" aria-label="הערך x" style="width:64px">
       <button class="btn ghost small" data-t="run">הרצה</button>
-      <button class="btn ghost small" data-vals="3,1,3,2,1,3">המערך מהשאלה</button>
+      <button class="btn ghost small" data-vals="4,7,4,4,9">המערך מהשאלה</button>
       <span class="err" data-t="err"></span>
     </div>
     <div class="trace-top">
@@ -120,7 +120,7 @@
     <div class="answer" data-a="a2">
       <b class="q">(2) מה עושה Sod:</b> הפעולה מחזירה את <b>מספר המופעים של x במערך</b>, מהמקום <code>i</code> ועד סוף המערך. בזימון <code dir="ltr">Sod(arr, 0, x)</code> היא סופרת את כל המופעים של x במערך.<br>
       הסבר: כשעוברים את התא האחרון אין מה לספור (0). בכל תא, אם הערך בו שווה ל־x מוסיפים 1 לספירה של שאר המערך, ואם לא, מחזירים את הספירה של שאר המערך כפי שהיא.<br>
-      בדוגמה: הערך 1 נמצא בתאים 1 ו־4, ולכן <code dir="ltr">Sod(arr, 0, 1) = 2</code>.
+      בדוגמה: הערך 4 נמצא בתאים 0, 2 ו־3, ולכן <code dir="ltr">Sod(arr, 0, 4) = 3</code>.
     </div>
     <div class="answer" data-a="a3">
       <b class="q">סיבוכיות:</b> <b dir="ltr">O(n)</b>. קריאה אחת לכל תא (ועוד אחת ל־<code dir="ltr">i == arr.Length</code>), ובכל קריאה מספר קבוע של פעולות. Sod תמיד עוברת עד סוף המערך, גם אם x לא מופיע בו כלל.
@@ -158,10 +158,10 @@
     </div>
     <div class="ctrl">
       <span class="hint">מערך משלכם:</span>
-      <input data-t="vals" value="3, 1, 3, 2, 1, 3" aria-label="ערכי המערך">
+      <input data-t="vals" value="4, 7, 4, 4, 9" aria-label="ערכי המערך">
       <button class="btn ghost small" data-t="run">הרצה</button>
-      <button class="btn ghost small" data-vals="3,1,3,2,1,3">המערך מהשאלה</button>
-      <button class="btn ghost small" data-vals="4,7,4,2,7,9,7,4">המערך מסעיף (4)</button>
+      <button class="btn ghost small" data-vals="4,7,4,4,9">המערך מהשאלה</button>
+      <button class="btn ghost small" data-vals="7,4,9,7,4">המערך מסעיף (4)</button>
       <span class="err" data-t="err"></span>
     </div>
     <div class="trace-top">
@@ -187,7 +187,7 @@
     </ol>
     <div class="answer" data-a="b2">
       <b class="q">(2) מה עושה What:</b> הפעולה מחזירה את <b>הערך השכיח ביותר במערך</b> (הערך שמופיע הכי הרבה פעמים).<br>
-      הסבר: What עוברת על התאים מהסוף להתחלה. בכל שלב <code>best</code> הוא הערך השכיח ביותר מבין התאים שכבר נבדקו (מתא i+1 ועד הסוף). הערך שבתא i מחליף את best רק אם הוא מופיע במערך <b>יותר</b> פעמים ממנו. בדוגמה: 3 מופיע 3 פעמים, 1 מופיע פעמיים ו־2 פעם אחת, ולכן <code dir="ltr">What(arr, 0) = 3</code>.
+      הסבר: What עוברת על התאים מהסוף להתחלה. בכל שלב <code>best</code> הוא הערך השכיח ביותר מבין התאים שכבר נבדקו (מתא i+1 ועד הסוף). הערך שבתא i מחליף את best רק אם הוא מופיע במערך <b>יותר</b> פעמים ממנו. בדוגמה: 4 מופיע 3 פעמים, 7 ו־9 פעם אחת כל אחד, ולכן <code dir="ltr">What(arr, 0) = 4</code>.
       <div class="trap">⚠ שימו לב: Sod תמיד נקראת עם 0, כלומר היא סופרת בכל המערך ולא רק מתא i והלאה. לכן best הוא באמת הערך השכיח ביותר בכל המערך מבין המועמדים שנבדקו.</div>
     </div>
     <div class="answer" data-a="b3">
@@ -205,16 +205,16 @@
   <div class="card">
     <span class="tag">סעיף ב׳ (4)</span>
     <h2>תיקו: מי מנצח?</h2>
-    <p style="margin-top:0">נתון המערך <code dir="ltr">{4, 7, 4, 2, 7, 9, 7, 4}</code>. מה תחזיר <code dir="ltr">What(arr, 0)</code>? מה קובעת הפעולה כאשר שני ערכים מופיעים אותו מספר פעמים?</p>
+    <p style="margin-top:0">נתון המערך <code dir="ltr">{7, 4, 9, 7, 4}</code>. מה תחזיר <code dir="ltr">What(arr, 0)</code>? מה קובעת הפעולה כאשר שני ערכים מופיעים אותו מספר פעמים?</p>
     <div class="struct" id="arr-tie"></div>
     <div class="btnrow"><button class="btn ghost" id="btn-tie-trace">למעקב על המערך הזה בסעיף ב׳</button></div>
     <ol class="qlist" id="q-c">
       <li class="qitem" data-q="c1">מה תחזיר <code dir="ltr">What(arr, 0)</code>, ולמה?</li>
     </ol>
     <div class="answer" data-a="c1">
-      <b class="q">התשובה: 4.</b> גם 4 וגם 7 מופיעים שלוש פעמים.<br>
+      <b class="q">התשובה: 4.</b> גם 4 וגם 7 מופיעים פעמיים.<br>
       בגלל <code dir="ltr">&gt;</code> (ולא <code dir="ltr">&gt;=</code>), ערך מחליף את best רק אם הוא שכיח <b>יותר ממש</b>. בתיקו best נשאר. מכיוון שההכרעות מתקבלות מהסוף להתחלה, הערך שנכנס ל־best <b>ראשון</b> הוא זה שהמופע האחרון שלו קרוב יותר לסוף המערך, והוא נשאר שם לאורך כל הדרך.<br>
-      כאן המופע האחרון של 4 הוא בתא 7 והמופע האחרון של 7 הוא בתא 6. ברגע ש־4 נכנס ל־best, אף 7 לא מצליח להחליף אותו (3 &gt; 3 אינו מתקיים).
+      כאן המופע האחרון של 4 הוא בתא 4 והמופע האחרון של 7 הוא בתא 3. ברגע ש־4 נכנס ל־best, 7 לא מצליח להחליף אותו (2 &gt; 2 אינו מתקיים).
       <div class="trap">⚠ כלל התיקו: <b>בתיקו מנצח הערך שהמופע האחרון שלו מאוחר יותר במערך.</b> זה לא כתוב בקוד במפורש, זו תוצאה של הסדר שבו הרקורסיה מכריעה.</div>
     </div>
   </div>
@@ -235,7 +235,7 @@
         <b>פתרון אפשרי</b>
         <div class="btnrow" style="margin-top:6px"><button class="btn ghost small" data-hint="ex1-sol">הצגת פתרון</button></div>
         <div class="reveal" id="ex1-sol">
-          <p style="margin:6px 0 0;font-size:16px">מספיק להחליף את שני התאים האחרונים של המערך מהשאלה: <span dir="ltr">4, 7, 4, 2, 7, 9, 4, 7</span>. עכשיו המופע האחרון של 7 (תא 7) מאוחר ממופע ה־4 האחרון (תא 6), ולכן 7 נכנס ל־best ראשון ונשאר.</p>
+          <p style="margin:6px 0 0;font-size:16px">מספיק להחליף את שני התאים האחרונים של המערך מהשאלה: <span dir="ltr">7, 4, 9, 4, 7</span>. עכשיו המופע האחרון של 7 (תא 4) מאוחר ממופע ה־4 האחרון (תא 3), ולכן 7 נכנס ל־best ראשון ונשאר.</p>
           <p class="hint" style="margin:6px 0 0">נסו גם מערך שבו 7 מופיע פעם אחת יותר. אז הוא מנצח בכל סידור, כי זה כבר לא תיקו.</p>
         </div>
       </div>
@@ -280,7 +280,7 @@ sumBoxes(ARR_DEFAULT);
 /* ---------- traces ---------- */
 function mk(key){return makeLinearTrace({frames:document.getElementById('frames-'+key),arrows:document.querySelector('#frames-'+key+' svg.arrows'),struct:document.getElementById('arr-trace-'+key),desc:document.getElementById('desc-'+key),counter:document.getElementById('cnt-'+key)},drawArray);}
 const traceA=mk('a'),traceB=mk('b');
-let xVal=1;
+let xVal=4;
 const simSodX=(vals,R)=>simSod(vals,R,xVal);
 const xIn=document.getElementById('x-in');
 function readX(){const v=Number(xIn.value.trim());if(!Number.isInteger(v)){document.querySelector('#sol-a [data-t="err"]').textContent='x חייב להיות מספר שלם.';return false;}xVal=v;return true;}
@@ -291,7 +291,7 @@ const runA=document.querySelector('#sol-a [data-t="run"]'),origRunA=runA.onclick
 runA.onclick=()=>{if(readX())origRunA();};
 xIn.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();runA.onclick();}});
 wireControls(document.getElementById('sol-b'),traceB,{sim:simWhat,min:1,max:9,onLoad:sumBoxes});
-document.getElementById('btn-tie-trace').onclick=()=>{document.querySelector('#sol-b [data-vals="4,7,4,2,7,9,7,4"]').click();goTo('b');const el=document.getElementById('sol-b');if(!el.classList.contains('open'))document.getElementById('btn-sol-b').click();else setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),50);};
+document.getElementById('btn-tie-trace').onclick=()=>{document.querySelector('#sol-b [data-vals="7,4,9,7,4"]').click();goTo('b');const el=document.getElementById('sol-b');if(!el.classList.contains('open'))document.getElementById('btn-sol-b').click();else setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),50);};
 document.addEventListener('keydown',e=>{
   const t=current==='a'&&document.getElementById('sol-a').classList.contains('open')?traceA:current==='b'&&document.getElementById('sol-b').classList.contains('open')?traceB:null;
   if(!t||e.target.tagName==='INPUT')return;

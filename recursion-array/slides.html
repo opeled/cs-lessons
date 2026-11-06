@@ -41,7 +41,7 @@
     <p>נתון המערך <span class="sheet-code">arr</span>:</p>
     <div class="struct-sheet" id="sheet-arr"></div>
     <ol class="sheet-sub" style="margin-right:24px">
-      <li>(1) מה מחזירה הפעולה <span class="sheet-code">Sod(arr, 0, 1)</span>? יש להציג מעקב.</li>
+      <li>(1) מה מחזירה הפעולה <span class="sheet-code">Sod(arr, 0, 4)</span>? יש להציג מעקב.</li>
       <li>(2) מה עושה הפעולה <span class="sheet-code">Sod</span>? הסבירו את תשובתכם.</li>
     </ol>
     <p style="margin-top:8px"><b>ב.</b> לפניכם הפעולה <span class="sheet-code">What</span>, המקבלת מערך <u>לא ריק</u> של מספרים שלמים ומקום במערך <span class="sheet-code">i</span>:</p>
@@ -58,7 +58,7 @@
       <li>(1) עקבו אחר <span class="sheet-code">What(arr, 0)</span> בעבור המערך שלעיל וכתבו מה היא מחזירה. אין צורך לעקוב אחר <span class="sheet-code">Sod</span>, אלא רק לציין את הערך שהיא מחזירה.</li>
       <li>(2) מה עושה הפעולה <span class="sheet-code">What</span>? הסבירו את תשובתכם.</li>
       <li>(3) מהי סיבוכיות זמן הריצה של הפעולה <span class="sheet-code">What</span>? נמקו את תשובתכם.</li>
-      <li>(4) נתון המערך <span class="sheet-code ltr">{4, 7, 4, 2, 7, 9, 7, 4}</span>. מה תחזיר <span class="sheet-code">What(arr, 0)</span>? מה קובעת הפעולה כאשר שני ערכים מופיעים אותו מספר פעמים? נמקו.</li>
+      <li>(4) נתון המערך <span class="sheet-code ltr">{7, 4, 9, 7, 4}</span>. מה תחזיר <span class="sheet-code">What(arr, 0)</span>? מה קובעת הפעולה כאשר שני ערכים מופיעים אותו מספר פעמים? נמקו.</li>
     </ol>
   </div>
   </div>
@@ -72,14 +72,14 @@
     <div style="font-size:22px">
       <p style="margin:0 0 10px">נתון המערך <code>arr</code>:</p>
       <div class="struct" id="arr-1" style="border:1px solid var(--line)"></div>
-      <div class="note" style="margin-top:18px">(1) מה מחזירה <code class="ltr">Sod(arr, 0, 1)</code>? יש להציג מעקב.</div>
+      <div class="note" style="margin-top:18px">(1) מה מחזירה <code class="ltr">Sod(arr, 0, 4)</code>? יש להציג מעקב.</div>
     </div>
   </div>
 </section>
 
 <!-- 3 מעקב Sod -->
 <section class="slide trace-slide" data-title="מעקב Sod" data-trace="a">
-  <h1>מעקב: <span class="mono ltr">Sod(arr, 0, 1)</span> <small>תא אחרי תא. הקריאות יורדות עד מעבר לתא האחרון, והספירה חוזרת מהסוף להתחלה</small></h1>
+  <h1>מעקב: <span class="mono ltr">Sod(arr, 0, 4)</span> <small>תא אחרי תא. הקריאות יורדות עד מעבר לתא האחרון, והספירה חוזרת מהסוף להתחלה</small></h1>
   <div class="struct" style="padding:4px 14px" id="arr-trace-a"></div>
   <div class="trace fill">
     <div class="side">
@@ -101,7 +101,7 @@
     </div>
     <div class="answer frag" style="font-size:19px">
       כשעוברים את התא האחרון אין מה לספור (0). בכל תא: אם הערך שווה ל־x מוסיפים 1 לספירה של שאר המערך, ואם לא, מחזירים את הספירה של שאר המערך כפי שהיא.<br>
-      בדוגמה: 1 נמצא בתאים 1 ו־4, ולכן <code class="ltr">Sod(arr, 0, 1) = 2</code>. הסיבוכיות: <b class="ltr">O(n)</b>, קריאה אחת לכל תא.
+      בדוגמה: 4 נמצא בתאים 0, 2 ו־3, ולכן <code class="ltr">Sod(arr, 0, 4) = 3</code>. הסיבוכיות: <b class="ltr">O(n)</b>, קריאה אחת לכל תא.
     </div>
   </div>
 </section>
@@ -141,7 +141,7 @@
     <div class="answer frag"><b class="q">What מחזירה את הערך השכיח ביותר במערך</b>, הערך שמופיע הכי הרבה פעמים.</div>
     <div class="answer frag" style="font-size:19px">
       What עוברת על התאים מהסוף להתחלה. בכל שלב <code>best</code> הוא הערך השכיח ביותר מבין התאים שכבר נבדקו. הערך שבתא i מחליף את best רק אם הוא מופיע במערך <b>יותר</b> פעמים ממנו.<br>
-      בדוגמה: 3 מופיע 3 פעמים, 1 פעמיים, 2 פעם אחת, ולכן <code class="ltr">What(arr, 0) = 3</code>.
+      בדוגמה: 4 מופיע 3 פעמים, 7 ו־9 פעם אחת כל אחד, ולכן <code class="ltr">What(arr, 0) = 4</code>.
       <div class="trap">⚠ Sod תמיד נקראת עם 0: היא סופרת בכל המערך, לא רק מתא i והלאה.</div>
     </div>
   </div>
@@ -164,15 +164,15 @@
 <section class="slide" data-title="ב(4)">
   <h1>סעיף ב׳ <small>(4) חשיבה הפוכה</small></h1>
   <div class="fill qa">
-    <p class="q-big" style="margin:0;font-size:28px">נתון המערך <code class="ltr">{4, 7, 4, 2, 7, 9, 7, 4}</code>. מה תחזיר <code class="ltr">What(arr, 0)</code>? מה קובעת הפעולה כאשר שני ערכים מופיעים אותו מספר פעמים?</p>
+    <p class="q-big" style="margin:0;font-size:28px">נתון המערך <code class="ltr">{7, 4, 9, 7, 4}</code>. מה תחזיר <code class="ltr">What(arr, 0)</code>? מה קובעת הפעולה כאשר שני ערכים מופיעים אותו מספר פעמים?</p>
     <div class="arrcard" id="arr-tie"></div>
-    <div class="answer frag"><b class="q">התשובה: 4.</b> גם 4 וגם 7 מופיעים שלוש פעמים. זה תיקו, ובכל זאת הפעולה בוחרת.</div>
+    <div class="answer frag"><b class="q">התשובה: 4.</b> גם 4 וגם 7 מופיעים פעמיים. זה תיקו, ובכל זאת הפעולה בוחרת.</div>
   </div>
 </section>
 
 <!-- 10 מעקב על התיקו -->
 <section class="slide trace-slide" data-title="מעקב תיקו" data-trace="c">
-  <h1>מעקב: <span class="mono ltr">What(arr, 0)</span> על <span class="mono ltr">{4, 7, 4, 2, 7, 9, 7, 4}</span> <small>שימו לב מי נכנס ל־best ראשון, ומתי ״3 &gt; 3״ נכשל</small></h1>
+  <h1>מעקב: <span class="mono ltr">What(arr, 0)</span> על <span class="mono ltr">{7, 4, 9, 7, 4}</span> <small>שימו לב מי נכנס ל־best ראשון, ומתי ״2 &gt; 2״ נכשל</small></h1>
   <div class="struct" style="padding:4px 14px" id="arr-trace-c"></div>
   <div class="trace fill">
     <div class="side">
@@ -189,7 +189,7 @@
   <h1>מה קובעת הפעולה בתיקו?</h1>
   <div class="fill qa">
     <div class="answer frag">בגלל <code class="ltr">&gt;</code> ולא <code class="ltr">&gt;=</code>, ערך מחליף את best רק אם הוא שכיח <b>יותר ממש</b>. בתיקו best נשאר.</div>
-    <div class="answer frag">ההכרעות מתקבלות מהסוף להתחלה. לכן הערך שנכנס ל־best <b>ראשון</b> הוא זה שהמופע האחרון שלו קרוב יותר לסוף המערך, והוא נשאר שם: כל 7 שמגיע אחר כך נכשל ב־<code class="ltr">3 &gt; 3</code>.</div>
+    <div class="answer frag">ההכרעות מתקבלות מהסוף להתחלה. לכן הערך שנכנס ל־best <b>ראשון</b> הוא זה שהמופע האחרון שלו קרוב יותר לסוף המערך, והוא נשאר שם: כל 7 שמגיע אחר כך נכשל ב־<code class="ltr">2 &gt; 2</code>.</div>
     <div class="answer frag"><div class="trap" style="margin:0;font-size:22px">כלל התיקו: <b>מנצח הערך שהמופע האחרון שלו מאוחר יותר במערך.</b> זה לא כתוב בקוד, זו תוצאה של סדר ההכרעה ברקורסיה.</div></div>
   </div>
 </section>
@@ -199,9 +199,9 @@
   <h1>אתגר <small>בנו מערך שבו 7 מנצח בתיקו</small></h1>
   <div class="fill qa">
     <p class="q-big" style="margin:0;font-size:28px">כתבו מערך שבו 4 ו־7 מופיעים אותו מספר פעמים, ו־<code class="ltr">What(arr, 0)</code> מחזירה <b>7</b>.</p>
-    <div class="answer frag">מספיק להחליף את שני התאים האחרונים: <code class="ltr">{4, 7, 4, 2, 7, 9, 4, 7}</code>.</div>
+    <div class="answer frag">מספיק להחליף את שני התאים האחרונים: <code class="ltr">{7, 4, 9, 4, 7}</code>.</div>
     <div class="arrcard frag" id="arr-swap"></div>
-    <div class="answer frag" style="font-size:19px">עכשיו המופע האחרון של 7 (תא 7) מאוחר ממופע ה־4 האחרון (תא 6), ולכן 7 נכנס ל־best ראשון ונשאר. <span class="hint">ואם 7 מופיע פעם אחת יותר, הוא מנצח בכל סידור, כי זה כבר לא תיקו.</span></div>
+    <div class="answer frag" style="font-size:19px">עכשיו המופע האחרון של 7 (תא 4) מאוחר ממופע ה־4 האחרון (תא 3), ולכן 7 נכנס ל־best ראשון ונשאר. <span class="hint">ואם 7 מופיע פעם אחת יותר, הוא מנצח בכל סידור, כי זה כבר לא תיקו.</span></div>
   </div>
 </section>
 
@@ -220,13 +220,13 @@
 ['code-what-1','code-what-2','code-what-3'].forEach(id=>document.getElementById(id).textContent=CODE_WHAT);
 drawArray(document.getElementById('sheet-arr'),ARR_DEFAULT);
 drawArray(document.getElementById('arr-1'),ARR_DEFAULT);drawArray(document.getElementById('arr-2'),ARR_DEFAULT);
-drawArray(document.getElementById('arr-tie'),ARR_TIE);drawArray(document.getElementById('arr-swap'),[4,7,4,2,7,9,4,7]);
+drawArray(document.getElementById('arr-tie'),ARR_TIE);drawArray(document.getElementById('arr-swap'),[7,4,9,4,7]);
 (function(){const n=ARR_DEFAULT.length,el=document.getElementById('sum-b');
   el.innerHTML=`<span class="b">${n-1}</span><span class="op">×</span><span class="b">2</span><span class="op">×</span><span class="b">${n+1}</span><span class="op">=</span><span class="b" style="background:var(--ret)">${sodEntries(ARR_DEFAULT)}</span>`
    +`<span class="hint" style="width:100%;text-align:center;direction:rtl">${n-1} קריאות ל־What שקוראות ל־Sod · 2 קריאות ל־Sod בכל אחת · ${n+1} כניסות בכל קריאה ל־Sod = ${sodEntries(ARR_DEFAULT)} כניסות ל־Sod</span>`;})();
 function mk(key){return makeLinearTrace({frames:document.getElementById('frames-'+key),arrows:document.querySelector('#frames-'+key+' svg.arrows'),struct:document.getElementById('arr-trace-'+key),desc:document.getElementById('desc-'+key),counter:document.getElementById('cnt-'+key)},drawArray);}
 const traces={a:mk('a'),b:mk('b'),c:mk('c')};
-traces.a.load(ARR_DEFAULT,(v,R)=>simSod(v,R,1));traces.b.load(ARR_DEFAULT,simWhat);traces.c.load(ARR_TIE,simWhat);
+traces.a.load(ARR_DEFAULT,(v,R)=>simSod(v,R,4));traces.b.load(ARR_DEFAULT,simWhat);traces.c.load(ARR_TIE,simWhat);
 
 /* ---------- slide engine ---------- */
 const slides=[...document.querySelectorAll('.slide')];

@@ -1,8 +1,8 @@
 /* Lesson: רקורסיה על מערך – הערך השכיח (Sod / What)
    Simulations that record a run for the shared trace engine (lib/trace.js). */
 
-const ARR_DEFAULT=[3,1,3,2,1,3];
-const ARR_TIE=[4,7,4,2,7,9,7,4];
+const ARR_DEFAULT=[4,7,4,4,9];
+const ARR_TIE=[7,4,9,7,4];
 
 const CODE_SOD=`public static int Sod(int[] arr, int i, int x)
 {
