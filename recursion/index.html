@@ -382,7 +382,7 @@
       <button class="btn ghost" id="t-prev">▸ חזרה</button>
       <button class="btn ghost small" id="t-reset">מההתחלה</button>
       <button class="btn ghost small" id="t-all">הכל</button>
-      <button class="btn ghost small" id="t-zoom" title="הצגת כל העץ / מעקב אחרי הקריאה הפעילה">🔍 כל העץ</button>
+      <button class="btn ghost small" id="t-zoom" title="מעבר בין תצוגה של העץ השלם לתקריב על הקריאה הפעילה">תצוגה מלאה</button>
       <span class="counter" id="t-counter"></span>
     </div>
     <div class="trace-top">
@@ -500,7 +500,7 @@ document.getElementById('memo-toggle').onchange=loadPreset;
 loadPreset();
 document.getElementById('t-next').onclick=()=>trace.next();document.getElementById('t-prev').onclick=()=>trace.prev();
 document.getElementById('t-reset').onclick=()=>trace.reset();document.getElementById('t-all').onclick=()=>trace.all();
-document.getElementById('t-zoom').onclick=e=>{trace.fitAll=!trace.fitAll;e.target.classList.toggle('on',trace.fitAll);trace.render();};
+document.getElementById('t-zoom').onclick=e=>{trace.fitAll=!trace.fitAll;e.target.classList.toggle('on',trace.fitAll);e.target.textContent=trace.fitAll?'תקריב':'תצוגה מלאה';trace.render();};
 document.addEventListener('keydown',e=>{
   if(current!=='d'||!document.getElementById('sol-d').classList.contains('open'))return;
   if(['ArrowRight',' ','PageDown','Enter'].includes(e.key)){e.preventDefault();trace.next();}
