@@ -97,12 +97,12 @@
       <button class="btn ghost small" data-vals="3,5,8,2,4,6,9,1">השרשרת מהשאלה</button>
       <span class="err" data-t="err"></span>
     </div>
-    <div class="struct" id="list-trace-a" style="margin-bottom:12px"></div>
-    <div class="desc" id="desc-a"></div>
-    <div class="trace-grid">
-      <div class="frames-wrap"><div class="frames" id="frames-a"><svg class="arrows" data-marker="arr-a"><defs><marker id="arr-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker></defs></svg></div></div>
-      <pre class="exam" id="code-what-2"></pre>
+    <div class="trace-top">
+      <div><pre class="exam" id="code-what-2"></pre></div>
+      <div class="struct" id="list-trace-a"></div>
     </div>
+    <div class="desc" id="desc-a"></div>
+    <div class="frames-wrap"><div class="frames" id="frames-a"><svg class="arrows" data-marker="arr-a"><defs><marker id="arr-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker></defs></svg></div></div>
     <p class="hint" style="margin-top:10px">אפשר גם עם <kbd>רווח</kbd> / <kbd>→</kbd> קדימה ו־<kbd>←</kbd> אחורה. <span style="color:var(--stop);font-weight:700">✓</span> תנאי מתקיים · <span style="color:var(--call);font-weight:700">✗</span> לא מתקיים · <span style="color:var(--ret);font-weight:700">→ ערך</span> שחזר מקריאה.</p>
   </div>
 
@@ -157,14 +157,15 @@
       <button class="btn ghost small" data-vals="3,5,8,2,4,6,9,1">השרשרת מהשאלה</button>
       <span class="err" data-t="err"></span>
     </div>
-    <div class="struct" id="list-trace-b" style="margin-bottom:12px"></div>
-    <div class="desc" id="desc-b"></div>
-    <div class="trace-grid">
-      <div class="frames-wrap"><div class="frames" id="frames-b"><svg class="arrows" data-marker="arr-b"><defs><marker id="arr-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker></defs></svg></div></div>
+    <div class="trace-top">
       <div>
         <pre class="exam" id="code-secret-2"></pre>
         <pre class="exam dim" id="code-what-3" style="margin-top:10px"></pre>
       </div>
+      <div class="struct" id="list-trace-b"></div>
+    </div>
+    <div class="desc" id="desc-b"></div>
+    <div class="frames-wrap"><div class="frames" id="frames-b"><svg class="arrows" data-marker="arr-b"><defs><marker id="arr-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker></defs></svg></div></div>
     </div>
     <p class="hint" style="margin-top:10px">השורה הכחולה <code dir="ltr">What(lst) → 3</code> היא ערך ידוע: לא פותחים אותה, רק כותבים מה היא מחזירה. כך בדיוק כותבים את זה במחברת הבחינה.</p>
   </div>
@@ -201,18 +202,18 @@
     <p class="hint">בשאלות 2025–2026 מופיעים סעיפים כאלה: ״כתבו זימון שיחזיר…״, ״הציגו עץ שעבורו…״. הם בודקים אם הבנתם מה הפעולה עושה, ולא רק אם אתם יודעים לעקוב.</p>
     <div class="examples">
       <div class="ex">
-        <b>Secret = 1</b>: שרשרת שאין בה אף זוג סמוך עולה ממש.
-        <div class="btnrow" style="margin-top:6px"><input class="mono" id="ex1-in" value="6, 5, 5, 3, 2, 1" style="font-size:15px;direction:ltr;padding:6px 10px;border:2px solid var(--line);border-radius:10px;width:200px"><button class="btn small" id="ex1-run">בדיקה</button></div>
-        <div class="struct" id="ex1-list"></div>
+        <b>Secret = 1</b>
+        <div class="btnrow" style="margin-top:6px"><input class="mono" id="ex1-in" placeholder="6 מספרים, מופרדים בפסיקים" style="font-size:15px;direction:ltr;padding:6px 10px;border:2px solid var(--line);border-radius:10px;width:220px"><button class="btn small" id="ex1-run">בדיקה</button><button class="btn ghost small" data-hint="ex1-hint">רמז</button></div>
+        <div class="struct" id="ex1-list" style="display:none"></div>
         <div class="res" id="ex1-res"></div>
-        <p class="hint" style="margin:4px 0 0">שימו לב ש־5, 5 אינו ״עולה ממש״, ולכן גם חזרות מותרות.</p>
+        <p class="hint reveal" id="ex1-hint" style="margin:4px 0 0">שרשרת שאין בה אף זוג סמוך עולה ממש, למשל שרשרת יורדת. שימו לב ש־5, 5 אינו ״עולה ממש״, ולכן גם חזרות מותרות.</p>
       </div>
       <div class="ex">
-        <b>Secret = 6</b>: כל השרשרת היא רצף עולה ממש.
-        <div class="btnrow" style="margin-top:6px"><input class="mono" id="ex2-in" value="1, 2, 3, 4, 5, 6" style="font-size:15px;direction:ltr;padding:6px 10px;border:2px solid var(--line);border-radius:10px;width:200px"><button class="btn small" id="ex2-run">בדיקה</button></div>
-        <div class="struct" id="ex2-list"></div>
+        <b>Secret = 6</b>
+        <div class="btnrow" style="margin-top:6px"><input class="mono" id="ex2-in" placeholder="6 מספרים, מופרדים בפסיקים" style="font-size:15px;direction:ltr;padding:6px 10px;border:2px solid var(--line);border-radius:10px;width:220px"><button class="btn small" id="ex2-run">בדיקה</button><button class="btn ghost small" data-hint="ex2-hint">רמז</button></div>
+        <div class="struct" id="ex2-list" style="display:none"></div>
         <div class="res" id="ex2-res"></div>
-        <p class="hint" style="margin:4px 0 0">נסו גם <span dir="ltr">1, 2, 3, 4, 5, 5</span>. מה יוצא, ולמה?</p>
+        <p class="hint reveal" id="ex2-hint" style="margin:4px 0 0">כל השרשרת צריכה להיות רצף עולה ממש אחד. נסו גם <span dir="ltr">1, 2, 3, 4, 5, 5</span>: מה יוצא, ולמה?</p>
       </div>
     </div>
   </div>
@@ -292,10 +293,11 @@ window.addEventListener('resize',()=>{traceA.render();traceB.render();});
 
 /* ---------- section ג examples ---------- */
 function wireExample(n,target){const inp=document.getElementById(`ex${n}-in`),out=document.getElementById(`ex${n}-res`),box=document.getElementById(`ex${n}-list`);
-  const run=()=>{const v=parseValues(inp.value,1,10);if(!v){out.textContent='כתבו מספרים שלמים מופרדים בפסיקים.';return;}drawList(box,v);const s=secretValue(v);
+  const run=()=>{const v=parseValues(inp.value,1,10);if(!v){out.textContent='כתבו מספרים שלמים מופרדים בפסיקים.';box.style.display='none';return;}box.style.display='';drawList(box,v);const s=secretValue(v);
     out.innerHTML=`Secret = <b>${s}</b> · ${v.length} חוליות ${s===target&&v.length===6?'<span style="color:var(--stop)">✓ מתאים לדרישה</span>':'<span style="color:var(--call)">✗ עדיין לא: צריך 6 חוליות ו־Secret = '+target+'</span>'}`;};
-  document.getElementById(`ex${n}-run`).onclick=run;inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();run();}});run();}
+  document.getElementById(`ex${n}-run`).onclick=run;inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();run();}});}
 wireExample(1,1);wireExample(2,6);
+document.querySelectorAll('[data-hint]').forEach(b=>b.onclick=()=>{document.getElementById(b.dataset.hint).classList.add('open');b.disabled=true;});
 </script>
 </body>
 </html>

@@ -67,9 +67,12 @@ pre.exam.dim{opacity:.55}
 .ctrl .counter{color:var(--muted);font-weight:700;margin-inline-start:auto;font-size:15px}
 .ctrl input{font:inherit;font-family:"JetBrains Mono",monospace;font-size:15px;direction:ltr;padding:7px 10px;border:2px solid var(--line);border-radius:10px;width:220px}
 .ctrl .err{color:var(--call);font-size:14px}
-.trace-grid{display:grid;grid-template-columns:1fr 470px;gap:14px;align-items:start}
-.trace-grid pre.exam{font-size:14px}
-@media (max-width:1000px){.trace-grid{grid-template-columns:1fr}}
+.trace-top{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:stretch;margin-bottom:12px}
+.trace-top pre.exam{font-size:14px}
+.trace-top>div{display:flex;flex-direction:column}
+.trace-top>div>pre.exam:first-child{flex:1}
+.trace-top .struct{display:flex;align-items:center}
+@media (max-width:900px){.trace-top{grid-template-columns:1fr}}
 .desc{min-height:62px;border-radius:12px;padding:12px 16px;font-size:17.5px;display:flex;gap:12px;align-items:center;border:2px solid var(--line);background:#fff;margin-bottom:12px}
 .desc .pill{font-size:14px;font-weight:900;padding:3px 10px;border-radius:999px;color:#fff;white-space:nowrap;background:#7c8aa3}
 .desc.call{border-color:var(--call);background:var(--call-soft)}.desc.call .pill{background:var(--call)}
@@ -84,7 +87,7 @@ pre.exam.dim{opacity:.55}
   linear-gradient(90deg,transparent 24%,rgba(21,35,59,.035) 25%,rgba(21,35,59,.035) 26%,transparent 27%,transparent 74%,rgba(21,35,59,.035) 75%,rgba(21,35,59,.035) 76%,transparent 77%);background-size:40px 40px}
 .frames{position:relative;direction:ltr;min-height:120px}
 .frames svg.arrows{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
-.frame{display:none;position:relative;background:#fff;border:2px solid var(--line);border-radius:12px;box-shadow:0 6px 18px rgba(21,35,59,.08);font-family:"JetBrains Mono",monospace;font-size:14.5px;direction:ltr;text-align:left;margin-bottom:12px;max-width:520px}
+.frame{display:none;position:relative;background:#fff;border:2px solid var(--line);border-radius:12px;box-shadow:0 6px 18px rgba(21,35,59,.08);font-family:"JetBrains Mono",monospace;font-size:14.5px;direction:ltr;text-align:left;margin-bottom:12px;width:max-content;min-width:440px;max-width:100%}
 .frame.show{display:block;animation:fade .25s ease}
 .frame.active{border-color:var(--ink);box-shadow:0 0 0 4px rgba(21,35,59,.12),0 10px 24px rgba(21,35,59,.15)}
 .frame.done{opacity:.85}
