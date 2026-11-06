@@ -107,19 +107,6 @@
   </div>
 </section>
 
-<!-- 5 א(3) -->
-<section class="slide" data-title="א(3)">
-  <h1>סעיף א׳ <small>(3)</small></h1>
-  <div class="fill" style="display:flex;flex-direction:column;gap:20px;justify-content:center">
-    <p class="q-big" style="margin:0">מהי סיבוכיות זמן הריצה של <code class="ltr">What</code>? נמקו.</p>
-    <div class="answer frag">
-      <b class="q" dir="ltr">O(n)</b>, כאשר n הוא מספר החוליות.<br>
-      יש קריאה אחת לכל חוליה, ובכל קריאה מספר קבוע של פעולות: בדיקה, קריאה אחת, השוואה אחת.
-    </div>
-    <div class="answer frag trap" style="border:0">⚠ המלכודת: What היא O(n) <b>גם כשהרצף נגמר מיד</b>. הקריאה הרקורסיבית <code dir="ltr">What(lst.GetNext())</code> מתבצעת <b>לפני</b> ההשוואה, ולכן הפעולה תמיד יורדת עד סוף השרשרת. בשרשרת <span dir="ltr">9 → 1 → 2 → 3</span> התשובה היא 1, אבל עדיין מתבצעות 4 קריאות.</div>
-  </div>
-</section>
-
 <!-- 6 משימה ב -->
 <section class="slide" data-title="סעיף ב׳">
   <h1>סעיף ב׳ <small>הפעולה Secret</small></h1>
@@ -172,8 +159,9 @@
     <p class="q-big" style="margin:0">מהי סיבוכיות זמן הריצה של <code class="ltr">Secret</code>? נמקו.</p>
     <div class="answer frag">
       <b class="q" dir="ltr">O(n²)</b>.<br>
-      Secret מבצעת n קריאות (אחת לכל חוליה, ועוד אחת ל־null). בכל קריאה היא קוראת ל־What על שאר השרשרת, ו־What <b>תמיד</b> עוברת עד הסוף (מסעיף א׳).
+      Secret מבצעת n קריאות (אחת לכל חוליה, ועוד אחת ל־null). בכל קריאה היא קוראת ל־What על שאר השרשרת, ו־What עצמה היא O(n): קריאה אחת לכל חוליה.
     </div>
+    <div class="answer frag trap" style="border:0;font-size:18px">⚠ What <b>תמיד</b> יורדת עד סוף השרשרת, גם כשהרצף נגמר מיד, כי הקריאה הרקורסיבית מתבצעת <b>לפני</b> ההשוואה. בשרשרת <span dir="ltr">9 → 1 → 2 → 3</span> התשובה היא 1, אבל עדיין 4 קריאות.</div>
     <div class="answer frag">
       מספר הכניסות ל־What הוא לכן:
       <div class="sum" id="sum-b"></div>
