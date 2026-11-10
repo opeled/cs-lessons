@@ -27,19 +27,19 @@ function secretValue(vals){let best=0;for(let i=0;i<vals.length;i++)best=Math.ma
 function simWhat(vals,R,parent=null,parentLi=null,i=0){
   const v=vals[i],last=i===vals.length-1;
   const id=R.call(`What(lst → ${v})`,parent,parentLi,{focus:i},
-    parent===null?`קוראים ל־What עם השרשרת. lst מצביעה על החוליה הראשונה, שערכה ${v}.`
-                 :`קריאה רקורסיבית: What על השרשרת שמתחילה בחוליה ${v}. הקריאה הקודמת מחכה לתשובה.`);
+    parent===null?`קוראים ל־What על השרשרת כולה. lst מצביעה על החוליה הראשונה, שערכה ${v}.`
+                 :`קריאה רקורסיבית ל־What על השרשרת שמתחילה בחוליה ${v}. הקריאה הקודמת מחכה לתשובה.`);
   R.line(id,'if (lst.GetNext() == null)',{kind:'if',res:last,focus:i,
-    text:last?`לחוליה ${v} אין חוליה אחריה: תנאי עצירה. רצף שמתחיל בחוליה האחרונה הוא באורך 1.`
-             :`לחוליה ${v} יש חוליה אחריה (${vals[i+1]}). התנאי לא מתקיים, ממשיכים.`});
+    text:last?`לחוליה ${v} אין חוליה אחריה. זה תנאי העצירה: רצף שמתחיל בחוליה האחרונה הוא באורך 1.`
+             :`לחוליה ${v} יש חוליה אחריה (${vals[i+1]}), אז התנאי לא מתקיים וממשיכים.`});
   if(last){R.ret(id,'return 1',1,{focus:i},`What(${v}) מחזירה 1.`);return 1;}
   const li=R.line(id,'int len = What(lst.GetNext())',{kind:'sub',focus:i,focus2:i+1,
-    text:`לפני כל השוואה: קוראים ל־What על שאר השרשרת. שימו לב, הקריאה יוצאת תמיד, בלי קשר לערכים.`});
+    text:`עוד לפני ההשוואה קוראים ל־What על שאר השרשרת. הקריאה מתבצעת תמיד, בלי קשר לערכים.`});
   const len=simWhat(vals,R,id,li,i+1);
   const res=v<vals[i+1];
   R.line(id,'if (lst.GetValue() < lst.GetNext().GetValue())',{kind:'if',res,eval:`${v} < ${vals[i+1]}`,focus:i,focus2:i+1,
     text:res?`חזרנו ל־What(${v}) עם len = ${len}. האם ${v} < ${vals[i+1]}? כן. החוליה ${v} מצטרפת לרצף שאחריה.`
-            :`חזרנו ל־What(${v}) עם len = ${len}. האם ${v} < ${vals[i+1]}? לא. הרצף נשבר כאן, והערך len = ${len} שחושב לא ישמש.`});
+            :`חזרנו ל־What(${v}) עם len = ${len}. האם ${v} < ${vals[i+1]}? לא. הרצף נגמר כאן והערך len = ${len} שחושב לא ישמש.`});
   if(res){R.ret(id,'return len + 1',len+1,{focus:i,range:[i,i+len]},`What(${v}) מחזירה ${len} + 1 = ${len+1}.`);return len+1;}
   R.ret(id,'return 1',1,{focus:i},`What(${v}) מחזירה 1: הרצף העולה שמתחיל ב־${v} הוא רק החוליה עצמה.`);return 1;
 }
@@ -48,19 +48,20 @@ function simWhat(vals,R,parent=null,parentLi=null,i=0){
 function simSecret(vals,R,parent=null,parentLi=null,i=0){
   const isNull=i===vals.length;
   const id=R.call(isNull?'Secret(null)':`Secret(lst → ${vals[i]})`,parent,parentLi,{focus:isNull?undefined:i},
-    parent===null?`קוראים ל־Secret עם השרשרת כולה. lst אינה null, ממשיכים.`:isNull?`קריאה רקורסיבית: Secret על null, אחרי החוליה האחרונה.`:`קריאה רקורסיבית: Secret על השרשרת שמתחילה בחוליה ${vals[i]}. lst אינה null, ממשיכים.`);
+    parent===null?`קוראים ל־Secret על השרשרת כולה. lst אינה null אז ממשיכים.`:isNull?`קריאה רקורסיבית ל־Secret על null, אחרי החוליה האחרונה.`:`קריאה רקורסיבית ל־Secret על השרשרת שמתחילה בחוליה ${vals[i]}. lst אינה null אז ממשיכים.`);
   if(isNull){
-    R.line(id,'if (lst == null)',{kind:'if',res:true,text:`השרשרת ריקה: תנאי עצירה.`});
+    R.line(id,'if (lst == null)',{kind:'if',res:true,text:`lst היא null: הגענו לתנאי העצירה.`});
     R.ret(id,'return 0',0,{},`Secret(null) מחזירה 0.`);return 0;}
   R.line(id,'if (lst == null)',{kind:'if',res:false,silent:'prev'});
   const w=whatValue(vals,i);
   R.line(id,'What(lst)',{kind:'inner',val:w,silent:'next'});
   const li=R.line(id,'Secret(lst.GetNext())',{kind:'sub',focus:i,range:[i,i+w-1],
-    text:`אין צורך לעקוב אחרי What: מסעיף א׳ ידוע שהיא מחזירה את אורך הרצף העולה שמתחיל בחוליה ${vals[i]}, כלומר ${w}. עכשיו קוראים ל־Secret על שאר השרשרת.`});
+    text:parent===null?`אין צורך לעקוב אחר What: מסעיף א׳ ידוע שהיא מחזירה את אורך הרצף העולה שמתחיל בחוליה ${vals[i]}, כלומר ${w}. עכשיו קוראים ל־Secret על שאר השרשרת.`
+                      :`מסעיף א׳ ידוע ש־What מחזירה כאן ${w} (הרצף שמתחיל ב־${vals[i]}). קוראים ל־Secret על שאר השרשרת.`});
   const s=simSecret(vals,R,id,li,i+1);
   const m=Math.max(w,s);
   R.ret(id,`return Math.Max(${w}, ${s})`,m,{focus:i},
-    `חזרנו ל־Secret(${vals[i]}). הגדול מבין ${w} (הרצף שמתחיל כאן) ו־${s} (הטוב ביותר בהמשך) הוא ${m}.`);
+    `חזרנו ל־Secret(${vals[i]}). הגדול מבין ${w} (הרצף שמתחיל כאן) ו־${s} (הארוך ביותר בהמשך השרשרת) הוא ${m}.`);
   return m;
 }
 

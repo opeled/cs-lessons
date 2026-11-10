@@ -10,7 +10,7 @@
 <body>
 <header>
   <div class="wrap">
-    <h1>רקורסיה על מערך: הערך השכיח <small>מה עושה הפעולה? Sod ו־What</small></h1>
+    <h1>רקורסיה על מערך: הערך השכיח <small>מה עושות הפעולות Sod ו־What?</small></h1>
     <nav class="stepper" id="stepper">
       <button data-sec="q" class="active"><span class="dot">?</span> השאלה</button>
       <button data-sec="a" class="locked"><span class="dot">א</span> הפעולה Sod</button>
@@ -82,8 +82,8 @@
 
   <div class="card reveal" id="sol-a">
     <span class="tag">מעקב</span>
-    <h2>תא אחרי תא</h2>
-    <p class="hint" style="margin-top:0">כל כרטיס הוא כניסה אחת לפעולה. הקריאות <b>יורדות</b> עד מעבר לתא האחרון, ואז הספירה <b>חוזרת</b> מהסוף להתחלה: כל תא שמכיל x מוסיף 1.</p>
+    <h2>המעקב, תא אחרי תא</h2>
+    <p class="hint" style="margin-top:0">כל כרטיס הוא קריאה אחת לפעולה. הקריאות <b>יורדות</b> עד מעבר לתא האחרון ואז הספירה <b>חוזרת</b> מהסוף להתחלה: כל תא שמכיל x מוסיף 1.</p>
     <div class="ctrl">
       <button class="btn" data-t="next">המהלך הבא ◂</button>
       <button class="btn ghost" data-t="prev">▸ חזרה</button>
@@ -106,7 +106,7 @@
     </div>
     <div class="desc" id="desc-a"></div>
     <div class="frames-wrap"><div class="frames" id="frames-a"><svg class="arrows" data-marker="arr-a"><defs><marker id="arr-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker></defs></svg></div></div>
-    <p class="hint" style="margin-top:10px">אפשר גם עם <kbd>רווח</kbd> / <kbd>→</kbd> קדימה ו־<kbd>←</kbd> אחורה. <span style="color:var(--stop);font-weight:700">✓</span> תנאי מתקיים · <span style="color:var(--call);font-weight:700">✗</span> לא מתקיים · <span style="color:var(--ret);font-weight:700">→ ערך</span> שחזר מקריאה.</p>
+    <p class="hint" style="margin-top:10px">אפשר להתקדם גם עם <kbd>רווח</kbd> או <kbd>→</kbd> ולחזור עם <kbd>←</kbd>. <span style="color:var(--stop);font-weight:700">✓</span> תנאי מתקיים · <span style="color:var(--call);font-weight:700">✗</span> לא מתקיים · <span style="color:var(--ret);font-weight:700">→ ערך</span> שחזר מקריאה.</p>
   </div>
 
   <div class="card">
@@ -118,12 +118,12 @@
       <li class="qitem" data-q="a3">(לא בשאלה) מהי סיבוכיות זמן הריצה של <code dir="ltr">Sod</code>?</li>
     </ol>
     <div class="answer" data-a="a2">
-      <b class="q">(2) מה עושה Sod:</b> הפעולה מחזירה את <b>מספר המופעים של x במערך</b>, מהמקום <code>i</code> ועד סוף המערך. בזימון <code dir="ltr">Sod(arr, 0, x)</code> היא סופרת את כל המופעים של x במערך.<br>
-      הסבר: כשעוברים את התא האחרון אין מה לספור (0). בכל תא, אם הערך בו שווה ל־x מוסיפים 1 לספירה של שאר המערך, ואם לא, מחזירים את הספירה של שאר המערך כפי שהיא.<br>
-      בדוגמה: הערך 4 נמצא בתאים 0, 2 ו־3, ולכן <code dir="ltr">Sod(arr, 0, 4) = 3</code>.
+      <b class="q">(2) מה עושה Sod:</b> הפעולה מחזירה את <b>מספר המופעים של x</b> מהתא <code>i</code> ועד סוף המערך. בקריאה <code dir="ltr">Sod(arr, 0, x)</code> היא סופרת את כל המופעים של x במערך.<br>
+      הסבר: כשעוברים את התא האחרון אין מה לספור ומחזירים 0. בכל תא אחר, אם הערך שווה ל־x מוסיפים 1 לספירה של שאר המערך ואם לא, מחזירים אותה כפי שהיא.<br>
+      בדוגמה הערך 4 נמצא בתאים 0, 2 ו־3 ולכן <code dir="ltr">Sod(arr, 0, 4) = 3</code>.
     </div>
     <div class="answer" data-a="a3">
-      <b class="q">סיבוכיות:</b> <b dir="ltr">O(n)</b>. קריאה אחת לכל תא (ועוד אחת ל־<code dir="ltr">i == arr.Length</code>), ובכל קריאה מספר קבוע של פעולות. Sod תמיד עוברת עד סוף המערך, גם אם x לא מופיע בו כלל.
+      <b class="q">סיבוכיות:</b> <b dir="ltr">O(n)</b>. יש קריאה אחת לכל תא (ועוד אחת ל־<code dir="ltr">i == arr.Length</code>) ובכל קריאה מספר קבוע של פעולות. Sod תמיד עוברת עד סוף המערך, גם אם x לא מופיע בו כלל.
     </div>
     <div class="next"><button class="btn dark" data-goto="b">המשך לסעיף ב׳: What ←</button></div>
   </div>
@@ -140,7 +140,7 @@
         <p style="margin-top:0">אותו מערך <code>arr</code>:</p>
         <div class="struct" id="arr-b"></div>
         <div class="note" style="margin-top:14px">(1) עקבו אחר <code dir="ltr">What(arr, 0)</code> וכתבו מה היא מחזירה. אין צורך לעקוב אחר <code dir="ltr">Sod</code>, אלא רק לציין את הערך שהיא מחזירה.</div>
-        <p class="hint">הרעיון: Sod היא עכשיו ״קופסה שחורה״ שסופרת מופעים, כפי שראינו בסעיף א׳.</p>
+        <p class="hint">מעכשיו Sod היא ״קופסה שחורה״ שסופרת מופעים, כפי שראינו בסעיף א׳.</p>
       </div>
     </div>
     <div class="btnrow"><button class="btn" id="btn-sol-b">הצגת המעקב</button></div>
@@ -174,12 +174,12 @@
     <div class="desc" id="desc-b"></div>
     <div class="frames-wrap"><div class="frames" id="frames-b"><svg class="arrows" data-marker="arr-b"><defs><marker id="arr-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker></defs></svg></div></div>
     </div>
-    <p class="hint" style="margin-top:10px">השורות הכחולות <code dir="ltr">Sod(arr, 0, …) → 3</code> הן ערכים ידועים: לא פותחים אותן, רק כותבים מה הן מחזירות. כך בדיוק כותבים את זה במחברת הבחינה.</p>
+    <p class="hint" style="margin-top:10px">השורות הכחולות <code dir="ltr">Sod(arr, 0, …) → 3</code> הן קריאות שהערך שלהן ידוע: לא פותחים אותן אלא רק כותבים מה הן מחזירות. כך כותבים גם במחברת הבחינה.</p>
   </div>
 
   <div class="card">
     <span class="tag">סעיף ב׳ (2), (3)</span>
-    <h2>מה עושה What, ובאיזו סיבוכיות?</h2>
+    <h2>מה עושה What ובאיזו סיבוכיות?</h2>
     <p class="hint" style="margin-top:0">לחיצה על שאלה מציגה את התשובה שלה.</p>
     <ol class="qlist" id="q-b">
       <li class="qitem" data-q="b2">מה עושה הפעולה <code dir="ltr">What</code>? הסבירו.</li>
@@ -187,14 +187,14 @@
     </ol>
     <div class="answer" data-a="b2">
       <b class="q">(2) מה עושה What:</b> הפעולה מחזירה את <b>הערך השכיח ביותר במערך</b> (הערך שמופיע הכי הרבה פעמים).<br>
-      הסבר: What עוברת על התאים מהסוף להתחלה. בכל שלב <code>best</code> הוא הערך השכיח ביותר מבין התאים שכבר נבדקו (מתא i+1 ועד הסוף). הערך שבתא i מחליף את best רק אם הוא מופיע במערך <b>יותר</b> פעמים ממנו. בדוגמה: 4 מופיע 3 פעמים, 7 ו־9 פעם אחת כל אחד, ולכן <code dir="ltr">What(arr, 0) = 4</code>.
-      <div class="trap">⚠ שימו לב: Sod תמיד נקראת עם 0, כלומר היא סופרת בכל המערך ולא רק מתא i והלאה. לכן best הוא באמת הערך השכיח ביותר בכל המערך מבין המועמדים שנבדקו.</div>
+      הסבר: What עוברת על התאים מהסוף להתחלה. בכל שלב <code>best</code> הוא הערך השכיח ביותר מבין התאים שכבר נבדקו (מתא i+1 ועד הסוף). הערך שבתא i מחליף את best רק אם הוא מופיע במערך <b>יותר</b> פעמים ממנו. בדוגמה 4 מופיע 3 פעמים, 7 ו־9 פעם אחת כל אחד ולכן <code dir="ltr">What(arr, 0) = 4</code>.
+      <div class="trap">⚠ Sod תמיד מקבלת i = 0, כלומר היא סופרת בכל המערך ולא רק מהתא הנוכחי והלאה. לכן השכיחות של best נמדדת בכל המערך, גם כשנבדקו עד כה רק חלק מהתאים.</div>
     </div>
     <div class="answer" data-a="b3">
       <b class="q">(3) סיבוכיות:</b> <b dir="ltr">O(n²)</b>.<br>
-      What מבצעת n קריאות (אחת לכל תא). בכל קריאה, חוץ מהאחרונה, היא קוראת פעמיים ל־Sod, ו־Sod עוברת על <b>כל</b> המערך: n+1 כניסות בכל פעם (מסעיף א׳). בדוגמה:
+      What מבצעת n קריאות (אחת לכל תא). בכל קריאה, חוץ מהאחרונה, היא קוראת פעמיים ל־Sod, שעוברת על <b>כל</b> המערך: n+1 קריאות בכל פעם (ראו סעיף א׳). בדוגמה:
       <div class="sum" id="sum-b"></div>
-      <div class="hint">בכלליות <span dir="ltr">(n−1) · 2 · (n+1) ≈ 2n²</span>, ולכן O(n²). זהו הדפוס החוזר בבגרות: פעולה רקורסיבית ב־O(n) שנקראת מתוך פעולה רקורסיבית אחרת ב־O(n).</div>
+      <div class="hint">באופן כללי <span dir="ltr">(n−1) · 2 · (n+1) ≈ 2n²</span> ולכן O(n²). המבנה הזה חוזר בבגרות: פעולה רקורסיבית ב־O(n) שנקראת מתוך פעולה רקורסיבית אחרת ב־O(n).</div>
     </div>
     <div class="next"><button class="btn dark" data-goto="c">המשך לסעיף ג׳: חשיבה הפוכה ←</button></div>
   </div>
@@ -204,38 +204,38 @@
 <section class="panel" id="sec-c">
   <div class="card">
     <span class="tag">סעיף ב׳ (4)</span>
-    <h2>תיקו: מי מנצח?</h2>
+    <h2>מה קורה בתיקו?</h2>
     <p style="margin-top:0">נתון המערך <code dir="ltr">{7, 4, 9, 7, 4}</code>. מה תחזיר <code dir="ltr">What(arr, 0)</code>? מה קובעת הפעולה כאשר שני ערכים מופיעים אותו מספר פעמים?</p>
     <div class="struct" id="arr-tie"></div>
     <div class="btnrow"><button class="btn ghost" id="btn-tie-trace">למעקב על המערך הזה בסעיף ב׳</button></div>
     <ol class="qlist" id="q-c">
-      <li class="qitem" data-q="c1">מה תחזיר <code dir="ltr">What(arr, 0)</code>, ולמה?</li>
+      <li class="qitem" data-q="c1">מה תחזיר <code dir="ltr">What(arr, 0)</code> ולמה?</li>
     </ol>
     <div class="answer" data-a="c1">
       <b class="q">התשובה: 4.</b> גם 4 וגם 7 מופיעים פעמיים.<br>
-      בגלל <code dir="ltr">&gt;</code> (ולא <code dir="ltr">&gt;=</code>), ערך מחליף את best רק אם הוא שכיח <b>יותר ממש</b>. בתיקו best נשאר. מכיוון שההכרעות מתקבלות מהסוף להתחלה, הערך שנכנס ל־best <b>ראשון</b> הוא זה שהמופע האחרון שלו קרוב יותר לסוף המערך, והוא נשאר שם לאורך כל הדרך.<br>
-      כאן המופע האחרון של 4 הוא בתא 4 והמופע האחרון של 7 הוא בתא 3. ברגע ש־4 נכנס ל־best, 7 לא מצליח להחליף אותו (2 &gt; 2 אינו מתקיים).
-      <div class="trap">⚠ כלל התיקו: <b>בתיקו מנצח הערך שהמופע האחרון שלו מאוחר יותר במערך.</b> זה לא כתוב בקוד במפורש, זו תוצאה של הסדר שבו הרקורסיה מכריעה.</div>
+      בגלל <code dir="ltr">&gt;</code> (ולא <code dir="ltr">&gt;=</code>), ערך מחליף את best רק אם הוא שכיח <b>יותר ממש</b>. בתיקו best נשאר. מכיוון שהפעולה מכריעה מהסוף להתחלה, הערך שנשמר ב־best <b>ראשון</b> הוא זה שהמופע האחרון שלו קרוב יותר לסוף המערך והוא נשאר שם עד הסוף.<br>
+      כאן המופע האחרון של 4 הוא בתא 4 והמופע האחרון של 7 הוא בתא 3. ברגע ש־4 נשמר ב־best, 7 כבר לא מחליף אותו (התנאי 2 &gt; 2 אינו מתקיים).
+      <div class="trap">⚠ כלל התיקו: <b>בתיקו הפעולה מחזירה את הערך שהמופע האחרון שלו מאוחר יותר במערך.</b> הכלל לא כתוב בקוד במפורש אלא נובע מהסדר שבו הרקורסיה מכריעה.</div>
     </div>
   </div>
 
   <div class="card">
     <span class="tag warn">אתגר</span>
     <h2>בנו מערך שבו 7 מנצח בתיקו</h2>
-    <p style="margin-top:0">כתבו מערך שבו 4 ו־7 מופיעים אותו מספר פעמים (לפחות פעמיים כל אחד), ו־<code dir="ltr">What(arr, 0)</code> מחזירה <b>7</b>.</p>
+    <p style="margin-top:0">כתבו מערך שבו 4 ו־7 מופיעים אותו מספר פעמים (לפחות פעמיים כל אחד) ו־<code dir="ltr">What(arr, 0)</code> מחזירה <b>7</b>.</p>
     <div class="examples">
       <div class="ex">
         <b>המערך שלכם</b>
-        <div class="btnrow" style="margin-top:6px"><input class="mono" id="ex1-in" placeholder="מספרים, מופרדים בפסיקים" style="font-size:15px;direction:ltr;padding:6px 10px;border:2px solid var(--line);border-radius:10px;width:240px"><button class="btn small" id="ex1-run">בדיקה</button><button class="btn ghost small" data-hint="ex1-hint">רמז</button></div>
+        <div class="btnrow" style="margin-top:6px"><input class="mono" id="ex1-in" placeholder="מספרים מופרדים בפסיקים" style="font-size:15px;direction:ltr;padding:6px 10px;border:2px solid var(--line);border-radius:10px;width:240px"><button class="btn small" id="ex1-run">בדיקה</button><button class="btn ghost small" data-hint="ex1-hint">רמז</button></div>
         <div class="struct" id="ex1-arr" style="display:none"></div>
         <div class="res" id="ex1-res"></div>
-        <p class="hint reveal" id="ex1-hint" style="margin:4px 0 0">רמז: מה צריך להיות הערך בתא האחרון מבין ה־4 וה־7?</p>
+        <p class="hint reveal" id="ex1-hint" style="margin:4px 0 0">רמז: מי משניהם, 4 או 7, צריך להופיע אחרון במערך?</p>
       </div>
       <div class="ex">
         <b>פתרון אפשרי</b>
         <div class="btnrow" style="margin-top:6px"><button class="btn ghost small" data-hint="ex1-sol">הצגת פתרון</button></div>
         <div class="reveal" id="ex1-sol">
-          <p style="margin:6px 0 0;font-size:16px">מספיק להחליף את שני התאים האחרונים של המערך מהשאלה: <span dir="ltr">7, 4, 9, 4, 7</span>. עכשיו המופע האחרון של 7 (תא 4) מאוחר ממופע ה־4 האחרון (תא 3), ולכן 7 נכנס ל־best ראשון ונשאר.</p>
+          <p style="margin:6px 0 0;font-size:16px">מספיק להחליף את שני התאים האחרונים של המערך מהשאלה: <span dir="ltr">7, 4, 9, 4, 7</span>. עכשיו המופע האחרון של 7 (תא 4) מאוחר מהמופע האחרון של 4 (תא 3) ולכן 7 נשמר ב־best ראשון ונשאר.</p>
           <p class="hint" style="margin:6px 0 0">נסו גם מערך שבו 7 מופיע פעם אחת יותר. אז הוא מנצח בכל סידור, כי זה כבר לא תיקו.</p>
         </div>
       </div>
@@ -274,7 +274,7 @@ drawArray(document.getElementById('arr-b'),ARR_DEFAULT);
 drawArray(document.getElementById('arr-tie'),ARR_TIE);
 function sumBoxes(vals){const n=vals.length,el=document.getElementById('sum-b');
   el.innerHTML=`<span class="b">${n-1}</span><span class="op">×</span><span class="b">2</span><span class="op">×</span><span class="b">${n+1}</span><span class="op">=</span><span class="b" style="background:var(--ret)">${sodEntries(vals)}</span>`
-   +`<span class="hint" style="width:100%;text-align:center;direction:rtl">${n-1} קריאות ל־What שקוראות ל־Sod · 2 קריאות ל־Sod בכל אחת · ${n+1} כניסות בכל קריאה ל־Sod = ${sodEntries(vals)} כניסות ל־Sod</span>`;}
+   +`<span class="hint" style="width:100%;text-align:center;direction:rtl">${n-1} קריאות ל־What שקוראות ל־Sod · 2 קריאות ל־Sod בכל אחת · ${n+1} קריאות בכל מעבר של Sod על המערך = ${sodEntries(vals)} קריאות ל־Sod</span>`;}
 sumBoxes(ARR_DEFAULT);
 
 /* ---------- traces ---------- */
@@ -304,7 +304,7 @@ window.addEventListener('resize',()=>{traceA.render();traceB.render();});
 (function(){const inp=document.getElementById('ex1-in'),out=document.getElementById('ex1-res'),box=document.getElementById('ex1-arr');
   const run=()=>{const v=parseValues(inp.value,1,12);if(!v){out.textContent='כתבו מספרים שלמים מופרדים בפסיקים.';box.style.display='none';return;}box.style.display='';drawArray(box,v);
     const w=whatValue(v),c4=sodValue(v,0,4),c7=sodValue(v,0,7),tie=c4===c7&&c4>=2;
-    out.innerHTML=`What = <b>${w}</b> · 4 מופיע ${c4} פעמים, 7 מופיע ${c7} פעמים · ${w===7&&tie?'<span style="color:var(--stop)">✓ תיקו ו־7 מנצח</span>':!tie?'<span style="color:var(--call)">✗ זה לא תיקו (או פחות משני מופעים)</span>':'<span style="color:var(--call)">✗ תיקו, אבל 4 מנצח</span>'}`;};
+    out.innerHTML=`What = <b>${w}</b> · 4 מופיע ${times(c4)}, 7 מופיע ${times(c7)} · ${w===7&&tie?'<span style="color:var(--stop)">✓ תיקו ו־7 מנצח</span>':!tie?'<span style="color:var(--call)">✗ זה לא תיקו (או שאחד מהם מופיע פחות מפעמיים)</span>':'<span style="color:var(--call)">✗ תיקו, אבל 4 מנצח</span>'}`;};
   document.getElementById('ex1-run').onclick=run;inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();run();}});})();
 document.querySelectorAll('[data-hint]').forEach(b=>b.onclick=()=>{document.getElementById(b.dataset.hint).classList.add('open');b.disabled=true;});
 </script>

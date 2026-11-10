@@ -82,7 +82,7 @@
   <div class="card reveal" id="sol-a">
     <span class="tag">מעקב</span>
     <h2>קריאה אחרי קריאה</h2>
-    <p class="hint" style="margin-top:0">כל כרטיס הוא כניסה אחת לפעולה. הקריאות <b>יורדות</b> עד סוף השרשרת לפני שמתבצעת ההשוואה הראשונה, ואז התשובות <b>חוזרות</b> מהסוף להתחלה.</p>
+    <p class="hint" style="margin-top:0">כל כרטיס הוא קריאה אחת לפעולה. הקריאות <b>יורדות</b> עד סוף השרשרת לפני שמתבצעת ההשוואה הראשונה ואז התשובות <b>חוזרות</b> מהסוף להתחלה.</p>
     <div class="ctrl">
       <button class="btn" data-t="next">המהלך הבא ◂</button>
       <button class="btn ghost" data-t="prev">▸ חזרה</button>
@@ -103,21 +103,21 @@
     </div>
     <div class="desc" id="desc-a"></div>
     <div class="frames-wrap"><div class="frames" id="frames-a"><svg class="arrows" data-marker="arr-a"><defs><marker id="arr-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker></defs></svg></div></div>
-    <p class="hint" style="margin-top:10px">אפשר גם עם <kbd>רווח</kbd> / <kbd>→</kbd> קדימה ו־<kbd>←</kbd> אחורה. <span style="color:var(--stop);font-weight:700">✓</span> תנאי מתקיים · <span style="color:var(--call);font-weight:700">✗</span> לא מתקיים · <span style="color:var(--ret);font-weight:700">→ ערך</span> שחזר מקריאה.</p>
+    <p class="hint" style="margin-top:10px">אפשר להתקדם גם עם <kbd>רווח</kbd> או <kbd>→</kbd> ולחזור עם <kbd>←</kbd>. <span style="color:var(--stop);font-weight:700">✓</span> תנאי מתקיים · <span style="color:var(--call);font-weight:700">✗</span> לא מתקיים · <span style="color:var(--ret);font-weight:700">→ ערך</span> שחזר מקריאה.</p>
   </div>
 
   <div class="card">
     <span class="tag">סעיף א׳ (2)</span>
     <h2>מה עושה הפעולה?</h2>
-    <p class="hint" style="margin-top:0">לחיצה על שאלה מציגה את התשובה שלה.</p>
+    <p class="hint" style="margin-top:0">לחצו על שאלה כדי לראות את התשובה.</p>
     <ol class="qlist" id="q-a">
       <li class="qitem" data-q="a2">מה עושה הפעולה <code dir="ltr">What</code>? הסבירו.</li>
     </ol>
     <div class="answer" data-a="a2">
       <b class="q">(2) מה עושה What:</b> הפעולה מחזירה את <b>אורך הרצף העולה ממש שמתחיל בחוליה הראשונה</b> של השרשרת.<br>
-      הסבר: רצף שמתחיל בחוליה האחרונה הוא באורך 1. חוליה מצטרפת לרצף שמתחיל אחריה רק אם הערך שלה <b>קטן ממש</b> מהערך הבא (ואז <code dir="ltr">len + 1</code>). אם לא, הרצף שמתחיל בה הוא באורך 1, בלי קשר למה שקרה בהמשך.<br>
-      בדוגמה: 1 &lt; 4, ואז 4 &gt; 2 שובר את הרצף. לכן <code dir="ltr">What(lst) = 2</code>.
-      <div class="trap">⚠ טעות נפוצה: לכתוב ש־What ״מחזירה את אורך הרצף העולה הארוך ביותר בשרשרת״. לא נכון: What בודקת רק את הרצף שמתחיל בחוליה <b>הראשונה</b>. בדוגמה הרצף הארוך ביותר הוא 2, 3, 5 (באורך 3), אבל What מחזירה 2, כי הרצף שמתחיל ב־1 נשבר אחרי 1, 4. את הרצף הארוך ביותר מוצאת Secret, בסעיף ב׳.</div>
+      הסבר: רצף שמתחיל בחוליה האחרונה הוא באורך 1. חוליה מצטרפת לרצף שמתחיל אחריה רק אם הערך שלה <b>קטן ממש</b> מהערך הבא (ואז מחזירים <code dir="ltr">len + 1</code>). אם לא, הרצף שמתחיל בה הוא באורך 1, בלי קשר למה שקרה בהמשך.<br>
+      בדוגמה: 1 &lt; 4 אבל 4 &gt; 2, אז הרצף נגמר ב־4 ו־<code dir="ltr">What(lst) = 2</code>.
+      <div class="trap">⚠ טעות נפוצה: לכתוב ש־What ״מחזירה את אורך הרצף העולה הארוך ביותר בשרשרת״. אבל What בודקת רק את הרצף שמתחיל בחוליה <b>הראשונה</b>. בדוגמה הרצף הארוך ביותר הוא 2, 3, 5 (באורך 3), אבל What מחזירה 2, כי הרצף שמתחיל ב־1 נגמר אחרי 1, 4. את הרצף הארוך ביותר מוצאת Secret בסעיף ב׳.</div>
     </div>
     <div class="next"><button class="btn dark" data-goto="b">המשך לסעיף ב׳: Secret ←</button></div>
   </div>
@@ -134,7 +134,7 @@
         <p style="margin-top:0">אותה שרשרת <code>lst</code>:</p>
         <div class="struct" id="list-b"></div>
         <div class="note" style="margin-top:14px">(1) מה תחזיר <code dir="ltr">Secret(lst)</code>? אין צורך לעקוב אחר <code dir="ltr">What</code>, אלא רק לציין את הערך שהיא מחזירה.</div>
-        <p class="hint">הרעיון: What היא עכשיו ״קופסה שחורה״ שאנחנו יודעים מה היא עושה מסעיף א׳.</p>
+        <p class="hint">מסעיף א׳ אנחנו כבר יודעים מה What עושה, אז נתייחס אליה כ״קופסה שחורה״.</p>
       </div>
     </div>
     <div class="btnrow"><button class="btn" id="btn-sol-b">הצגת המעקב</button></div>
@@ -167,29 +167,29 @@
     <div class="desc" id="desc-b"></div>
     <div class="frames-wrap"><div class="frames" id="frames-b"><svg class="arrows" data-marker="arr-b"><defs><marker id="arr-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker></defs></svg></div></div>
     </div>
-    <p class="hint" style="margin-top:10px">השורה הכחולה <code dir="ltr">What(lst) → 3</code> היא ערך ידוע: לא פותחים אותה, רק כותבים מה היא מחזירה. כך בדיוק כותבים את זה במחברת הבחינה.</p>
+    <p class="hint" style="margin-top:10px">השורה הכחולה <code dir="ltr">What(lst) → 3</code> היא ערך ידוע. לא עוקבים אחריה אלא רק רושמים מה היא מחזירה. כך גם רושמים את זה במחברת הבחינה.</p>
   </div>
 
   <div class="card">
     <span class="tag">סעיף ב׳ (2), (3)</span>
-    <h2>מה עושה Secret, ובאיזו סיבוכיות?</h2>
-    <p class="hint" style="margin-top:0">לחיצה על שאלה מציגה את התשובה שלה.</p>
+    <h2>מה עושה Secret ומה הסיבוכיות שלה?</h2>
+    <p class="hint" style="margin-top:0">לחצו על שאלה כדי לראות את התשובה.</p>
     <ol class="qlist" id="q-b">
       <li class="qitem" data-q="b2">מה עושה הפעולה <code dir="ltr">Secret</code>? הסבירו.</li>
       <li class="qitem" data-q="b3">מהי סיבוכיות זמן הריצה של <code dir="ltr">Secret</code>? נמקו.</li>
     </ol>
     <div class="answer" data-a="b2">
       <b class="q">(2) מה עושה Secret:</b> הפעולה מחזירה את <b>אורך הרצף העולה ממש הארוך ביותר</b> בשרשרת.<br>
-      הסבר: Secret עוברת על כל חוליה, מחשבת בעזרת What את אורך הרצף העולה שמתחיל <b>בה</b>, ומחזירה את הגדול מבין כל הערכים האלה (עם 0 לשרשרת ריקה). בדוגמה: הרצפים שמתחילים בכל חוליה הם באורך 2, 1, 3, 2, 1, והגדול ביותר הוא 3 (הרצף 2, 3, 5).
+      הסבר: Secret עוברת על כל חוליה, מחשבת בעזרת What את אורך הרצף העולה שמתחיל <b>בה</b> ומחזירה את הגדול מבין כל הערכים האלה (לשרשרת ריקה היא מחזירה 0). בדוגמה: אורכי הרצפים שמתחילים בכל חוליה הם 2, 1, 3, 2, 1. הגדול ביותר הוא 3 (הרצף 2, 3, 5).
     </div>
     <div class="answer" data-a="b3">
       <b class="q">(3) סיבוכיות:</b> <b dir="ltr">O(n²)</b>.<br>
-      Secret מבצעת n קריאות (אחת לכל חוליה, ועוד אחת ל־null). בכל קריאה היא קוראת ל־What על שאר השרשרת, ו־What עצמה היא O(n): קריאה אחת לכל חוליה, עם מספר קבוע של פעולות בכל קריאה. מספר הכניסות ל־What הוא לכן:
+      Secret מבצעת n+1 קריאות (אחת לכל חוליה ועוד אחת ל־null). בכל קריאה היא קוראת ל־What על שאר השרשרת. What עצמה היא O(n): קריאה אחת לכל חוליה, עם מספר קבוע של פעולות בכל קריאה. לכן מספר הקריאות ל־What הוא:
       <div class="sum" id="sum-b"></div>
-      <div class="trap">⚠ שימו לב: What <b>תמיד</b> יורדת עד סוף השרשרת, גם כשהרצף נגמר מיד, כי הקריאה הרקורסיבית מתבצעת <b>לפני</b> ההשוואה. בשרשרת <span dir="ltr">9 → 1 → 2 → 3</span> התשובה היא 1, אבל עדיין מתבצעות 4 קריאות. לכן אי אפשר לטעון ש״בדרך כלל What קצרה״.</div>
-      <div class="hint">בכלליות <span dir="ltr">n + (n−1) + … + 1 ≈ n²/2</span>, ולכן O(n²). זהו הדפוס החוזר בבגרות: פעולה רקורסיבית ב־O(n) שנקראת מתוך פעולה רקורסיבית אחרת ב־O(n).</div>
+      <div class="trap">⚠ What <b>תמיד</b> יורדת עד סוף השרשרת, גם כשהרצף נגמר מיד, כי הקריאה הרקורסיבית מתבצעת <b>לפני</b> ההשוואה. בשרשרת <span dir="ltr">9 → 1 → 2 → 3</span> התשובה היא 1, אבל עדיין מתבצעות 4 קריאות. לכן אי אפשר לטעון ש״בדרך כלל What מסיימת מהר״.</div>
+      <div class="hint">באופן כללי <span dir="ltr">n + (n−1) + … + 1 ≈ n²/2</span> ולכן O(n²). שילוב כזה חוזר הרבה בבגרות: פעולה רקורסיבית ב־O(n) שנקראת מתוך פעולה רקורסיבית אחרת ב־O(n).</div>
     </div>
-    <div class="next"><button class="btn dark" data-goto="c">המשך לסעיף ג׳: חשיבה הפוכה ←</button></div>
+    <div class="next"><button class="btn dark" data-goto="c">המשך לסעיף ב׳ (4): חשיבה הפוכה ←</button></div>
   </div>
 </section>
 
@@ -205,14 +205,14 @@
         <div class="btnrow" style="margin-top:6px"><input class="mono" id="ex1-in" placeholder="5 מספרים, מופרדים בפסיקים" style="font-size:15px;direction:ltr;padding:6px 10px;border:2px solid var(--line);border-radius:10px;width:220px"><button class="btn small" id="ex1-run">בדיקה</button><button class="btn ghost small" data-hint="ex1-hint">רמז</button></div>
         <div class="struct" id="ex1-list" style="display:none"></div>
         <div class="res" id="ex1-res"></div>
-        <p class="hint reveal" id="ex1-hint" style="margin:4px 0 0">שרשרת שאין בה אף זוג סמוך עולה ממש, למשל שרשרת יורדת. שימו לב ש־4, 4 אינו ״עולה ממש״, ולכן גם חזרות מותרות.</p>
+        <p class="hint reveal" id="ex1-hint" style="margin:4px 0 0">שרשרת שאין בה אף זוג סמוך עולה ממש, למשל שרשרת יורדת. הזוג 4, 4 אינו ״עולה ממש״ ולכן גם חזרות מותרות.</p>
       </div>
       <div class="ex">
         <b>Secret = 5</b>
         <div class="btnrow" style="margin-top:6px"><input class="mono" id="ex2-in" placeholder="5 מספרים, מופרדים בפסיקים" style="font-size:15px;direction:ltr;padding:6px 10px;border:2px solid var(--line);border-radius:10px;width:220px"><button class="btn small" id="ex2-run">בדיקה</button><button class="btn ghost small" data-hint="ex2-hint">רמז</button></div>
         <div class="struct" id="ex2-list" style="display:none"></div>
         <div class="res" id="ex2-res"></div>
-        <p class="hint reveal" id="ex2-hint" style="margin:4px 0 0">כל השרשרת צריכה להיות רצף עולה ממש אחד. נסו גם <span dir="ltr">1, 2, 3, 4, 4</span>: מה יוצא, ולמה?</p>
+        <p class="hint reveal" id="ex2-hint" style="margin:4px 0 0">כל השרשרת צריכה להיות רצף עולה ממש אחד. נסו גם <span dir="ltr">1, 2, 3, 4, 4</span>: מה יוצא ולמה?</p>
       </div>
     </div>
   </div>
@@ -220,7 +220,7 @@
   <div class="card">
     <span class="tag warn">בונוס</span>
     <h2>אפשר לעצור מוקדם?</h2>
-    <p style="margin-top:0">תלמידה הציעה לשנות את What כך שתבדוק את ההשוואה <b>לפני</b> הקריאה הרקורסיבית, ותעצור כשהרצף נגמר:</p>
+    <p style="margin-top:0">נניח שמשנים את What כך שתבצע את ההשוואה <b>לפני</b> הקריאה הרקורסיבית ותעצור כשהרצף נגמר:</p>
     <div class="two">
 <pre class="exam">public static int What2(Node&lt;int&gt; lst)
 {
@@ -238,9 +238,9 @@
         </ol>
       </div>
     </div>
-    <div class="answer" data-a="c1"><b class="q">(1)</b> כן. שתיהן מחזירות את אורך הרצף העולה שמתחיל בחוליה הראשונה. ההבדל הוא רק בסדר: What2 מחליטה לפני שהיא קוראת, What קוראת ואז מחליטה.</div>
-    <div class="answer" data-a="c2"><b class="q">(2)</b> ב־<span dir="ltr">9 → 1 → 2 → 3</span> What2 עוצרת אחרי קריאה אחת (9 אינו קטן מ־1). ב־<span dir="ltr">1 → 2 → 3 → 9</span> היא עוברת את כל השרשרת. לכן במקרה הגרוע היא עדיין O(n), אבל במקרה הטוב היא O(1).</div>
-    <div class="answer" data-a="c3"><b class="q">(3)</b> לא. במקרה הגרוע (שרשרת עולה ממש) כל קריאה ל־What2 עוברת עד הסוף, ו־Secret נשארת <span dir="ltr">O(n²)</span>. השיפור הוא רק במקרים ״נוחים״, וסיבוכיות נמדדת לפי המקרה הגרוע.</div>
+    <div class="answer" data-a="c1"><b class="q">(1)</b> כן. שתיהן מחזירות את אורך הרצף העולה שמתחיל בחוליה הראשונה. ההבדל הוא רק בסדר: What2 בודקת לפני הקריאה הרקורסיבית ואילו What בודקת רק אחריה.</div>
+    <div class="answer" data-a="c2"><b class="q">(2)</b> ב־<span dir="ltr">9 → 1 → 2 → 3</span> What2 עוצרת אחרי קריאה אחת (9 אינו קטן מ־1). ב־<span dir="ltr">1 → 2 → 3 → 9</span> היא עוברת על כל השרשרת. לכן במקרה הגרוע היא עדיין O(n), אבל במקרה הטוב היא O(1).</div>
+    <div class="answer" data-a="c3"><b class="q">(3)</b> לא. במקרה הגרוע (שרשרת עולה ממש) כל קריאה ל־What2 עוברת עד הסוף ו־Secret נשארת <span dir="ltr">O(n²)</span>. השיפור עוזר רק בחלק מהשרשראות ואת הסיבוכיות מודדים לפי המקרה הגרוע.</div>
   </div>
 </section>
 

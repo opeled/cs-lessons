@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>רקורסיה: שליח ברחוב – מצגת</title>
+<title>רקורסיה: שליח ברחוב (מצגת)</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -210,13 +210,13 @@
 
 <!-- 5 הרעיון -->
 <section class="slide" data-title="הרעיון" id="s-idea">
-  <h1>איך ניגשים לבעיה? <small>חושבים על הנסיעות האחרונות</small></h1>
+  <h1>איך ניגשים לבעיה? <small>חושבים על הנסיעה האחרונה</small></h1>
   <div class="card fill two" style="align-items:center">
     <div class="street" id="street-3"></div>
     <div style="font-size:23px;line-height:1.7">
-      <p class="frag" style="margin:0">השליח הגיע לבניין n בנסיעה של <b style="color:var(--ret)">בניין אחד</b>, ואז לפני כן היה בבניין <span class="ltr">n − 1</span>.</p>
-      <p class="frag">או בנסיעה של <b style="color:var(--call)">שני בניינים</b>, ואז היה בבניין <span class="ltr">n − 2</span>.</p>
-      <p class="frag">אם נחשב את מספר הדרכים להגיע לבניין הקודם ולבניין שלפניו, ונסכום אותן, נגיע לפתרון:</p>
+      <p class="frag" style="margin:0">אם השליח הגיע לבניין n בנסיעה של <b style="color:var(--ret)">בניין אחד</b>, לפני כן הוא היה בבניין <span class="ltr">n − 1</span>.</p>
+      <p class="frag">ואם הגיע בנסיעה של <b style="color:var(--call)">שני בניינים</b>, לפני כן הוא היה בבניין <span class="ltr">n − 2</span>.</p>
+      <p class="frag">אם נחשב את מספר הדרכים אל הבניין הקודם ואל הבניין שלפניו ונחבר אותן, נגיע לפתרון:</p>
       <p class="frag mono ltr" style="text-align:center;font-size:24px;font-weight:700;background:var(--accent-soft);border-radius:10px;padding:12px;margin:0">Ways(n) = Ways(n−1) + Ways(n−2)</p>
     </div>
   </div>
@@ -226,9 +226,9 @@
 <section class="slide" data-title="הקוד" data-build="build-code">
   <h1>שלושה דברים שצריך לחשוב עליהם</h1>
   <div class="three">
-    <div class="think stop" data-part="stop" data-code="build-code"><div class="num">1</div><h4>תנאי עצירה</h4><p>מתי התשובה ידועה בלי רקורסיה? <button class="more">…</button><span class="ans">אל בניין 1 יש דרך אחת, אל בניין 2 יש שתיים (1+1 או 2). בלי שני תנאים, הקריאה תגיע ל־Ways(0) ול־Ways(−1) ולא תעצור.</span></p><span class="check">✓ נוסף לקוד</span></div>
-    <div class="think call" data-part="call" data-code="build-code"><div class="num">2</div><h4>קריאה רקורסיבית</h4><p>מה הפרמטרים של הקריאה הרקורסיבית? <button class="more">…</button><span class="ans"><span class="ltr">n − 1</span> ו־<span class="ltr">n − 2</span>: בעיה <b>קטנה יותר</b> מאותו סוג – הדרכים אל הבניין הקודם ואל הבניין שלפניו.</span></p><span class="check">✓ נוסף לקוד</span></div>
-    <div class="think comb" data-part="comb" data-code="build-code"><div class="num">3</div><h4>שילוב התוצאות</h4><p>מה עושים עם מה שחזר? <button class="more">…</button><span class="ans">כאן <b>מחברים</b>, כי כל דרך אל n שייכת בדיוק לאחת משתי הקבוצות.</span></p><span class="check">✓ נוסף לקוד</span></div>
+    <div class="think stop" data-part="stop" data-code="build-code"><div class="num">1</div><h4>תנאי עצירה</h4><p>מתי התשובה ידועה בלי רקורסיה? <button class="more">…</button><span class="ans">אל בניין 1 יש דרך אחת ואל בניין 2 יש שתיים (1+1 או 2). בלי שני התנאים האלה הרקורסיה תגיע ל־Ways(0) ול־Ways(−1) ולא תיעצר.</span></p><span class="check">✓ נוסף לקוד</span></div>
+    <div class="think call" data-part="call" data-code="build-code"><div class="num">2</div><h4>קריאה רקורסיבית</h4><p>מה הפרמטרים של הקריאה הרקורסיבית? <button class="more">…</button><span class="ans"><span class="ltr">n − 1</span> ו־<span class="ltr">n − 2</span>. זו אותה בעיה, רק <b>קטנה יותר</b>: הדרכים אל הבניין הקודם ואל הבניין שלפניו.</span></p><span class="check">✓ נוסף לקוד</span></div>
+    <div class="think comb" data-part="comb" data-code="build-code"><div class="num">3</div><h4>שילוב התוצאות</h4><p>מה עושים עם מה שחזר? <button class="more">…</button><span class="ans">כאן <b>מחברים</b>, כי כל דרך אל n מסתיימת באחת משתי הנסיעות ונספרת פעם אחת בלבד.</span></p><span class="check">✓ נוסף לקוד</span></div>
   </div>
 <pre class="code fill" id="build-code"><span class="k">public static int</span> <span class="f">Ways</span>(<span class="k">int</span> n)
 {
@@ -237,8 +237,8 @@
     <span class="k">if</span> (n == <span class="n">2</span>)
         <span class="k">return</span> <span class="n">2</span>;        <span class="c">// <bdi>שתי דרכים: 1+1 או 2</bdi></span></span></span></span>
 
-<span class="part" data-part="call"><span class="placeholder">    <span class="c">// 2. קריאה רקורסיבית</span></span><span class="body">    <span class="hl-call"><span class="k">int</span> p1 = <span class="f">Ways</span>(n - <span class="n">1</span>);  <span class="c">// <bdi>הגיע מבניין n−1</bdi></span>
-    <span class="k">int</span> p2 = <span class="f">Ways</span>(n - <span class="n">2</span>);  <span class="c">// <bdi>הגיע מבניין n−2</bdi></span></span></span></span>
+<span class="part" data-part="call"><span class="placeholder">    <span class="c">// 2. קריאה רקורסיבית</span></span><span class="body">    <span class="hl-call"><span class="k">int</span> p1 = <span class="f">Ways</span>(n - <span class="n">1</span>);  <span class="c">// <bdi>השליח הגיע מבניין n−1</bdi></span>
+    <span class="k">int</span> p2 = <span class="f">Ways</span>(n - <span class="n">2</span>);  <span class="c">// <bdi>השליח הגיע מבניין n−2</bdi></span></span></span></span>
 <span class="part" data-part="comb"><span class="placeholder">    <span class="c">// 3. שילוב התוצאות</span></span><span class="body">    <span class="hl-comb"><span class="k">return</span> p1 + p2;</span></span></span>
 }</pre>
 </section>
@@ -261,18 +261,18 @@
 
 <!-- 8 פתרון ב -->
 <section class="slide" data-title="הקוד המורחב" data-build="build-code-b">
-  <h1>מה משתנה? <small>הקריאה השלישית ברורה; השאלה היא תנאי העצירה</small></h1>
+  <h1>מה משתנה? <small>הקריאה השלישית ברורה. מה עם תנאי העצירה?</small></h1>
   <div class="three">
-    <div class="think stop" data-part="stop" data-code="build-code-b"><div class="num">1</div><h4>תנאי עצירה</h4><p>למה <span class="ltr">n == 1</span> ו־<span class="ltr">n == 2</span> כבר לא מספיקים? <button class="more">…</button><span class="ans">כי <span class="ltr">Ways5(3)</span> קוראת ל־<span class="ltr">Ways5(−2)</span> ושום תנאי לא עוצר אותה. הכלל הכללי: <b><span class="ltr">n == 0</span></b> – הגענו בדיוק ליעד, דרך אחת; <b><span class="ltr">n &lt; 0</span></b> – קפצנו מעבר ליעד, אין דרך.</span></p><span class="check">✓ נוסף לקוד</span></div>
-    <div class="think call" data-part="call" data-code="build-code-b"><div class="num">2</div><h4>קריאה רקורסיבית</h4><p>מה הפרמטרים עכשיו? <button class="more">…</button><span class="ans"><span class="ltr">n − 1</span>, <span class="ltr">n − 2</span> ו־<span class="ltr">n − 5</span>: הבניין שממנו הגיע השליח בנסיעה האחרונה.</span></p><span class="check">✓ נוסף לקוד</span></div>
-    <div class="think comb" data-part="comb" data-code="build-code-b"><div class="num">3</div><h4>שילוב התוצאות</h4><p>מה עושים עם מה שחזר? <button class="more">…</button><span class="ans">כמו קודם, <b>מחברים</b>: כל דרך אל n מסתיימת בדיוק באחת משלוש הנסיעות.</span></p><span class="check">✓ נוסף לקוד</span></div>
+    <div class="think stop" data-part="stop" data-code="build-code-b"><div class="num">1</div><h4>תנאי עצירה</h4><p>למה <span class="ltr">n == 1</span> ו־<span class="ltr">n == 2</span> כבר לא מספיקים? <button class="more">…</button><span class="ans">כי <span class="ltr">Ways5(3)</span> קוראת ל־<span class="ltr">Ways5(−2)</span> ושום תנאי לא עוצר אותה. במקום זה בודקים: אם <b><span class="ltr">n == 0</span></b> הגענו ליעד וזו דרך אחת. אם <b><span class="ltr">n &lt; 0</span></b> עברנו את היעד ואין דרך.</span></p><span class="check">✓ נוסף לקוד</span></div>
+    <div class="think call" data-part="call" data-code="build-code-b"><div class="num">2</div><h4>קריאה רקורסיבית</h4><p>מה הפרמטרים עכשיו? <button class="more">…</button><span class="ans"><span class="ltr">n − 1</span>, <span class="ltr">n − 2</span> ו־<span class="ltr">n − 5</span>, לפי הבניין שממנו הגיע השליח בנסיעה האחרונה.</span></p><span class="check">✓ נוסף לקוד</span></div>
+    <div class="think comb" data-part="comb" data-code="build-code-b"><div class="num">3</div><h4>שילוב התוצאות</h4><p>מה עושים עם מה שחזר? <button class="more">…</button><span class="ans">כמו קודם <b>מחברים</b>: כל דרך אל n מסתיימת באחת משלוש הנסיעות ונספרת פעם אחת.</span></p><span class="check">✓ נוסף לקוד</span></div>
   </div>
 <pre class="code fill" id="build-code-b"><span class="k">public static int</span> <span class="f">Ways5</span>(<span class="k">int</span> n)
 {
 <span class="part" data-part="stop"><span class="placeholder">    <span class="c">// 1. תנאי עצירה</span></span><span class="body">    <span class="hl-stop"><span class="k">if</span> (n == <span class="n">0</span>)
-        <span class="k">return</span> <span class="n">1</span>;        <span class="c">// <bdi>הגענו בדיוק ליעד: דרך אחת</bdi></span>
+        <span class="k">return</span> <span class="n">1</span>;        <span class="c">// <bdi>הגענו ליעד: דרך אחת</bdi></span>
     <span class="k">if</span> (n &lt; <span class="n">0</span>)
-        <span class="k">return</span> <span class="n">0</span>;        <span class="c">// <bdi>קפצנו מעבר ליעד: אין דרך</bdi></span></span></span></span>
+        <span class="k">return</span> <span class="n">0</span>;        <span class="c">// <bdi>עברנו את היעד: אין דרך</bdi></span></span></span></span>
 
 <span class="part" data-part="call"><span class="placeholder">    <span class="c">// 2. קריאה רקורסיבית</span></span><span class="body">    <span class="hl-call"><span class="k">int</span> p1 = <span class="f">Ways5</span>(n - <span class="n">1</span>);
     <span class="k">int</span> p2 = <span class="f">Ways5</span>(n - <span class="n">2</span>);
@@ -317,7 +317,7 @@
       </defs></svg>
     </div></div>
   </div>
-  <div class="desc" id="t-desc"><span class="pill">התחלה</span><span>לחיצה מקדמת מהלך אחד.</span></div>
+  <div class="desc" id="t-desc"><span class="pill">התחלה</span><span>כל לחיצה מקדמת מהלך אחד.</span></div>
 </section>
 
 <!-- ד1 -->
@@ -327,7 +327,7 @@
     <p class="q-big" style="margin:0">מהו סוג הרקורסיה בפעולה <code class="ltr">Ways</code>? נמקו.</p>
     <div class="answer frag">
       <b class="q">הלוך־חזור.</b><br>
-      אחרי שהקריאה הרקורסיבית חוזרת נותרה עבודה: צריך לחבר את הערכים שחזרו (<span class="mono ltr">p1 + p2</span>). לכן זו אינה רקורסיית זנב, שבה הקריאה הרקורסיבית היא הפעולה האחרונה והערך שלה מוחזר כמו שהוא. זו גם אינה רקורסיה הדדית, כי יש כאן פעולה אחת שקוראת לעצמה ולא שתי פעולות שקוראות זו לזו.
+      אחרי שהקריאה הרקורסיבית חוזרת עוד יש מה לעשות: צריך לחבר את הערכים שחזרו (<span class="mono ltr">p1 + p2</span>). לכן זו אינה רקורסיית זנב, שבה הקריאה הרקורסיבית היא הפעולה האחרונה והערך שלה מוחזר כמו שהוא. זו גם אינה רקורסיה הדדית, כי יש כאן פעולה אחת שקוראת לעצמה ולא שתי פעולות שקוראות זו לזו.
     </div>
   </div>
 </section>
@@ -339,13 +339,13 @@
     <p class="q-big" style="margin:0;font-size:30px">מהי סיבוכיות זמן הריצה של <code class="ltr">Ways(n)</code>? ומהי של <code class="ltr">Ways5(n)</code>? נמקו.</p>
     <div class="answer frag" style="font-size:19px">
       <span class="mono ltr">Ways(n)</span>: <b class="mono ltr">O(2<sup>n</sup>)</b> · <span class="mono ltr">Ways5(n)</span>: <b class="mono ltr">O(3<sup>n</sup>)</b><br>
-      סיבוכיות של רקורסיה היא <b>מספר הקריאות</b>. ב־Ways כל קריאה (שאינה תנאי עצירה) פותחת <b>שתי</b> קריאות חדשות, וזה חוזר על עצמו עד העומק n: <span class="ltr mono">2 · 2 · … · 2 = 2<sup>n</sup></span>. ב־Ways5 כל קריאה פותחת <b>שלוש</b>, ולכן <span class="ltr mono">3<sup>n</sup></span>.
+      כאן הסיבוכיות היא <b>מספר הקריאות</b>. ב־Ways כל קריאה (שלא עצרה בתנאי העצירה) פותחת <b>שתי</b> קריאות חדשות וכך שוב ושוב לאורך n רמות: <span class="ltr mono">2 · 2 · … · 2 = 2<sup>n</sup></span>. ב־Ways5 כל קריאה פותחת <b>שלוש</b> ולכן <span class="ltr mono">3<sup>n</sup></span>.
     </div>
     <div class="answer frag two" style="align-items:center;font-size:17px">
       <div class="pyr" id="pyr"></div>
       <div style="color:var(--muted)">
-        <p style="margin:0 0 8px"><b>למה לא <span class="ltr">n<sup>2</sup></span>?</b> <span class="ltr">n<sup>2</sup></span> מתאים למשל לפעולה רקורסיבית על מערך שבה יש n קריאות, וכל קריאה עוברת על כל המערך. כאן כל קריאה מבצעת מספר קבוע של פעולות; מה שגדל הוא מספר הקריאות עצמו.</p>
-        <p style="margin:0"><b>למה לא n?</b> O(n) מתאים לרקורסיה שבה כל קריאה פותחת <b>קריאה אחת</b>: שרשרת של n קריאות. כאן כל קריאה פותחת שתיים (או שלוש), ולכן מספר הקריאות מוכפל בכל רמה: 1, 2, 4, 8, …</p>
+        <p style="margin:0 0 8px"><b>למה לא <span class="ltr">n<sup>2</sup></span>?</b> <span class="ltr">n<sup>2</sup></span> מתאים למשל לפעולה רקורסיבית על מערך שבה יש n קריאות וכל קריאה עוברת על כל המערך. כאן כל קריאה עושה מספר קבוע של פעולות. מה שגדל הוא רק מספר הקריאות.</p>
+        <p style="margin:0"><b>למה לא n?</b> O(n) מתאים לרקורסיה שבה כל קריאה פותחת <b>קריאה אחת</b>: שרשרת של n קריאות. כאן כל קריאה פותחת שתיים (או שלוש) ולכן מספר הקריאות מוכפל בכל רמה: 1, 2, 4, 8, …</p>
       </div>
     </div>
   </div>
@@ -353,7 +353,7 @@
 
 <!-- 11 העץ המלא -->
 <section class="slide" data-title="העץ המלא">
-  <h1>העץ המלא של <span class="mono ltr">Ways5(5)</span> <small>בלי שום קיצור – <span id="fulltree-count"></span> קריאות כדי לחשב את התשובה 9</small></h1>
+  <h1>העץ המלא של <span class="mono ltr">Ways5(5)</span> <small>בלי שום קיצור, <span id="fulltree-count"></span> קריאות בשביל התשובה 9</small></h1>
   <div class="fulltree fill" id="fulltree"></div>
 </section>
 
@@ -363,9 +363,9 @@
 <section class="slide bonus" data-title="בונוס">
   <h1>בונוס <small>סעיף ד׳</small></h1>
   <div class="fill" style="display:flex;flex-direction:column;gap:22px;justify-content:center">
-    <p class="q-big" style="margin:0">בעץ הקריאות הפעולה <code class="ltr">Ways5(3)</code> מופיעה פעמיים. הסבירו מדוע זה קורה, ומה זה אומר על גודל העץ כאשר n גדל.</p>
+    <p class="q-big" style="margin:0">בעץ הקריאות הקריאה <code class="ltr">Ways5(3)</code> מופיעה פעמיים. הסבירו מדוע זה קורה ומה זה אומר על גודל העץ כאשר n גדל.</p>
     <div class="answer frag">
-      <span class="mono ltr">Ways5(3)</span> נדרשת גם על ידי <span class="mono ltr">Ways5(5)</span> וגם על ידי <span class="mono ltr">Ways5(4)</span>, וכל קריאה מחשבת אותה מחדש בלי ״לזכור״ שכבר חושבה. ככל ש־n גדל, אותם ערכים קטנים חוזרים ומופיעים בחלקים רבים של העץ, וזה מקור הגידול המעריכי. במעקב הרשינו לעצמנו לקצר – ״חושב כבר״ – בדיוק את מה שהמחשב לא עושה. אם הפעולה הייתה שומרת כל תוצאה פעם אחת, היו רק n ערכים שונים לחשב.
+      גם <span class="mono ltr">Ways5(5)</span> וגם <span class="mono ltr">Ways5(4)</span> קוראות ל־<span class="mono ltr">Ways5(3)</span>. כל אחת מהן מחשבת אותה מחדש בלי ״לזכור״ שכבר חושבה. ככל ש־n גדל, אותם ערכים קטנים חוזרים ומופיעים בחלקים רבים של העץ. זה מקור הגידול המעריכי. במעקב הרשינו לעצמנו לכתוב ״חושב כבר״ ולקצר, אבל המחשב לא מקצר. אם הפעולה הייתה שומרת כל תוצאה שחישבה, היא הייתה צריכה לחשב רק n ערכים שונים.
     </div>
   </div>
 </section>
@@ -404,7 +404,7 @@ document.querySelectorAll('.think[data-part]').forEach(b=>{
 (function(){const p=document.getElementById('pyr');[[0,1],[1,2],[2,4],[3,8]].forEach(([lvl,k])=>{
   const row=document.createElement('div');row.className='row';
   row.innerHTML=`<span class="lbl">רמה ${lvl}: ${k===1?'קריאה אחת':k+' קריאות'}</span>`+'<span class="b"></span>'.repeat(k);p.appendChild(row);});
-  const cap=document.createElement('div');cap.className='hint';cap.innerHTML='ב־Ways כל רמה מכפילה; אחרי n רמות: <span class="ltr">2<sup>n</sup></span>. ב־Ways5 כל רמה משלשת.';p.appendChild(cap);})();
+  const cap=document.createElement('div');cap.className='hint';cap.innerHTML='ב־Ways כל רמה כפולה מהקודמת. אחרי n רמות: <span class="ltr">2<sup>n</sup></span>. ב־Ways5 כל רמה גדולה פי 3 מהקודמת.';p.appendChild(cap);})();
 document.getElementById('fulltree-count').textContent=staticTree(document.getElementById('fulltree'),{...TRACE_PRESETS.ways5,memo:false});
 // trace
 const trace=makeTrace({stage:document.getElementById('stage'),arrows:document.getElementById('arrows'),desc:document.getElementById('t-desc'),counter:document.getElementById('t-counter'),wrapHeight:470});

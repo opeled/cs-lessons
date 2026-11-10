@@ -100,8 +100,8 @@ function lastRidesArcs(street,hidden){
    base 'zero' : if (n == 0) return 1; if (n < 0) return 0;
    Produces nodes (with layout) and a list of single "moves" (steps). */
 const TRACE_PRESETS={
-  ways4:{key:'ways4',label:'Ways(4) – קפיצות 1, 2',name:'Ways',jumps:[1,2],n:4,base:'fib',memo:false},
-  ways5:{key:'ways5',label:'Ways5(5) – קפיצות 1, 2, 5',name:'Ways5',jumps:[1,2,5],n:5,base:'zero',memo:true},
+  ways4:{key:'ways4',label:'Ways(4): נסיעות של 1, 2',name:'Ways',jumps:[1,2],n:4,base:'fib',memo:false},
+  ways5:{key:'ways5',label:'Ways5(5): נסיעות של 1, 2, 5',name:'Ways5',jumps:[1,2,5],n:5,base:'zero',memo:true},
 };
 function genTrace(cfg){
   const nodes=[],steps=[],memoVals=new Map();let idc=0;
@@ -110,18 +110,18 @@ function genTrace(cfg){
     ?[{line:'if (n == 1)',res:n===1,val:1},{line:'if (n == 2)',res:n===2,val:2}]
     :[{line:'if (n == 0)',res:n===0,val:0+1},{line:'if (n < 0)',res:n<0,val:0}];
   const why=(c,n)=>cfg.base==='fib'
-    ?(c.res?`${c.line.replace('n',n)} מתקיים: תנאי עצירה, מחזירים ${c.val}.`:`האם ${c.line.slice(4,-1).replace('n',n)}? לא.`)
-    :(c.res?(n===0?`n == 0: הגענו בדיוק לבניין היעד, זו דרך אחת. מחזירים 1.`:`n < 0: קפצנו מעבר ליעד, אין כאן דרך. מחזירים 0.`):`האם ${c.line.slice(4,-1).replace('n',n)}? לא.`);
+    ?(c.res?`${c.line.slice(4,-1).replace('n',n)} מתקיים, זה תנאי עצירה ומחזירים ${c.val}.`:`האם ${c.line.slice(4,-1).replace('n',n)}? לא.`)
+    :(c.res?(n===0?`n == 0 מתקיים. הגענו ליעד וזו דרך אחת, מחזירים 1.`:`n < 0 מתקיים. עברנו את היעד ואין כאן דרך, מחזירים 0.`):`האם ${c.line.slice(4,-1).replace('n',n)}? לא.`);
   function visit(n,parent,slot,depth){
     const id='N'+(idc++);
     if(cfg.memo&&memoVals.has(n)){
       const v=memoVals.get(n);
       nodes.push({id,n,parent,slot,depth,kind:'memo',val:v});
-      steps.push({t:'memo',id,val:v,text:`${N}(${n}) כבר חושבה קודם במעקב, הערך שלה ${v}. אין צורך לפתוח אותה שוב: מציינים ״חושב כבר״ ומשתמשים בערך.`});
+      steps.push({t:'memo',id,val:v,text:`${N}(${n}) כבר חושבה במעקב והערך שלה ${v}. לא פותחים אותה שוב, רק כותבים ״חושב כבר״ ומשתמשים בערך.`});
       return v;
     }
     const node={id,n,parent,slot,depth,kind:'node',val:null,checks:[],slots:[]};nodes.push(node);
-    steps.push({t:'call',id,text:parent===null?`קוראים ל־${N} עם n = ${n}. נפתחת קריאה חדשה.`:`קריאה רקורסיבית: ${N}(${n}). הקריאה הקודמת ״מחכה״ עד שתחזור תשובה.`});
+    steps.push({t:'call',id,text:parent===null?`קוראים ל־${N} עם n = ${n}. נפתחת קריאה חדשה.`:`${N}(${n}) נפתחת. הקריאה שקראה לה מחכה לתשובה.`});
     const checks=checksFor(n);node.checks=checks.map(c=>c.line);
     for(let i=0;i<checks.length;i++){const c=checks[i];
       steps.push({t:'if',id,line:i,res:c.res,text:`ב־${N}(${n}): ${why(c,n)}`});
@@ -134,7 +134,7 @@ function genTrace(cfg){
     const vals=[];let sum=0;
     J.forEach((j,k)=>{const v=visit(n-j,id,k,depth+1);vals.push(v);sum+=v;node.slots[k].val=v;});
     node.val=sum;
-    steps.push({t:'ret',id,val:sum,expr:vals.join(' + '),text:`ל־${N}(${n}) יש את כל הערכים: מחזירה ${J.map((j,k)=>'p'+(k+1)).join(' + ')} = ${vals.join(' + ')} = ${sum}${parent!==null?` אל ${N}(${nodes.find(x=>x.id===parent).n})`:'. זו התשובה הסופית'}.`});
+    steps.push({t:'ret',id,val:sum,expr:vals.join(' + '),text:`כל הערכים חזרו ל־${N}(${n}). היא מחזירה ${J.map((j,k)=>'p'+(k+1)).join(' + ')} = ${vals.join(' + ')} = ${sum}${parent!==null?` אל ${N}(${nodes.find(x=>x.id===parent).n})`:'. זו התשובה הסופית'}.`});
     if(cfg.memo)memoVals.set(n,sum);
     return sum;
   }
@@ -242,12 +242,12 @@ function makeTrace(dom){ // dom: {stage, arrows, desc, counter, wrapHeight?:numb
       else line(cc.x+12,cc.top-2,pc.x+off+12,pc.bottom+2,a.kind==='memo'?'memo':'ret',String(a.val));});
     // description
     const d=dom.desc;
-    if(!last){d.className='desc';d.innerHTML=`<span class="pill">התחלה</span><span>לחיצה מקדמת מהלך אחד.</span>`;}
+    if(!last){d.className='desc';d.innerHTML=`<span class="pill">התחלה</span><span>כל לחיצה מקדמת מהלך אחד.</span>`;}
     else{let cls=last.t,pill={call:'קריאה רקורסיבית',if:'בדיקת תנאי',ret:'החזרת ערך',memo:'ערך ידוע'}[last.t];
       if(last.t==='if'&&last.res){cls='stop';pill='תנאי עצירה';}
       if(last.t==='ret'&&!byId.get(last.id).parent){cls='done';pill='סיום';}
       d.className='desc '+cls;d.innerHTML=`<span class="pill">${pill}</span><span>${last.text}</span>`+(cls==='done'?`<span class="result">${T.cfg.name}(${T.cfg.n}) = ${last.val}</span>`:'');}
-    if(dom.counter)dom.counter.textContent=T.step===0?`${T.steps.length} מהלכים · ${T.nodes.length} כניסות לפעולה`:`מהלך ${T.step} מתוך ${T.steps.length}`;
+    if(dom.counter)dom.counter.textContent=T.step===0?`${T.steps.length} מהלכים · ${T.nodes.length} קריאות`:`מהלך ${T.step} מתוך ${T.steps.length}`;
     T.fit(activeId);
   };
   /* two view modes: "follow" keeps boxes at full size and pans the view to the active call;

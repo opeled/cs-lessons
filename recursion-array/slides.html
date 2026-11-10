@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>רקורסיה על מערך: הערך השכיח – מצגת</title>
+<title>רקורסיה על מערך: הערך השכיח (מצגת)</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../lib/slides.css">
 <style>
@@ -79,7 +79,7 @@
 
 <!-- 3 מעקב Sod -->
 <section class="slide trace-slide" data-title="מעקב Sod" data-trace="a">
-  <h1>מעקב: <span class="mono ltr">Sod(arr, 0, 4)</span> <small>תא אחרי תא. הקריאות יורדות עד מעבר לתא האחרון, והספירה חוזרת מהסוף להתחלה</small></h1>
+  <h1>מעקב: <span class="mono ltr">Sod(arr, 0, 4)</span> <small>הקריאות מתקדמות תא אחרי תא עד מעבר לתא האחרון ואז הספירה חוזרת מהסוף להתחלה</small></h1>
   <div class="struct" style="padding:4px 14px" id="arr-trace-a"></div>
   <div class="trace fill">
     <div class="side">
@@ -88,7 +88,7 @@
     </div>
     <div class="frames-wrap" style="height:360px"><div class="frames" id="frames-a"><svg class="arrows" data-marker="arr-a"><defs><marker id="arr-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker></defs></svg></div></div>
   </div>
-  <div class="desc" id="desc-a"><span class="pill">התחלה</span><span>לחיצה מקדמת מהלך אחד.</span></div>
+  <div class="desc" id="desc-a"><span class="pill">התחלה</span><span>כל לחיצה מקדמת מהלך אחד.</span></div>
 </section>
 
 <!-- 4 מה עושה Sod -->
@@ -97,11 +97,11 @@
   <div class="fill qa">
     <p class="q-big" style="margin:0">מה עושה הפעולה <code class="ltr">Sod</code>? הסבירו.</p>
     <div class="answer frag">
-      <b class="q">Sod מחזירה את מספר המופעים של x במערך</b>, מהמקום i ועד סוף המערך. בזימון <code class="ltr">Sod(arr, 0, x)</code> היא סופרת את כל המופעים של x.
+      <b class="q">Sod מחזירה את מספר המופעים של x</b> מהתא i ועד סוף המערך. בקריאה <code class="ltr">Sod(arr, 0, x)</code> היא סופרת את כל המופעים של x במערך.
     </div>
     <div class="answer frag" style="font-size:19px">
-      כשעוברים את התא האחרון אין מה לספור (0). בכל תא: אם הערך שווה ל־x מוסיפים 1 לספירה של שאר המערך, ואם לא, מחזירים את הספירה של שאר המערך כפי שהיא.<br>
-      בדוגמה: 4 נמצא בתאים 0, 2 ו־3, ולכן <code class="ltr">Sod(arr, 0, 4) = 3</code>. הסיבוכיות: <b class="ltr">O(n)</b>, קריאה אחת לכל תא.
+      כשעוברים את התא האחרון אין מה לספור ומחזירים 0. בכל תא אחר, אם הערך שווה ל־x מוסיפים 1 לספירה של שאר המערך ואם לא, מחזירים אותה כפי שהיא.<br>
+      בדוגמה 4 נמצא בתאים 0, 2 ו־3 ולכן <code class="ltr">Sod(arr, 0, 4) = 3</code>. הסיבוכיות היא <b class="ltr">O(n)</b>, כי יש קריאה אחת לכל תא.
     </div>
   </div>
 </section>
@@ -114,14 +114,14 @@
     <div style="font-size:22px">
       <p style="margin:0 0 10px">אותו מערך <code>arr</code>:</p>
       <div class="struct" id="arr-2" style="border:1px solid var(--line)"></div>
-      <div class="note" style="margin-top:18px">(1) עקבו אחר <code class="ltr">What(arr, 0)</code> וכתבו מה היא מחזירה.<div style="font-size:17px;margin-top:6px;color:var(--muted)">אין צורך לעקוב אחר Sod, רק לציין את הערך שהיא מחזירה.</div></div>
+      <div class="note" style="margin-top:18px">(1) עקבו אחר <code class="ltr">What(arr, 0)</code> וכתבו מה היא מחזירה.<div style="font-size:17px;margin-top:6px;color:var(--muted)">אין צורך לעקוב אחר Sod אלא רק לציין את הערך שהיא מחזירה.</div></div>
     </div>
   </div>
 </section>
 
 <!-- 6 מעקב What -->
 <section class="slide trace-slide" data-title="מעקב What" data-trace="b">
-  <h1>מעקב: <span class="mono ltr">What(arr, 0)</span> <small>Sod היא ״קופסה שחורה״: רושמים רק מה היא מחזירה</small></h1>
+  <h1>מעקב: <span class="mono ltr">What(arr, 0)</span> <small>Sod היא ״קופסה שחורה״ ורושמים רק מה היא מחזירה</small></h1>
   <div class="struct" style="padding:4px 14px" id="arr-trace-b"></div>
   <div class="trace fill">
     <div class="side">
@@ -130,7 +130,7 @@
     </div>
     <div class="frames-wrap" style="height:360px"><div class="frames" id="frames-b"><svg class="arrows" data-marker="arr-b"><defs><marker id="arr-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker></defs></svg></div></div>
   </div>
-  <div class="desc" id="desc-b"><span class="pill">התחלה</span><span>לחיצה מקדמת מהלך אחד.</span></div>
+  <div class="desc" id="desc-b"><span class="pill">התחלה</span><span>כל לחיצה מקדמת מהלך אחד.</span></div>
 </section>
 
 <!-- 7 מה עושה What -->
@@ -141,8 +141,8 @@
     <div class="answer frag"><b class="q">What מחזירה את הערך השכיח ביותר במערך</b>, הערך שמופיע הכי הרבה פעמים.</div>
     <div class="answer frag" style="font-size:19px">
       What עוברת על התאים מהסוף להתחלה. בכל שלב <code>best</code> הוא הערך השכיח ביותר מבין התאים שכבר נבדקו. הערך שבתא i מחליף את best רק אם הוא מופיע במערך <b>יותר</b> פעמים ממנו.<br>
-      בדוגמה: 4 מופיע 3 פעמים, 7 ו־9 פעם אחת כל אחד, ולכן <code class="ltr">What(arr, 0) = 4</code>.
-      <div class="trap">⚠ Sod תמיד נקראת עם 0: היא סופרת בכל המערך, לא רק מתא i והלאה.</div>
+      בדוגמה 4 מופיע 3 פעמים, 7 ו־9 פעם אחת כל אחד ולכן <code class="ltr">What(arr, 0) = 4</code>.
+      <div class="trap">⚠ Sod תמיד מקבלת i = 0, כלומר סופרת בכל המערך ולא רק מהתא הנוכחי והלאה.</div>
     </div>
   </div>
 </section>
@@ -152,10 +152,10 @@
   <h1>סעיף ב׳ <small>(3) סיבוכיות</small></h1>
   <div class="fill qa">
     <p class="q-big" style="margin:0;font-size:30px">מהי סיבוכיות זמן הריצה של <code class="ltr">What</code>? נמקו.</p>
-    <div class="answer frag"><b class="q ltr">O(n²)</b>. n קריאות ל־What, ובכל אחת (חוץ מהאחרונה) שתי קריאות ל־Sod שעוברת על <b>כל</b> המערך.</div>
+    <div class="answer frag"><b class="q ltr">O(n²)</b>. יש n קריאות ל־What ובכל אחת (חוץ מהאחרונה) שתי קריאות ל־Sod, שעוברת על <b>כל</b> המערך.</div>
     <div class="answer frag" style="font-size:19px">
       <div class="sum" id="sum-b"></div>
-      <div class="hint" style="text-align:center">בכלליות <span class="ltr">(n−1) · 2 · (n+1) ≈ 2n²</span>, ולכן O(n²). הדפוס החוזר בבגרות: פעולה רקורסיבית ב־O(n) שנקראת מתוך פעולה רקורסיבית אחרת ב־O(n).</div>
+      <div class="hint" style="text-align:center">באופן כללי <span class="ltr">(n−1) · 2 · (n+1) ≈ 2n²</span> ולכן O(n²). המבנה הזה חוזר בבגרות: פעולה רקורסיבית ב־O(n) שנקראת מתוך פעולה רקורסיבית אחרת ב־O(n).</div>
     </div>
   </div>
 </section>
@@ -166,13 +166,13 @@
   <div class="fill qa">
     <p class="q-big" style="margin:0;font-size:28px">נתון המערך <code class="ltr">{7, 4, 9, 7, 4}</code>. מה תחזיר <code class="ltr">What(arr, 0)</code>? מה קובעת הפעולה כאשר שני ערכים מופיעים אותו מספר פעמים?</p>
     <div class="arrcard" id="arr-tie"></div>
-    <div class="answer frag"><b class="q">התשובה: 4.</b> גם 4 וגם 7 מופיעים פעמיים. זה תיקו, ובכל זאת הפעולה בוחרת.</div>
+    <div class="answer frag"><b class="q">התשובה: 4.</b> גם 4 וגם 7 מופיעים פעמיים. זה תיקו ובכל זאת הפעולה חייבת להחזיר ערך אחד.</div>
   </div>
 </section>
 
 <!-- 10 מעקב על התיקו -->
 <section class="slide trace-slide" data-title="מעקב תיקו" data-trace="c">
-  <h1>מעקב: <span class="mono ltr">What(arr, 0)</span> על <span class="mono ltr">{7, 4, 9, 7, 4}</span> <small>שימו לב מי נכנס ל־best ראשון, ומתי ״2 &gt; 2״ נכשל</small></h1>
+  <h1>מעקב: <span class="mono ltr">What(arr, 0)</span> על <span class="mono ltr">{7, 4, 9, 7, 4}</span> <small>איזה ערך נשמר ב־best ראשון ומתי התנאי 2 &gt; 2 לא מתקיים</small></h1>
   <div class="struct" style="padding:4px 14px" id="arr-trace-c"></div>
   <div class="trace fill">
     <div class="side">
@@ -181,7 +181,7 @@
     </div>
     <div class="frames-wrap" style="height:360px"><div class="frames" id="frames-c"><svg class="arrows" data-marker="arr-c"><defs><marker id="arr-c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e0323c"/></marker></defs></svg></div></div>
   </div>
-  <div class="desc" id="desc-c"><span class="pill">התחלה</span><span>לחיצה מקדמת מהלך אחד.</span></div>
+  <div class="desc" id="desc-c"><span class="pill">התחלה</span><span>כל לחיצה מקדמת מהלך אחד.</span></div>
 </section>
 
 <!-- 11 כלל התיקו -->
@@ -189,8 +189,8 @@
   <h1>מה קובעת הפעולה בתיקו?</h1>
   <div class="fill qa">
     <div class="answer frag">בגלל <code class="ltr">&gt;</code> ולא <code class="ltr">&gt;=</code>, ערך מחליף את best רק אם הוא שכיח <b>יותר ממש</b>. בתיקו best נשאר.</div>
-    <div class="answer frag">ההכרעות מתקבלות מהסוף להתחלה. לכן הערך שנכנס ל־best <b>ראשון</b> הוא זה שהמופע האחרון שלו קרוב יותר לסוף המערך, והוא נשאר שם: כל 7 שמגיע אחר כך נכשל ב־<code class="ltr">2 &gt; 2</code>.</div>
-    <div class="answer frag"><div class="trap" style="margin:0;font-size:22px">כלל התיקו: <b>מנצח הערך שהמופע האחרון שלו מאוחר יותר במערך.</b> זה לא כתוב בקוד, זו תוצאה של סדר ההכרעה ברקורסיה.</div></div>
+    <div class="answer frag">הפעולה מכריעה מהסוף להתחלה. לכן הערך שנשמר ב־best <b>ראשון</b> הוא זה שהמופע האחרון שלו קרוב יותר לסוף המערך והוא נשאר שם: בכל 7 שמגיע אחר כך התנאי <code class="ltr">2 &gt; 2</code> לא מתקיים.</div>
+    <div class="answer frag"><div class="trap" style="margin:0;font-size:22px">כלל התיקו: <b>בתיקו הפעולה מחזירה את הערך שהמופע האחרון שלו מאוחר יותר במערך.</b> הכלל לא כתוב בקוד במפורש אלא נובע מהסדר שבו הרקורסיה מכריעה.</div></div>
   </div>
 </section>
 
@@ -198,10 +198,10 @@
 <section class="slide bonus" data-title="אתגר">
   <h1>אתגר <small>בנו מערך שבו 7 מנצח בתיקו</small></h1>
   <div class="fill qa">
-    <p class="q-big" style="margin:0;font-size:28px">כתבו מערך שבו 4 ו־7 מופיעים אותו מספר פעמים, ו־<code class="ltr">What(arr, 0)</code> מחזירה <b>7</b>.</p>
+    <p class="q-big" style="margin:0;font-size:28px">כתבו מערך שבו 4 ו־7 מופיעים אותו מספר פעמים ו־<code class="ltr">What(arr, 0)</code> מחזירה <b>7</b>.</p>
     <div class="answer frag">מספיק להחליף את שני התאים האחרונים: <code class="ltr">{7, 4, 9, 4, 7}</code>.</div>
     <div class="arrcard frag" id="arr-swap"></div>
-    <div class="answer frag" style="font-size:19px">עכשיו המופע האחרון של 7 (תא 4) מאוחר ממופע ה־4 האחרון (תא 3), ולכן 7 נכנס ל־best ראשון ונשאר. <span class="hint">ואם 7 מופיע פעם אחת יותר, הוא מנצח בכל סידור, כי זה כבר לא תיקו.</span></div>
+    <div class="answer frag" style="font-size:19px">עכשיו המופע האחרון של 7 (תא 4) מאוחר מהמופע האחרון של 4 (תא 3) ולכן 7 נשמר ב־best ראשון ונשאר. <span class="hint">ואם 7 מופיע פעם אחת יותר, הוא מנצח בכל סידור, כי זה כבר לא תיקו.</span></div>
   </div>
 </section>
 
@@ -223,7 +223,7 @@ drawArray(document.getElementById('arr-1'),ARR_DEFAULT);drawArray(document.getEl
 drawArray(document.getElementById('arr-tie'),ARR_TIE);drawArray(document.getElementById('arr-swap'),[7,4,9,4,7]);
 (function(){const n=ARR_DEFAULT.length,el=document.getElementById('sum-b');
   el.innerHTML=`<span class="b">${n-1}</span><span class="op">×</span><span class="b">2</span><span class="op">×</span><span class="b">${n+1}</span><span class="op">=</span><span class="b" style="background:var(--ret)">${sodEntries(ARR_DEFAULT)}</span>`
-   +`<span class="hint" style="width:100%;text-align:center;direction:rtl">${n-1} קריאות ל־What שקוראות ל־Sod · 2 קריאות ל־Sod בכל אחת · ${n+1} כניסות בכל קריאה ל־Sod = ${sodEntries(ARR_DEFAULT)} כניסות ל־Sod</span>`;})();
+   +`<span class="hint" style="width:100%;text-align:center;direction:rtl">${n-1} קריאות ל־What שקוראות ל־Sod · 2 קריאות ל־Sod בכל אחת · ${n+1} קריאות בכל מעבר של Sod על המערך = ${sodEntries(ARR_DEFAULT)} קריאות ל־Sod</span>`;})();
 function mk(key){return makeLinearTrace({frames:document.getElementById('frames-'+key),arrows:document.querySelector('#frames-'+key+' svg.arrows'),struct:document.getElementById('arr-trace-'+key),desc:document.getElementById('desc-'+key),counter:document.getElementById('cnt-'+key)},drawArray);}
 const traces={a:mk('a'),b:mk('b'),c:mk('c')};
 traces.a.load(ARR_DEFAULT,(v,R)=>simSod(v,R,4));traces.b.load(ARR_DEFAULT,simWhat);traces.c.load(ARR_TIE,simWhat);
