@@ -68,8 +68,9 @@
   /* think cards + code */
   .three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
   .think{border-radius:14px;padding:14px 18px;border:2px solid;background:#fff;text-align:right;font:inherit;cursor:pointer;position:relative;color:var(--ink)}
-  .think .num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;margin-bottom:4px}
-  .think h4{margin:0 0 4px;font-size:21px}
+  .think .num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;float:right;margin:0 0 4px 10px}
+  .think h4{margin:0 0 4px;font-size:21px;line-height:34px}
+  .slide[data-build]{padding-bottom:44px}
   .think p{margin:0;font-size:17px;color:var(--muted)}
   .think.stop{border-color:var(--stop);background:var(--stop-soft)}.think.stop .num{background:var(--stop)}
   .think.call{border-color:var(--call);background:var(--call-soft)}.think.call .num{background:var(--call)}
@@ -80,7 +81,7 @@
   .think.open .more{display:none}
   .think .check{display:none;margin-top:8px;font-weight:700;font-size:14px}
   .think.added .check{display:inline-block}
-  pre.code{direction:ltr;text-align:left;background:#0f172a;color:#e2e8f0;padding:16px 22px;border-radius:14px;font-size:18px;line-height:1.5;margin:0;border:1px solid rgba(255,255,255,.08)}
+  pre.code{direction:ltr;text-align:left;background:#0f172a;color:#e2e8f0;padding:16px 22px;border-radius:14px;font-size:18px;line-height:1.4;margin:0;border:1px solid rgba(255,255,255,.08)}
   .code .k{color:#93c5fd}.code .f{color:#86efac}.code .c{color:#94a3b8;font-style:italic}.code .n{color:#fca5a5}
   .code .hl-stop{background:rgba(31,157,85,.25);border-radius:4px;box-shadow:0 0 0 2px rgba(31,157,85,.35)}
   .code .hl-call{background:rgba(224,50,60,.25);border-radius:4px;box-shadow:0 0 0 2px rgba(224,50,60,.35)}
@@ -236,7 +237,6 @@
         <span class="k">return</span> <span class="n">1</span>;        <span class="c">// <bdi>דרך אחת: נסיעה של 1</bdi></span>
     <span class="k">if</span> (n == <span class="n">2</span>)
         <span class="k">return</span> <span class="n">2</span>;        <span class="c">// <bdi>שתי דרכים: 1+1 או 2</bdi></span></span></span></span>
-
 <span class="part" data-part="call"><span class="placeholder">    <span class="c">// 2. קריאה רקורסיבית</span></span><span class="body">    <span class="hl-call"><span class="k">int</span> p1 = <span class="f">Ways</span>(n - <span class="n">1</span>);  <span class="c">// <bdi>השליח הגיע מבניין n−1</bdi></span>
     <span class="k">int</span> p2 = <span class="f">Ways</span>(n - <span class="n">2</span>);  <span class="c">// <bdi>השליח הגיע מבניין n−2</bdi></span></span></span></span>
 <span class="part" data-part="comb"><span class="placeholder">    <span class="c">// 3. שילוב התוצאות</span></span><span class="body">    <span class="hl-comb"><span class="k">return</span> p1 + p2;</span></span></span>
@@ -263,7 +263,7 @@
 <section class="slide" data-title="הקוד המורחב" data-build="build-code-b">
   <h1>מה משתנה? <small>הקריאה השלישית ברורה. מה עם תנאי העצירה?</small></h1>
   <div class="three">
-    <div class="think stop" data-part="stop" data-code="build-code-b"><div class="num">1</div><h4>תנאי עצירה</h4><p>למה <span class="ltr">n == 1</span> ו־<span class="ltr">n == 2</span> כבר לא מספיקים? <button class="more">…</button><span class="ans">כי <span class="ltr">Ways5(3)</span> קוראת ל־<span class="ltr">Ways5(−2)</span> ושום תנאי לא עוצר אותה. במקום זה בודקים: אם <b><span class="ltr">n == 0</span></b> הגענו ליעד וזו דרך אחת. אם <b><span class="ltr">n &lt; 0</span></b> עברנו את היעד ואין דרך.</span></p><span class="check">✓ נוסף לקוד</span></div>
+    <div class="think stop" data-part="stop" data-code="build-code-b"><div class="num">1</div><h4>תנאי עצירה</h4><p>למה <span class="ltr">n == 1</span> ו־<span class="ltr">n == 2</span> כבר לא מספיקים? <button class="more">…</button><span class="ans">כי <span class="ltr">Ways5(3)</span> קוראת ל־<span class="ltr">Ways5(−2)</span> ולא נעצרת. במקומם בודקים <b><span class="ltr">n == 0</span></b> ו־<b><span class="ltr">n &lt; 0</span></b>.</span></p><span class="check">✓ נוסף לקוד</span></div>
     <div class="think call" data-part="call" data-code="build-code-b"><div class="num">2</div><h4>קריאה רקורסיבית</h4><p>מה הפרמטרים עכשיו? <button class="more">…</button><span class="ans"><span class="ltr">n − 1</span>, <span class="ltr">n − 2</span> ו־<span class="ltr">n − 5</span>, לפי הבניין שממנו הגיע השליח בנסיעה האחרונה.</span></p><span class="check">✓ נוסף לקוד</span></div>
     <div class="think comb" data-part="comb" data-code="build-code-b"><div class="num">3</div><h4>שילוב התוצאות</h4><p>מה עושים עם מה שחזר? <button class="more">…</button><span class="ans">כמו קודם <b>מחברים</b>: כל דרך אל n מסתיימת באחת משלוש הנסיעות ונספרת פעם אחת.</span></p><span class="check">✓ נוסף לקוד</span></div>
   </div>
@@ -273,7 +273,6 @@
         <span class="k">return</span> <span class="n">1</span>;        <span class="c">// <bdi>הגענו ליעד: דרך אחת</bdi></span>
     <span class="k">if</span> (n &lt; <span class="n">0</span>)
         <span class="k">return</span> <span class="n">0</span>;        <span class="c">// <bdi>עברנו את היעד: אין דרך</bdi></span></span></span></span>
-
 <span class="part" data-part="call"><span class="placeholder">    <span class="c">// 2. קריאה רקורסיבית</span></span><span class="body">    <span class="hl-call"><span class="k">int</span> p1 = <span class="f">Ways5</span>(n - <span class="n">1</span>);
     <span class="k">int</span> p2 = <span class="f">Ways5</span>(n - <span class="n">2</span>);
     <span class="k">int</span> p3 = <span class="f">Ways5</span>(n - <span class="n">5</span>);</span></span></span>
