@@ -43,15 +43,16 @@
   .hint{color:var(--muted);font-size:16px}
   .note{background:var(--accent-soft);border-right:6px solid var(--accent);padding:18px 22px;border-radius:12px;font-size:22px}
   /* exam sheet */
-  .sheet{background:#fff;color:#000;width:860px;margin:0 auto;text-align:right;padding:22px 44px 26px;border:1px solid #cfd4dd;font-family:"Times New Roman","David",Times,serif;font-size:17px;line-height:1.6;box-shadow:0 20px 50px rgba(0,0,0,.4)}
-  .sheet p{margin:7px 0}
-  .sheet-head{display:flex;justify-content:space-between;font-size:14px;color:#333;border-bottom:1px solid #999;padding-bottom:3px;margin-bottom:14px}
+  .slide.sheet-slide{padding:14px 24px 44px}
+  .sheet{background:#fff;color:#000;width:1230px;max-width:100%;margin:0 auto;text-align:right;padding:14px 40px 16px;border:1px solid #cfd4dd;font-family:"Times New Roman","David",Times,serif;font-size:22px;line-height:1.5;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+  .sheet p{margin:4px 0}
+  .sheet-head{display:flex;justify-content:space-between;font-size:19px;color:#333;border-bottom:1px solid #999;padding-bottom:3px;margin-bottom:8px}
   .sheet-head span:first-child{text-decoration:underline}
-  .sheet-table{border-collapse:collapse;margin:6px 40px}
+  .sheet-table{border-collapse:collapse;margin:4px 40px}
   .sheet-table td{border:1px solid #000;padding:1px 16px;text-align:center}
-  .sheet-code{font-family:"Courier New",monospace;font-size:15px;white-space:nowrap}
-  .sheet-sections{list-style:none;padding:0;margin:12px 0 0}
-  .sheet-sections>li{margin:7px 0;padding-right:32px;position:relative}
+  .sheet-code{font-family:"Courier New",monospace;font-size:20px;white-space:nowrap}
+  .sheet-sections{list-style:none;padding:0;margin:8px 0 0}
+  .sheet-sections>li{margin:5px 0;padding-right:32px;position:relative}
   .sec-letter{position:absolute;right:0;top:0;font-weight:700}
   .sheet-sub{list-style:none;padding:0;margin:0}
   /* street */
@@ -146,7 +147,7 @@
 <div class="deck" id="deck">
 
 <!-- 1 שאלון -->
-<section class="slide" data-title="השאלה">
+<section class="slide sheet-slide" data-title="השאלה">
   <div class="fill center">
   <div class="sheet">
     <div class="sheet-head"><span>מדעי המחשב, שאלה לדוגמה</span><span>- 1 -</span><span>רקורסיה</span></div>
