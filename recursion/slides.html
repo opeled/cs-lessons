@@ -162,7 +162,7 @@
     <ol class="sheet-sections">
       <li><span class="sec-letter">א.</span> כתבו פעולה רקורסיבית <span class="ltr sheet-code">public static int Ways(int n)</span>, המקבלת את מספר הבניין n ומחזירה את מספר דרכי ההגעה השונות שבהן השליח יכול להגיע מנקודת ההתחלה אל בניין n.</li>
       <li><span class="sec-letter">ב.</span> לשליח נוספה אפשרות: בנסיעה אחת הוא יכול להתקדם בניין אחד, שני בניינים <u>או חמישה בניינים</u>. כתבו פעולה רקורסיבית <span class="ltr sheet-code">public static int Ways5(int n)</span>, המחזירה את מספר דרכי ההגעה השונות אל בניין n במצב החדש.</li>
-      <li><span class="sec-letter">ג.</span> כתבו מה תחזיר הפעולה <span class="ltr sheet-code">Ways5(5)</span>. עליכם להראות מעקב. אם ערכה של קריאה כבר חושב במעקב, מותר להשתמש בו שוב, בתנאי שתציינו זאת.</li>
+      <li><span class="sec-letter">ג.</span> כתבו מה תחזיר הפעולה <span class="ltr sheet-code">Ways5(4)</span>. עליכם להראות מעקב. אם ערכה של קריאה כבר חושב במעקב, מותר להשתמש בו שוב, בתנאי שתציינו זאת.</li>
       <li><span class="sec-letter">ד.</span>
         <ol class="sheet-sub">
           <li>(1) מהו סוג הרקורסיה בפעולה <span class="ltr sheet-code">Ways</span>? נמקו.</li>
@@ -285,7 +285,7 @@
   <h1>סעיף ג׳</h1>
   <div class="fill center">
     <div class="note" style="max-width:900px;width:100%;font-size:26px">
-      כתבו מה תחזיר הפעולה <code class="ltr">Ways5(5)</code>.<br>עליכם להראות מעקב.
+      כתבו מה תחזיר הפעולה <code class="ltr">Ways5(4)</code>.<br>עליכם להראות מעקב.
       <div style="font-size:19px;margin-top:10px;color:var(--muted)">אם ערכה של קריאה כבר חושב במעקב, מותר להשתמש בו שוב, בתנאי שתציינו זאת.</div>
     </div>
   </div>
@@ -293,7 +293,7 @@
 
 <!-- 13 מעקב -->
 <section class="slide" data-title="מעקב" id="s-trace">
-  <h1>עץ הקריאות של <span class="mono ltr">Ways5(5)</span></h1>
+  <h1>עץ הקריאות של <span class="mono ltr">Ways5(4)</span></h1>
   <div class="trace fill">
     <div>
 <pre class="exam">public static int Ways5(int n)
@@ -352,7 +352,7 @@
 
 <!-- 11 העץ המלא -->
 <section class="slide" data-title="העץ המלא">
-  <h1>העץ המלא של <span class="mono ltr">Ways5(5)</span> <small>בלי שום קיצור, <span id="fulltree-count"></span> קריאות בשביל התשובה 9</small></h1>
+  <h1>העץ המלא של <span class="mono ltr">Ways5(4)</span> <small>בלי שום קיצור, <span id="fulltree-count"></span> קריאות בשביל התשובה 5</small></h1>
   <div class="fulltree fill" id="fulltree"></div>
 </section>
 
@@ -362,9 +362,9 @@
 <section class="slide bonus" data-title="בונוס">
   <h1>בונוס <small>סעיף ד׳</small></h1>
   <div class="fill" style="display:flex;flex-direction:column;gap:22px;justify-content:center">
-    <p class="q-big" style="margin:0">בעץ הקריאות הקריאה <code class="ltr">Ways5(3)</code> מופיעה פעמיים. הסבירו מדוע זה קורה ומה זה אומר על גודל העץ כאשר n גדל.</p>
+    <p class="q-big" style="margin:0">בעץ הקריאות הקריאה <code class="ltr">Ways5(2)</code> מופיעה פעמיים. הסבירו מדוע זה קורה ומה זה אומר על גודל העץ כאשר n גדל.</p>
     <div class="answer frag">
-      גם <span class="mono ltr">Ways5(5)</span> וגם <span class="mono ltr">Ways5(4)</span> קוראות ל־<span class="mono ltr">Ways5(3)</span>. כל אחת מהן מחשבת אותה מחדש בלי ״לזכור״ שכבר חושבה. ככל ש־n גדל, אותם ערכים קטנים חוזרים ומופיעים בחלקים רבים של העץ. זה מקור הגידול המעריכי. במעקב הרשינו לעצמנו לכתוב ״חושב כבר״ ולקצר, אבל המחשב לא מקצר. אם הפעולה הייתה שומרת כל תוצאה שחישבה, היא הייתה צריכה לחשב רק n ערכים שונים.
+      גם <span class="mono ltr">Ways5(4)</span> וגם <span class="mono ltr">Ways5(3)</span> קוראות ל־<span class="mono ltr">Ways5(2)</span>. כל אחת מהן מחשבת אותה מחדש בלי ״לזכור״ שכבר חושבה. ככל ש־n גדל, אותם ערכים קטנים חוזרים ומופיעים בחלקים רבים של העץ. זה מקור הגידול המעריכי. במעקב הרשינו לעצמנו לכתוב ״חושב כבר״ ולקצר, אבל המחשב לא מקצר. אם הפעולה הייתה שומרת כל תוצאה שחישבה, היא הייתה צריכה לחשב רק n ערכים שונים.
     </div>
   </div>
 </section>

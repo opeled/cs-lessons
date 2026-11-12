@@ -193,7 +193,7 @@
     <ol class="sheet-sections">
       <li><span class="sec-letter">א.</span> כתבו פעולה רקורסיבית <span class="ltr sheet-code">public static int Ways(int n)</span>, המקבלת את מספר הבניין n ומחזירה את מספר דרכי ההגעה השונות שבהן השליח יכול להגיע מנקודת ההתחלה אל בניין n.</li>
       <li><span class="sec-letter">ב.</span> לשליח נוספה אפשרות: בנסיעה אחת הוא יכול להתקדם בניין אחד, שני בניינים <u>או חמישה בניינים</u>. כתבו פעולה רקורסיבית <span class="ltr sheet-code">public static int Ways5(int n)</span>, המחזירה את מספר דרכי ההגעה השונות אל בניין n במצב החדש.</li>
-      <li><span class="sec-letter">ג.</span> כתבו מה תחזיר הפעולה <span class="ltr sheet-code">Ways5(5)</span>. עליכם להראות מעקב. אם ערכה של קריאה כבר חושב במעקב, מותר להשתמש בו שוב, בתנאי שתציינו זאת.</li>
+      <li><span class="sec-letter">ג.</span> כתבו מה תחזיר הפעולה <span class="ltr sheet-code">Ways5(4)</span>. עליכם להראות מעקב. אם ערכה של קריאה כבר חושב במעקב, מותר להשתמש בו שוב, בתנאי שתציינו זאת.</li>
       <li><span class="sec-letter">ד.</span>
         <ol class="sheet-sub">
           <li>(1) מהו סוג הרקורסיה בפעולה <span class="ltr sheet-code">Ways</span>? נמקו.</li>
@@ -325,7 +325,7 @@
     <ol style="font-size:18px" id="q-list">
       <li class="qitem" data-q="1">מהו סוג הרקורסיה בפעולה <code dir="ltr">Ways</code>? נמקו.</li>
       <li class="qitem" data-q="2">מהי סיבוכיות זמן הריצה של <code dir="ltr">Ways(n)</code>? ומהי של <code dir="ltr">Ways5(n)</code>? נמקו.</li>
-      <li class="qitem bonus" data-q="3"><span class="tag" style="margin:0 0 0 6px;background:var(--combine-soft);color:var(--combine)">בונוס</span> בעץ הקריאות הקריאה <code dir="ltr">Ways5(3)</code> מופיעה פעמיים. הסבירו מדוע זה קורה ומה זה אומר על גודל העץ כאשר n גדל.</li>
+      <li class="qitem bonus" data-q="3"><span class="tag" style="margin:0 0 0 6px;background:var(--combine-soft);color:var(--combine)">בונוס</span> בעץ הקריאות הקריאה <code dir="ltr">Ways5(2)</code> מופיעה פעמיים. הסבירו מדוע זה קורה ומה זה אומר על גודל העץ כאשר n גדל.</li>
     </ol>
     <div class="btnrow"><button class="btn ghost" id="btn-bonus-c">שאלת בונוס</button></div>
   </div>
@@ -347,12 +347,12 @@
         </div>
       </div>
       <div class="fulltree">
-        <p class="hint" style="margin:0 0 6px">כך נראה העץ המלא של <span class="mono ltr">Ways5(5)</span> בלי שום קיצור: <b id="fulltree-count"></b> קריאות בשביל התשובה 9.</p>
+        <p class="hint" style="margin:0 0 6px">כך נראה העץ המלא של <span class="mono ltr">Ways5(4)</span> בלי שום קיצור: <b id="fulltree-count"></b> קריאות בשביל התשובה 5.</p>
         <div id="fulltree"></div>
       </div>
     </div>
     <div class="answer bonus" data-a="3">
-      <b class="q">3. בונוס, חישוב חוזר:</b> גם <span class="mono ltr">Ways5(5)</span> וגם <span class="mono ltr">Ways5(4)</span> קוראות ל־<span class="mono ltr">Ways5(3)</span>. כל אחת מהן מחשבת אותה מחדש בלי ״לזכור״ שכבר חושבה. ככל ש־n גדל, אותם ערכים קטנים חוזרים ומופיעים בחלקים רבים של העץ. זה מקור הגידול המעריכי: רוב העבודה בעץ היא חזרה על חישובים שכבר נעשו. במעקב בסעיף ג׳ הרשינו לעצמנו לכתוב ״חושב כבר״ ולקצר, אבל המחשב לא מקצר. אם הפעולה הייתה שומרת כל תוצאה שחישבה, היא הייתה צריכה לחשב רק n ערכים שונים.
+      <b class="q">3. בונוס, חישוב חוזר:</b> גם <span class="mono ltr">Ways5(4)</span> וגם <span class="mono ltr">Ways5(3)</span> קוראות ל־<span class="mono ltr">Ways5(2)</span>. כל אחת מהן מחשבת אותה מחדש בלי ״לזכור״ שכבר חושבה. ככל ש־n גדל, אותם ערכים קטנים חוזרים ומופיעים בחלקים רבים של העץ. זה מקור הגידול המעריכי: רוב העבודה בעץ היא חזרה על חישובים שכבר נעשו. במעקב בסעיף ג׳ הרשינו לעצמנו לכתוב ״חושב כבר״ ולקצר, אבל המחשב לא מקצר. אם הפעולה הייתה שומרת כל תוצאה שחישבה, היא הייתה צריכה לחשב רק n ערכים שונים.
     </div>
   </div>
 </section>
@@ -363,7 +363,7 @@
     <span class="tag">סעיף ג׳</span>
     <h2>מעקב</h2>
     <div class="note">
-      כתבו מה תחזיר הפעולה <code dir="ltr">Ways5(5)</code>. עליכם להראות מעקב.<br>
+      כתבו מה תחזיר הפעולה <code dir="ltr">Ways5(4)</code>. עליכם להראות מעקב.<br>
       <span class="hint">אם ערכה של קריאה כבר חושב במעקב, מותר להשתמש בו שוב, בתנאי שתציינו זאת.</span>
     </div>
     <div class="btnrow"><button class="btn" id="btn-sol-d">הצגת תשובה</button></div>
@@ -373,7 +373,7 @@
     <span class="tag">מעקב</span>
     <h2>עץ הקריאות</h2>
     <div class="ctrl">
-      <button class="btn ghost small on" data-preset="ways5">Ways5(5): נסיעות של 1, 2, 5</button>
+      <button class="btn ghost small on" data-preset="ways5">Ways5(4): נסיעות של 1, 2, 5</button>
       <button class="btn ghost small" data-preset="ways4">Ways(4): נסיעות של 1, 2</button>
       <label class="switch"><input type="checkbox" id="memo-toggle" checked> קיצור ״חושב כבר״</label>
     </div>

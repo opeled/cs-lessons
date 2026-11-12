@@ -101,7 +101,7 @@ function lastRidesArcs(street,hidden){
    Produces nodes (with layout) and a list of single "moves" (steps). */
 const TRACE_PRESETS={
   ways4:{key:'ways4',label:'Ways(4): נסיעות של 1, 2',name:'Ways',jumps:[1,2],n:4,base:'fib',memo:false},
-  ways5:{key:'ways5',label:'Ways5(5): נסיעות של 1, 2, 5',name:'Ways5',jumps:[1,2,5],n:5,base:'zero',memo:true},
+  ways5:{key:'ways5',label:'Ways5(4): נסיעות של 1, 2, 5',name:'Ways5',jumps:[1,2,5],n:4,base:'zero',memo:true},
 };
 function genTrace(cfg){
   const nodes=[],steps=[],memoVals=new Map();let idc=0;
