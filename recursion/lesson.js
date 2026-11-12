@@ -258,7 +258,7 @@ function makeTrace(dom){ // dom: {stage, arrows, desc, counter, wrapHeight?:numb
     const wantH=dom.wrapHeight||Math.min(T.size.height,dom.maxHeight||760);
     wrap.style.height=wantH+'px';
     const availH=wrap.clientHeight-2;
-    const fitScale=Math.min(1,availW/T.size.width,availH/T.size.height);
+    const fitScale=Math.min(dom.maxScale||1,availW/T.size.width,availH/T.size.height);
     const useFit=T.fitAll||T.step===T.steps.length||fitScale>=0.8;
     const sc=useFit?fitScale:1;
     dom.stage.style.transform=`scale(${sc})`;

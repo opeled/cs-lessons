@@ -130,6 +130,12 @@
   .counter-s{color:rgba(255,255,255,.6);font-size:15px;margin-top:8px}
   #s-trace{gap:10px}
   #s-trace h1{font-size:30px;line-height:1.25}
+  #s-trace .wide-btn{position:absolute;top:14px;left:24px;z-index:5;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:rgba(255,255,255,.85);font:inherit;font-size:15px;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer}
+  #s-trace .wide-btn:hover{background:rgba(255,255,255,.18)}
+  #s-trace.wide{padding:14px 24px 40px}
+  #s-trace.wide .wide-btn{top:26px;left:38px;background:var(--ink);color:#fff;border-color:transparent;box-shadow:0 3px 10px rgba(21,35,59,.3)}
+  #s-trace.wide h1,#s-trace.wide .trace>div:first-child,#s-trace.wide .desc{display:none}
+  #s-trace.wide .trace{grid-template-columns:1fr}
   /* answers */
   .answer{border-radius:14px;border:1px solid var(--line);padding:18px 22px;background:#fff;font-size:21px}
   .answer b.q{color:var(--accent-ink)}
@@ -294,6 +300,7 @@
 
 <!-- 13 מעקב -->
 <section class="slide" data-title="מעקב" id="s-trace">
+  <button class="wide-btn" id="t-wide" title="הצגת העץ על כל השקף (T)">העץ על כל השקף (T)</button>
   <h1>עץ הקריאות של <span class="mono ltr">Ways5(4)</span></h1>
   <div class="trace fill">
     <div>
@@ -377,7 +384,7 @@
 </div>
 </div>
 
-<script src="lesson.js?v=20261112"></script>
+<script src="lesson.js?v=20261112b"></script>
 <script>
 /* ---------- slide content setup ---------- */
 buildStreet(document.getElementById('street-1'),3);
@@ -407,7 +414,10 @@ document.querySelectorAll('.think[data-part]').forEach(b=>{
   const cap=document.createElement('div');cap.className='hint';cap.innerHTML='ב־Ways כל רמה כפולה מהקודמת. אחרי n רמות: <span class="ltr">2<sup>n</sup></span>. ב־Ways5 כל רמה גדולה פי 3 מהקודמת.';p.appendChild(cap);})();
 document.getElementById('fulltree-count').textContent=staticTree(document.getElementById('fulltree'),{...TRACE_PRESETS.ways5,memo:false});
 // trace
-const trace=makeTrace({stage:document.getElementById('stage'),arrows:document.getElementById('arrows'),desc:document.getElementById('t-desc'),counter:document.getElementById('t-counter'),wrapHeight:470});
+const traceDom={stage:document.getElementById('stage'),arrows:document.getElementById('arrows'),desc:document.getElementById('t-desc'),counter:document.getElementById('t-counter'),wrapHeight:470,maxScale:1};
+const trace=makeTrace(traceDom);
+function toggleWide(){const s=document.getElementById('s-trace');const on=s.classList.toggle('wide');traceDom.wrapHeight=on?660:470;traceDom.maxScale=on?1.8:1;document.getElementById('t-wide').textContent=on?'חזרה לתצוגה הרגילה (T)':'העץ על כל השקף (T)';trace.render();}
+document.getElementById('t-wide').addEventListener('click',e=>{e.stopPropagation();toggleWide();});
 trace.load(TRACE_PRESETS.ways5);
 
 /* ---------- slide engine ---------- */
@@ -462,6 +472,7 @@ document.addEventListener('keydown',e=>{
   else if(e.key==='Escape'){if(document.referrer&&history.length>1)history.back();else location.href='index.html';}
   else if(e.key==='Home'){go(0);}
   else if(e.key==='z'||e.key==='Z'||e.key==='ז'){trace.fitAll=!trace.fitAll;trace.render();}
+  else if((e.key==='t'||e.key==='T'||e.key==='א')&&slides[cur].id==='s-trace'){toggleWide();}
 });
 document.getElementById('deck').addEventListener('click',e=>{if(e.target.closest('button,.route,.think,.stage-wrap'))return;next();});
 function fit(){const s=Math.min(window.innerWidth/1280,window.innerHeight/720);document.getElementById('deck').style.transform=`scale(${s})`;if(slides[cur].id==='s-trace')trace.render();}
