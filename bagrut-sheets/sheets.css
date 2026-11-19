@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --ink: #16202e;
+  --muted: #55627a;
+  --line: #cfd6e2;
+  --accent: #0b5d8a;
+  --accent-soft: #e6f1f7;
+  --exam: #8a4b00;
+  --exam-soft: #fdf3e1;
+  --warn: #9b1c2c;
+  --warn-soft: #fbecee;
+  --code-bg: #f4f6f9;
+}
+
+@page {
+  size: A4;
+  margin: 13mm 13mm 15mm 13mm;
+  @bottom-center {
+    content: counter(page);
+    font-family: Heebo, Arial, sans-serif;
+    font-size: 8.5pt;
+    color: #55627a;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { direction: rtl; }
+
+body {
+  margin: 0;
+  font-family: Heebo, "Arial Hebrew", Arial, sans-serif;
+  font-size: 10pt;
+  line-height: 1.45;
+  color: var(--ink);
+  background: #fff;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* On screen the sheet is shown as a centered A4-width column */
+@media screen {
+  body { background: #e9edf2; }
+  main { width: 210mm; margin: 8mm auto; padding: 13mm; background: #fff; box-shadow: 0 1px 8px rgba(0,0,0,.15); }
+}
+
+header.sheet {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2.5pt solid var(--accent);
+  padding-bottom: 2mm;
+  margin-bottom: 4mm;
+}
+header.sheet h1 { margin: 0; font-size: 21pt; font-weight: 800; line-height: 1.1; }
+header.sheet .meta { font-size: 8.5pt; color: var(--muted); text-align: left; }
+
+h2 {
+  font-size: 13pt;
+  font-weight: 800;
+  margin: 5mm 0 2mm;
+  color: var(--accent);
+  break-after: avoid;
+}
+h2.exam { color: var(--exam); }
+h3 { font-size: 10.5pt; font-weight: 700; margin: 0 0 1mm; break-after: avoid; }
+
+p { margin: 0 0 1.8mm; }
+ul, ol { margin: 0 0 1.8mm; padding-inline-start: 5mm; }
+li { margin-bottom: .8mm; }
+strong { font-weight: 700; }
+
+.box {
+  border: .8pt solid var(--line);
+  border-radius: 2mm;
+  padding: 2.5mm 3mm;
+  margin-bottom: 3mm;
+  break-inside: avoid;
+}
+.box > :last-child { margin-bottom: 0; }
+.box.key { background: var(--accent-soft); border-color: #b9d6e6; }
+.box.exam { background: var(--exam-soft); border-color: #ecd3a4; }
+.box.warn { background: var(--warn-soft); border-color: #eec3c9; }
+.box.exam h3 { color: var(--exam); }
+.box.warn h3 { color: var(--warn); }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; }
+.grid2 > .box { margin-bottom: 0; }
+.grid2 { margin-bottom: 3mm; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; margin-bottom: 3mm; }
+.grid3 > .box { margin-bottom: 0; }
+
+/* Numbered steps: the big number sits at the start of each step */
+ol.steps { list-style: none; padding: 0; margin: 0; counter-reset: step; }
+ol.steps > li {
+  counter-increment: step;
+  position: relative;
+  padding-inline-start: 9mm;
+  margin-bottom: 2mm;
+}
+ol.steps > li::before {
+  content: counter(step);
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 800;
+  font-size: 10.5pt;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Code is always left-to-right */
+pre, code { font-family: "JetBrains Mono", Menlo, Consolas, monospace; }
+pre {
+  direction: ltr;
+  text-align: left;
+  background: var(--code-bg);
+  border: .6pt solid var(--line);
+  border-radius: 1.5mm;
+  padding: 2mm 2.5mm;
+  margin: 0 0 2mm;
+  font-size: 8.3pt;
+  line-height: 1.38;
+  white-space: pre;
+  overflow: hidden;
+  break-inside: avoid;
+}
+code {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-size: .88em;
+  background: var(--code-bg);
+  padding: 0 .8mm;
+  border-radius: 1mm;
+  white-space: nowrap;
+}
+pre code { background: none; padding: 0; font-size: inherit; white-space: inherit; }
+pre .c { color: #6b7688; }            /* comment */
+pre .hl1 { background: #ffe9a8; }     /* stop condition */
+pre .hl2 { background: #cfe8ff; }     /* recursive call */
+pre .hl3 { background: #d5f2d5; }     /* combine */
+.hl1, .hl2, .hl3 { border-radius: 1mm; padding: 0 .6mm; }
+span.hl1 { background: #ffe9a8; } span.hl2 { background: #cfe8ff; } span.hl3 { background: #d5f2d5; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 3mm;
+  font-size: 9.2pt;
+  break-inside: avoid;
+}
+th, td { border: .6pt solid var(--line); padding: 1.2mm 2mm; text-align: right; vertical-align: top; }
+th { background: #eef2f6; font-weight: 700; }
+td.ltr, th.ltr { direction: ltr; text-align: left; }
+td.c, th.c { text-align: center; }
+
+.small { font-size: 8.6pt; color: var(--muted); }
+.pagebreak { break-before: page; }
+.big-o { font-family: "JetBrains Mono", Menlo, monospace; font-weight: 600; direction: ltr; unicode-bidi: isolate; white-space: nowrap; }
+
+.grid2 > *, .grid3 > * { min-width: 0; }
+.grid2 pre, .grid3 pre { font-size: 7.5pt; }
+pre span[dir="rtl"] { unicode-bidi: isolate; font-family: Heebo, Arial, sans-serif; }
+
+/* JetBrains Mono turns != and <= into single glyphs; students must see the real characters */
+pre, code, .big-o { font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+
+/* ---- screen only: the site version (cs-lessons/bagrut-sheets) ---- */
+.site-nav { display: none; }
+@media screen {
+  .site-nav {
+    display: flex; gap: 10px; align-items: center; justify-content: space-between;
+    width: 210mm; max-width: 100%; margin: 6mm auto -4mm; font-size: 14px;
+  }
+  .site-nav a {
+    color: #15233b; text-decoration: none; background: #fff; border: 1px solid #dfe6f0;
+    border-radius: 999px; padding: 6px 14px;
+  }
+  .site-nav a:hover { border-color: #0aa8d6; color: #0aa8d6; }
+}
+@media screen and (max-width: 860px) {
+  body { background: #fff; }
+  .site-nav { margin: 12px auto 0; padding: 0 16px; }
+  main { width: auto; margin: 0; padding: 16px; box-shadow: none; }
+  .grid2, .grid3 { grid-template-columns: 1fr; }
+  pre { overflow-x: auto; }
+  table { display: block; overflow-x: auto; }
+  svg { max-width: 100%; height: auto; }
+  main .m, main code { white-space: normal; overflow-wrap: anywhere; }
+  main pre code { white-space: inherit; }
+}

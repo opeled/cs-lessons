@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>דף עזר: מודלים חישוביים</title>
+<link rel="stylesheet" href="sheets.css">
+<style>
+  .m { font-family: "JetBrains Mono", Heebo, Menlo, monospace; direction: ltr; unicode-bidi: isolate; white-space: nowrap; font-size: .92em; }
+  .ov { text-decoration: overline; }
+  svg.fa { display: block; margin: 0 auto 1mm; max-width: 100%; height: auto; direction: ltr; }
+  svg.fa circle { fill: #fff; stroke: var(--ink); stroke-width: .9; }
+  svg.fa path { fill: none; stroke: var(--ink); stroke-width: .9; }
+  svg.fa path.head { fill: var(--ink); stroke: none; }
+  svg.fa .dash { stroke-dasharray: 3 2; stroke: var(--warn); }
+  svg.fa text { font-family: "JetBrains Mono", Heebo, Menlo, monospace; fill: var(--ink); direction: ltr; unicode-bidi: isolate; }
+  svg.fa text.q { font-size: 9px; }
+  .fig h3 { font-size: 9.6pt; }
+  .fig p { font-size: 8.8pt; margin-bottom: 0; }
+  .grid3 { break-inside: auto; }
+  table.trace { width: auto; direction: ltr; margin: 0 auto 2mm; font-family: "JetBrains Mono", Menlo, monospace; font-size: 8.5pt; }
+  table.trace td, table.trace th { text-align: center; padding: .6mm 2.2mm; }
+  table.trace td.hd { background: #ffe9a8; font-weight: 600; }
+  table.trace td.dots { border: none; color: var(--muted); }
+  table.tight td, table.tight th { padding: .9mm 1.6mm; }
+  ul.two { column-count: 2; column-gap: 8mm; }
+  ul.two li { break-inside: avoid; }
+  .wide-fig { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4mm; align-items: center; }
+  .wide-fig svg.fa { max-width: none; }
+  @media screen and (max-width: 860px) { .wide-fig { grid-template-columns: 1fr; } .wide-fig svg.fa { max-width: 100%; } }
+</style>
+</head>
+<body>
+<nav class="site-nav"><a href="./">→ לכל דפי העזר</a><a href="pdf/07-computational-models.pdf" download="07-מודלים חישוביים.pdf">הורדת PDF להדפסה</a></nav>
+<main>
+
+<header class="sheet">
+  <h1>מודלים חישוביים</h1>
+  <div class="meta">דף עזר לבגרות במדעי המחשב, שאלון 899271<br>שפות, אוטומט סופי, אוטומט מחסנית, מכונת טיורינג</div>
+</header>
+
+<h2>מילים, שפות ופעולות על שפות</h2>
+
+<div class="grid2">
+  <div>
+    <table class="tight">
+      <tr><th>סימון</th><th>משמעות</th><th>דוגמה</th></tr>
+      <tr><td><span class="m">Σ</span></td><td>הא״ב: קבוצת האותיות המותרות</td><td class="ltr"><span class="m">Σ = {a, b}</span></td></tr>
+      <tr><td><span class="m">ε</span></td><td>המילה הריקה. האורך שלה 0</td><td></td></tr>
+      <tr><td><span class="m">#<sub>a</sub>(w)</span></td><td>מספר המופעים של a במילה w</td><td class="ltr"><span class="m">#<sub>a</sub>(abab) = 2</span></td></tr>
+      <tr><td><span class="m">u·v</span></td><td>שרשור: כותבים את v מיד אחרי u</td><td class="ltr"><span class="m">ab·ba = abba</span></td></tr>
+      <tr><td><span class="m">a<sup>n</sup></span></td><td>האות (או המילה) n פעמים ברצף</td><td class="ltr"><span class="m">(ab)<sup>2</sup> = abab</span><br><span class="m">a<sup>0</sup> = ε</span></td></tr>
+      <tr><td><span class="m">R(w)</span></td><td>היפוך: המילה בסדר אותיות הפוך</td><td class="ltr"><span class="m">R(abb) = bba</span></td></tr>
+      <tr><td><span class="m">Σ*</span></td><td>שפת כל המילים מעל הא״ב, כולל ε</td><td></td></tr>
+      <tr><td><span class="m">∅</span></td><td>השפה הריקה: אין בה אף מילה</td><td></td></tr>
+    </table>
+    <p class="small">בהגדרה של שפה, לדוגמה <span class="m">{a<sup>n</sup>b<sup>m</sup> | n &gt; 0, m ≥ 0}</span>, קוראים קודם את התנאים שאחרי הקו האנכי. <span class="m">n &gt; 0</span> אומר שהאות a חייבת להופיע ו־<span class="m">m ≥ 0</span> אומר שהאות b יכולה גם לא להופיע. המספרים n ו־m שבהגדרה נקראים בדף הזה מונים: כל מונה הוא מספר הפעמים שאות מופיעה.</p>
+  </div>
+  <div>
+    <table class="tight">
+      <tr><th>פעולה</th><th>אילו מילים יש בשפה החדשה</th></tr>
+      <tr><td><span class="m">L1 ∪ L2</span> איחוד</td><td>מילים ששייכות לפחות לאחת מהשפות</td></tr>
+      <tr><td><span class="m">L1 ∩ L2</span> חיתוך</td><td>מילים ששייכות לשתי השפות</td></tr>
+      <tr><td><span class="m ov">L</span> משלים</td><td>כל המילים מעל הא״ב שאינן שייכות ל־L</td></tr>
+      <tr><td><span class="m">L1·L2</span> שרשור</td><td>כל מילה מ־L1 שאחריה מילה מ־L2</td></tr>
+      <tr><td><span class="m">R(L)</span> היפוך</td><td>ההיפוך של כל מילה ב־L</td></tr>
+      <tr><td><span class="m">L<sup>n</sup></span> חזקה</td><td>שרשור של L עם עצמה n פעמים</td></tr>
+    </table>
+    <div class="box key">
+      <ul>
+        <li><span class="m">∅·L = ∅</span> ואילו <span class="m">{ε}·L = L</span>. בשפה <span class="m">{ε}</span> יש מילה אחת ובשפה <span class="m">∅</span> אין מילים.</li>
+        <li>המשלים של <span class="m">Σ*</span> הוא <span class="m">∅</span>. המשלים של <span class="m">L1 ∪ L2</span> הוא <span class="m"><span class="ov">L1</span> ∩ <span class="ov">L2</span></span>.</li>
+        <li><span class="m">R(L1·L2) = R(L2)·R(L1)</span>. סדר השפות מתהפך.</li>
+        <li>בשרשור של שפות סופיות משרשרים כל מילה מהראשונה עם כל מילה מהשנייה ורושמים כל תוצאה פעם אחת: <span class="m">{a, ab}·{ε, b} = {a, ab, abb}</span>.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h2>אוטומט סופי דטרמיניסטי: איך בונים אוטומט לשפה</h2>
+<p>אוטומט סופי דטרמיניסטי (בהמשך: אס״ד) קורא את המילה אות אחרי אות. מכל מצב יוצא לכל היותר מעבר אחד לכל אות. המילה מתקבלת אם האוטומט קרא את כולה וסיים במצב מקבל (עיגול כפול).</p>
+
+<div class="box key">
+  <ol class="steps">
+    <li><strong>מה האוטומט צריך לזכור?</strong> לאוטומט אין זיכרון מלבד המצב שבו הוא נמצא. רושמים מה חייבים לדעת על החלק שכבר נקרא: השארית של מספר המופעים של אות, האות האחרונה, באיזה חלק של המילה נמצאים, מספר המופעים כל עוד הוא קטן מגבול קבוע.</li>
+    <li><strong>קובעים מצב לכל אפשרות שהאוטומט צריך להבחין בה.</strong> ליד כל מצב כותבים במילים מה נכון לגבי המילים שמגיעות אליו. לדוגמה: "מספר המופעים של a זוגי והאות האחרונה היא b".</li>
+    <li><strong>מעברים.</strong> עוברים על כל מצב ועל כל אות בא״ב ובודקים מה האוטומט זוכר אחרי קריאת האות ולאיזה מצב הוא עובר.</li>
+    <li><strong>מצבים מקבלים.</strong> מסמנים כל מצב שהתיאור שלו מקיים את תנאי השפה. בודקים בנפרד אם ε שייכת לשפה: אם כן, המצב ההתחלתי מקבל.</li>
+    <li><strong>בדיקה.</strong> מריצים את האוטומט על ε, על מילה בת אות אחת, על שתי מילים מהשפה ועל שתי מילים שאינן בשפה.</li>
+  </ol>
+</div>
+
+<div class="box">
+  <h3>אוטומט מלא, אוטומט שאינו מלא ומצב מלכודת</h3>
+  <ul>
+    <li>באס״ד <strong>מלא</strong> יוצא מכל מצב מעבר אחד לכל אות בא״ב, גם לאות שאינה מוזכרת בתנאי השפה. באס״ד <strong>שאינו מלא</strong> מותר להשמיט מעברים. אם האוטומט צריך לקרוא אות שאין לה מעבר מהמצב הנוכחי, המילה נדחית.</li>
+    <li><strong>מצב מלכודת</strong> הוא מצב לא מקבל שכל המעברים ממנו חוזרים אליו. כדי להפוך אוטומט שאינו מלא לאוטומט מלא מוסיפים מצב מלכודת ומפנים אליו את כל המעברים החסרים (החלק המקווקו בסרטוט 4).</li>
+    <li>כשהשאלה מבקשת אוטומט שאינו מלא, משמיטים את המעברים שמובילים לדחייה ולא מסרטטים מצב מלכודת. כשהיא מבקשת אוטומט מלא, בודקים בסוף שמכל מצב יוצא מעבר לכל אות.</li>
+  </ul>
+</div>
+
+<h2>אבני בניין לאוטומט סופי</h2>
+<p>בכל הסרטוטים האוטומט הוא מעל הא״ב <span class="m">{a, b}</span>. החץ שנכנס משמאל מסמן את המצב ההתחלתי.</p>
+
+<div class="grid3">
+  <div class="box fig">
+    <h3>1. מספר המופעים של a מתחלק ב־3</h3>
+    <svg class="fa" viewBox="0 0 200 92" width="200" height="92" style="font-size:10px" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" class="head"/></marker></defs><path d="M48.0,44.0 L88.0,44.0" marker-end="url(#ar)"/><text x="68.0" y="40.0" text-anchor="middle">a</text><path d="M112.0,44.0 L152.0,44.0" marker-end="url(#ar)"/><text x="132.0" y="40.0" text-anchor="middle">a</text><path d="M153.1,49.1 Q100.0,74.0 46.9,49.1" marker-end="url(#ar)"/><text x="100.0" y="71.0" text-anchor="middle">a</text><path d="M31.0,33.0 C19.0,11.0 53.0,11.0 41.0,32.5" marker-end="url(#ar)"/><text x="36.0" y="14.0" text-anchor="middle">b</text><path d="M95.0,33.0 C83.0,11.0 117.0,11.0 105.0,32.5" marker-end="url(#ar)"/><text x="100.0" y="14.0" text-anchor="middle">b</text><path d="M159.0,33.0 C147.0,11.0 181.0,11.0 169.0,32.5" marker-end="url(#ar)"/><text x="164.0" y="14.0" text-anchor="middle">b</text><path d="M9.0,44.0 L24.0,44.0" marker-end="url(#ar)"/><circle cx="36" cy="44" r="12"/><circle cx="36" cy="44" r="9"/><text class="q" x="36" y="47" text-anchor="middle">q0</text><circle cx="100" cy="44" r="12"/><text class="q" x="100" y="47" text-anchor="middle">q1</text><circle cx="164" cy="44" r="12"/><text class="q" x="164" y="47" text-anchor="middle">q2</text></svg>
+    <p>מעגל של k מצבים סופר שארית בחלוקה ב־k. המצב המקבל נקבע לפי השארית שנדרשת.</p>
+  </div>
+  <div class="box fig">
+    <h3>2. המילה מכילה את הרצף ab</h3>
+    <svg class="fa" viewBox="0 0 200 64" width="200" height="64" style="font-size:10px" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" class="head"/></marker></defs><path d="M48.0,44.0 L88.0,44.0" marker-end="url(#ar)"/><text x="68.0" y="40.0" text-anchor="middle">a</text><path d="M112.0,44.0 L152.0,44.0" marker-end="url(#ar)"/><text x="132.0" y="40.0" text-anchor="middle">b</text><path d="M31.0,33.0 C19.0,11.0 53.0,11.0 41.0,32.5" marker-end="url(#ar)"/><text x="36.0" y="14.0" text-anchor="middle">b</text><path d="M95.0,33.0 C83.0,11.0 117.0,11.0 105.0,32.5" marker-end="url(#ar)"/><text x="100.0" y="14.0" text-anchor="middle">a</text><path d="M159.0,33.0 C147.0,11.0 181.0,11.0 169.0,32.5" marker-end="url(#ar)"/><text x="164.0" y="14.0" text-anchor="middle">a,b</text><path d="M9.0,44.0 L24.0,44.0" marker-end="url(#ar)"/><circle cx="36" cy="44" r="12"/><text class="q" x="36" y="47" text-anchor="middle">q0</text><circle cx="100" cy="44" r="12"/><text class="q" x="100" y="47" text-anchor="middle">q1</text><circle cx="164" cy="44" r="12"/><circle cx="164" cy="44" r="9"/><text class="q" x="164" y="47" text-anchor="middle">q2</text></svg>
+    <p>כל מצב זוכר כמה אותיות מתחילת הרצף כבר נקראו. אחרי שהרצף נמצא נשארים במצב המקבל.</p>
+  </div>
+  <div class="box fig">
+    <h3>3. המילה מסתיימת ברצף ab</h3>
+    <svg class="fa" viewBox="0 0 200 102" width="200" height="102" style="font-size:10px" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" class="head"/></marker></defs><path d="M48.0,44.0 L88.0,44.0" marker-end="url(#ar)"/><text x="68.0" y="40.0" text-anchor="middle">a</text><path d="M111.6,40.8 Q132.0,35.0 152.4,40.8" marker-end="url(#ar)"/><text x="132.0" y="35.5" text-anchor="middle">b</text><path d="M152.4,47.2 Q132.0,53.0 111.6,47.2" marker-end="url(#ar)"/><text x="123.0" y="58.0" text-anchor="middle">a</text><path d="M154.0,50.6 Q100.0,86.0 46.0,50.6" marker-end="url(#ar)"/><text x="100.0" y="77.0" text-anchor="middle">b</text><path d="M31.0,33.0 C19.0,11.0 53.0,11.0 41.0,32.5" marker-end="url(#ar)"/><text x="36.0" y="14.0" text-anchor="middle">b</text><path d="M95.0,33.0 C83.0,11.0 117.0,11.0 105.0,32.5" marker-end="url(#ar)"/><text x="100.0" y="14.0" text-anchor="middle">a</text><path d="M9.0,44.0 L24.0,44.0" marker-end="url(#ar)"/><circle cx="36" cy="44" r="12"/><text class="q" x="36" y="47" text-anchor="middle">q0</text><circle cx="100" cy="44" r="12"/><text class="q" x="100" y="47" text-anchor="middle">q1</text><circle cx="164" cy="44" r="12"/><circle cx="164" cy="44" r="9"/><text class="q" x="164" y="47" text-anchor="middle">q2</text></svg>
+    <p>המילה יכולה להמשיך גם אחרי המצב המקבל: אחרי a עוברים ל־q1 ואחרי b חוזרים ל־q0.</p>
+  </div>
+  <div class="box fig">
+    <h3>4. המילה מתחילה ברצף ab</h3>
+    <svg class="fa" viewBox="0 0 200 132" width="200" height="132" style="font-size:10px" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" class="head"/></marker></defs><path d="M48.0,44.0 L88.0,44.0" marker-end="url(#ar)"/><text x="68.0" y="40.0" text-anchor="middle">a</text><path d="M112.0,44.0 L152.0,44.0" marker-end="url(#ar)"/><text x="132.0" y="40.0" text-anchor="middle">b</text><path class="dash" d="M42.7,54.0 L61.3,82.0" marker-end="url(#ar)"/><text x="43.0" y="73.0" text-anchor="middle">b</text><path class="dash" d="M93.3,54.0 L74.7,82.0" marker-end="url(#ar)"/><text x="92.0" y="73.0" text-anchor="middle">a</text><path d="M159.0,33.0 C147.0,11.0 181.0,11.0 169.0,32.5" marker-end="url(#ar)"/><text x="164.0" y="14.0" text-anchor="middle">a,b</text><path class="dash" d="M63.0,103.0 C51.0,125.0 85.0,125.0 73.0,103.5" marker-end="url(#ar)"/><text x="68.0" y="130.0" text-anchor="middle">a,b</text><path d="M9.0,44.0 L24.0,44.0" marker-end="url(#ar)"/><circle cx="36" cy="44" r="12"/><text class="q" x="36" y="47" text-anchor="middle">q0</text><circle cx="100" cy="44" r="12"/><text class="q" x="100" y="47" text-anchor="middle">q1</text><circle cx="164" cy="44" r="12"/><circle cx="164" cy="44" r="9"/><text class="q" x="164" y="47" text-anchor="middle">q2</text><circle class="dash" cx="68" cy="92" r="12"/><text class="q" x="68" y="95" text-anchor="middle">q3</text></svg>
+    <p>אם המילה אינה מתחילה ב־ab, שום המשך לא יכניס אותה לשפה. באוטומט שאינו מלא אין מעבר לאות שמפרה את התנאי. באוטומט מלא המעבר הזה מוביל למלכודת q3.</p>
+  </div>
+  <div class="box fig">
+    <h3>5. <span class="m">a<sup>n</sup>b<sup>m</sup></span> כאשר <span class="m">n &gt; 0</span> ו־m זוגי</h3>
+    <svg class="fa" viewBox="0 0 206 78" width="206" height="78" style="font-size:10px" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" class="head"/></marker></defs><path d="M46.0,44.0 L72.0,44.0" marker-end="url(#ar)"/><text x="59.0" y="40.0" text-anchor="middle">a</text><path d="M96.0,44.0 L122.0,44.0" marker-end="url(#ar)"/><text x="109.0" y="40.0" text-anchor="middle">b</text><path d="M145.3,39.9 Q159.0,35.0 172.7,39.9" marker-end="url(#ar)"/><text x="159.0" y="35.5" text-anchor="middle">b</text><path d="M172.7,48.1 Q159.0,53.0 145.3,48.1" marker-end="url(#ar)"/><text x="159.0" y="60.5" text-anchor="middle">b</text><path d="M79.0,33.0 C67.0,11.0 101.0,11.0 89.0,32.5" marker-end="url(#ar)"/><text x="84.0" y="14.0" text-anchor="middle">a</text><path d="M7.0,44.0 L22.0,44.0" marker-end="url(#ar)"/><circle cx="34" cy="44" r="12"/><text class="q" x="34" y="47" text-anchor="middle">q0</text><circle cx="84" cy="44" r="12"/><circle cx="84" cy="44" r="9"/><text class="q" x="84" y="47" text-anchor="middle">q1</text><circle cx="134" cy="44" r="12"/><text class="q" x="134" y="47" text-anchor="middle">q2</text><circle cx="184" cy="44" r="12"/><circle cx="184" cy="44" r="9"/><text class="q" x="184" y="47" text-anchor="middle">q3</text></svg>
+    <p>האוטומט אינו מלא. לכל חלק של המילה יש מצבים משלו. אחרי b אין מעבר לאות a ולכן aba נדחית. q1 מקבל כי <span class="m">m = 0</span> זוגי.</p>
+  </div>
+  <div class="box fig">
+    <h3>6. המילה מכילה aba או bb (אוטומט לא דטרמיניסטי)</h3>
+    <svg class="fa" viewBox="0 0 206 110" width="206" height="110" style="font-size:10px" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" class="head"/></marker></defs><path d="M46.0,44.0 L72.0,44.0" marker-end="url(#ar)"/><text x="59.0" y="40.0" text-anchor="middle">a</text><path d="M96.0,44.0 L122.0,44.0" marker-end="url(#ar)"/><text x="109.0" y="40.0" text-anchor="middle">b</text><path d="M146.0,44.0 L172.0,44.0" marker-end="url(#ar)"/><text x="159.0" y="40.0" text-anchor="middle">a</text><path d="M44.1,50.5 L98.9,85.5" marker-end="url(#ar)"/><text x="60.0" y="77.0" text-anchor="middle">b</text><path d="M119.1,85.5 L173.9,50.5" marker-end="url(#ar)"/><text x="158.0" y="77.0" text-anchor="middle">b</text><path d="M29.0,33.0 C17.0,11.0 51.0,11.0 39.0,32.5" marker-end="url(#ar)"/><text x="34.0" y="14.0" text-anchor="middle">a,b</text><path d="M179.0,33.0 C167.0,11.0 201.0,11.0 189.0,32.5" marker-end="url(#ar)"/><text x="184.0" y="14.0" text-anchor="middle">a,b</text><path d="M7.0,44.0 L22.0,44.0" marker-end="url(#ar)"/><circle cx="34" cy="44" r="12"/><text class="q" x="34" y="47" text-anchor="middle">q0</text><circle cx="84" cy="44" r="12"/><text class="q" x="84" y="47" text-anchor="middle">q1</text><circle cx="134" cy="44" r="12"/><text class="q" x="134" y="47" text-anchor="middle">q2</text><circle cx="184" cy="44" r="12"/><circle cx="184" cy="44" r="9"/><text class="q" x="184" y="47" text-anchor="middle">q3</text><circle cx="109" cy="92" r="12"/><text class="q" x="109" y="95" text-anchor="middle">q4</text></svg>
+    <p>מ־q0 יוצאים שני מעברים לאותה אות. הלולאה ב־q0 מאפשרת להישאר ב־q0 עד המקום שבו הרצף מתחיל ורק שם לצאת ממנו.</p>
+  </div>
+</div>
+
+<table class="tight">
+  <tr><th style="width:34%">התנאי בשפה</th><th>מבנה האוטומט</th></tr>
+  <tr><td>לפחות k מופעים של אות</td><td>שרשרת של <span class="m">k + 1</span> מצבים. המצב האחרון מקבל ויש בו לולאה.</td></tr>
+  <tr><td>לכל היותר k מופעים של אות</td><td>שרשרת של <span class="m">k + 1</span> מצבים שכולם מקבלים. מופע נוסף מוביל למלכודת. כשהתנאי הוא על אורך המילה, כל אות מעבירה למצב הבא בשרשרת.</td></tr>
+  <tr><td>המילה אינה מכילה רצף מסוים</td><td>בונים את האוטומט של "מכילה את הרצף" (סרטוט 2). המצב שאחרי הרצף הופך למלכודת וכל שאר המצבים מקבלים.</td></tr>
+  <tr><td>האות שלפני האחרונה היא a</td><td>המצבים זוכרים את שתי האותיות האחרונות שנקראו.</td></tr>
+  <tr><td>תנאי שחייב להתקיים בכל רישא של המילה (כל התחלה שלה)</td><td>ברגע שהתנאי מופר עוברים למלכודת. כל שאר המצבים מקבלים.</td></tr>
+  <tr><td>שני תנאים יחד ("וגם", "או")</td><td>לכל תנאי רושמים מה צריך לזכור וקובעים מצב לכל צירוף של שני הדברים. לדוגמה: הזוגיות של מספר ה־a והשארית של מספר ה־c בחלוקה ב־3 נותנות <span class="m">2·3 = 6</span> מצבים. ב"וגם" המצב מקבל רק כששני התנאים מתקיימים בו וב"או" מספיק שאחד מהם מתקיים.</td></tr>
+  <tr><td>המשלים של שפה</td><td>באס״ד מלא כל מצב מקבל נעשה מצב שאינו מקבל וכל מצב שאינו מקבל נעשה מקבל. לאוטומט שאינו מלא מוסיפים קודם מצב מלכודת, כי גם המלכודת הופכת למצב מקבל.</td></tr>
+</table>
+
+<div class="grid2">
+  <div class="box">
+    <h3>אוטומט סופי לא דטרמיניסטי (סרטוט 6)</h3>
+    <ul>
+      <li>מותר שממצב ייצאו כמה מעברים לאותה אות ומותר שלא ייצא אף מעבר.</li>
+      <li>מילה מתקבלת אם קיים לפחות מסלול אחד שקורא את כולה ומסתיים במצב מקבל. כדי לקבוע שמילה נדחית בודקים את כל המסלולים.</li>
+      <li>אוטומט לא דטרמיניסטי אינו מקבל יותר שפות מאס״ד. לכל שפה שהוא מקבל יש גם אס״ד.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h3>תיאור מערכת ופתרון חידה בעזרת תרשים מצבים</h3>
+    <ul>
+      <li>מצב מתאר את כל מה שחשוב לדעת על המערכת ברגע מסוים. מעבר הוא פעולה אחת שמשנה את המצב ורושמים אותה על החץ.</li>
+      <li>פתרון של חידה הוא מסלול מהמצב ההתחלתי אל מצב היעד, שאינו עובר במצב אסור.</li>
+    </ul>
+  </div>
+</div>
+
+<h2>איך קובעים אם שפה רגולרית, כלומר אם יש אוטומט סופי שמקבל אותה</h2>
+
+<div class="grid2">
+  <div class="box key">
+    <h3>כמה האוטומט צריך לזכור?</h3>
+    <ul>
+      <li>השפה <strong>רגולרית</strong> כאשר מספיק לזכור אחת ממספר סופי של אפשרויות: שארית או זוגיות של מונה, רצף של אותיות, סדר החלקים במילה, מונה חסום, כלומר מונה שיש לו גבול קבוע (<span class="m">n &lt; 1000</span>).</li>
+      <li>השפה <strong>אינה רגולרית</strong> כאשר יש להשוות בין שני מונים שאינם חסומים: <span class="m">n = k</span>, <span class="m">m = 2k</span>, <span class="m">n &lt; k</span>, <span class="m">#<sub>a</sub>(w) = #<sub>b</sub>(w)</span>.</li>
+      <li>השפה <span class="m">∅</span>, השפה <span class="m">Σ*</span> וכל שפה סופית הן רגולריות.</li>
+    </ul>
+    <p><strong>ניסוח של נימוק</strong> לשפה <span class="m">a<sup>n</sup>b<sup>m</sup>a<sup>k</sup></span> שבה <span class="m">n%2 = k%2</span>: "השפה רגולרית, כי מספיק לזכור את הזוגיות של n ואת הזוגיות של k. מספר האפשרויות סופי ולכן אפשר לבנות לה אוטומט סופי."</p>
+    <p>ולשפה <span class="m">a<sup>n</sup>b<sup>k</sup>c<sup>n</sup></span>: "השפה אינה רגולרית, כי יש לזכור את n כדי להשוות את מספר ה־c למספר ה־a. הערך של n אינו חסום ואילו לאוטומט סופי יש רק מספר סופי של מצבים."</p>
+  </div>
+  <div class="box exam">
+    <h3>שפות לדוגמה: רגולרית או לא</h3>
+    <table class="tight">
+      <tr><th>השפה</th><th>הכרעה ונימוק</th></tr>
+      <tr><td class="ltr"><span class="m">a<sup>n</sup>b<sup>k</sup>c<sup>n</sup>, 0&lt;n&lt;1000&lt;k</span></td><td>רגולרית. n חסום ולכן המצבים יכולים לזכור אותו</td></tr>
+      <tr><td class="ltr"><span class="m">a<sup>n</sup>b<sup>k</sup>c<sup>n</sup>, 0&lt;k&lt;1000&lt;n</span></td><td>לא רגולרית. n אינו חסום ויש להשוות את מספר ה־a למספר ה־c</td></tr>
+      <tr><td class="ltr"><span class="m">a<sup>n</sup>b<sup>m</sup>a<sup>k</sup>, n%2 = k%2</span></td><td>רגולרית. מספיק לזכור זוגיות</td></tr>
+      <tr><td class="ltr"><span class="m">a<sup>n</sup>b<sup>m</sup>a<sup>k</sup>, n+m+k&lt;100</span></td><td>רגולרית. השפה סופית</td></tr>
+      <tr><td class="ltr"><span class="m">0<sup>i</sup>1<sup>2n</sup>, n = i%3</span></td><td>רגולרית. מספר ה־1 תלוי רק בשארית של i</td></tr>
+      <tr><td class="ltr"><span class="m">0<sup>i</sup>1<sup>n+i</sup>, n = i%3</span></td><td>לא רגולרית. מספר ה־1 תלוי ב־i עצמו</td></tr>
+      <tr><td class="ltr"><span class="m">a<sup>n</sup>b<sup>m</sup>c<sup>k</sup>, m = 2k</span></td><td>לא רגולרית. יש להשוות בין m ל־k ושניהם אינם חסומים</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="box">
+    <h3>תכונות סגירות</h3>
+    <p>אם L1 ו־L2 רגולריות, גם השפות <span class="m">L1 ∪ L2</span>, <span class="m">L1 ∩ L2</span>, <span class="m">L1·L2</span>, <span class="m ov">L1</span> ו־<span class="m">R(L1)</span> רגולריות.</p>
+    <p><strong>הוכחה ששפה רגולרית:</strong> כותבים את L כביטוי שמורכב משפות רגולריות ומסבירים למה כל אחת מהן רגולרית. מסיימים במשפט כמו "השפות הרגולריות סגורות לחיתוך ולכן L רגולרית".</p>
+    <p>מכך ששפות אינן רגולריות אין להסיק שגם התוצאה של פעולה עליהן אינה רגולרית. לדוגמה: חיתוך של שתי שפות לא רגולריות שאין להן מילה משותפת הוא <span class="m">∅</span>, האיחוד של שפה לא רגולרית עם המשלים שלה הוא <span class="m">Σ*</span> וחיתוך של שפה לא רגולרית עם שפה סופית הוא שפה סופית.</p>
+  </div>
+  <div class="box">
+    <h3>הוכחה מלאה ששפה אינה רגולרית: <span class="m">{a<sup>n</sup>b<sup>n</sup> | n ≥ 0}</span></h3>
+    <p>נניח בשלילה שיש אס״ד מלא שמקבל את השפה ונסמן ב־m את מספר המצבים שלו. יש רק m מצבים ולכן בין <span class="m">m + 1</span> המילים <span class="m">a, aa, ..., a<sup>m+1</sup></span> יש שתי מילים שונות, <span class="m">a<sup>i</sup></span> ו־<span class="m">a<sup>j</sup></span>, שהאוטומט מסיים לקרוא באותו מצב. מהמצב הזה קריאה של <span class="m">b<sup>i</sup></span> מובילה בשני המקרים למצב אחד ולכן גם <span class="m">a<sup>i</sup>b<sup>i</sup></span> ו־<span class="m">a<sup>j</sup>b<sup>i</sup></span> מגיעות לאותו מצב. הראשונה שייכת לשפה והשנייה אינה שייכת לה וזו סתירה.</p>
+    <p class="small">יש שאלות שדורשות הוכחה כזאת ויש שאלות שבהן מספיק הסבר מילולי.</p>
+  </div>
+</div>
+
+<h2>אוטומט מחסנית דטרמיניסטי</h2>
+<p>בכל מעבר האוטומט קורא אות מהקלט, בודק מהי האות שבראש המחסנית ומבצע פעולה אחת על המחסנית: דחוף, שלוף או ללא שינוי. האוטומט דטרמיניסטי כאשר לכל צירוף של מצב, אות בקלט ואות בראש המחסנית יש לכל היותר מעבר אחד. המילה מתקבלת אם האוטומט קרא את כולה וסיים במצב מקבל.</p>
+
+<div class="box">
+  <div class="wide-fig">
+    <div>
+      <svg class="fa" viewBox="0 0 408 124" width="408" height="124" style="font-size:9px" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" class="head"/></marker></defs><path d="M44.0,56.0 L132.0,56.0" marker-end="url(#ar)"/><text x="88.0" y="52.0" text-anchor="middle">a, ⊢ / דחוף S</text><path d="M156.0,56.0 L248.0,56.0" marker-end="url(#ar)"/><text x="202.0" y="52.0" text-anchor="middle">b, A / שלוף</text><path d="M272.0,56.0 L364.0,56.0" marker-end="url(#ar)"/><text x="318.0" y="52.0" text-anchor="middle">b, S / שלוף</text><path d="M155.2,60.3 Q260.0,100.0 364.8,60.3" marker-end="url(#ar)"/><text x="260.0" y="89.2" text-anchor="middle">b, S / שלוף</text><path d="M139.0,45.0 C127.0,23.0 161.0,23.0 149.0,44.5" marker-end="url(#ar)"/><text x="144.0" y="15.5" text-anchor="middle">a, S / דחוף A</text><text x="144.0" y="26.0" text-anchor="middle">a, A / דחוף A</text><path d="M255.0,45.0 C243.0,23.0 277.0,23.0 265.0,44.5" marker-end="url(#ar)"/><text x="260.0" y="26.0" text-anchor="middle">b, A / שלוף</text><path d="M5.0,56.0 L20.0,56.0" marker-end="url(#ar)"/><circle cx="32" cy="56" r="12"/><text class="q" x="32" y="59" text-anchor="middle">q0</text><circle cx="144" cy="56" r="12"/><text class="q" x="144" y="59" text-anchor="middle">q1</text><circle cx="260" cy="56" r="12"/><text class="q" x="260" y="59" text-anchor="middle">q2</text><circle cx="376" cy="56" r="12"/><circle cx="376" cy="56" r="9"/><text class="q" x="376" y="59" text-anchor="middle">q3</text></svg>
+      <p class="small" style="text-align:center;margin:0">אוטומט מחסנית דטרמיניסטי לשפה <span class="m">{a<sup>n</sup>b<sup>n</sup> | n &gt; 0}</span></p>
+    </div>
+    <ul>
+      <li><strong>סימון מעבר</strong> (כמו בשאלונים): <span class="m">a, A / דחוף A</span>. לפני הקו הנטוי רשומות האות שנקראת והאות שבראש המחסנית ואחריו רשומה הפעולה.</li>
+      <li><strong>מחסנית ריקה</strong> מסומנת כאן <span class="m">⊢</span>. בחלק מהשאלונים כתוב במקום הסימן הזה "מחסנית ריקה".</li>
+      <li>האות הראשונה שנדחפת (S) שונה מהאותיות שנדחפות אחריה (A). כך האוטומט מזהה את תחתית המחסנית: כשהוא שולף את S המחסנית מתרוקנת והוא עובר למצב המקבל.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="box">
+  <div class="wide-fig">
+    <div>
+      <svg class="fa" viewBox="0 0 420 156" width="420" height="156" style="font-size:9px" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" class="head"/></marker></defs><path d="M44.0,56.0 L132.0,56.0" marker-end="url(#ar)"/><text x="88.0" y="52.0" text-anchor="middle">a, ⊢ / דחוף S</text><path d="M156.0,56.0 L258.0,56.0" marker-end="url(#ar)"/><text x="207.0" y="41.5" text-anchor="middle">b, S / ללא שינוי</text><text x="207.0" y="52.0" text-anchor="middle">b, A / ללא שינוי</text><path d="M281.8,53.6 Q333.0,43.0 384.2,53.6" marker-end="url(#ar)"/><text x="333.0" y="45.5" text-anchor="middle">b, A / שלוף</text><path d="M384.2,58.4 Q333.0,69.0 281.8,58.4" marker-end="url(#ar)"/><text x="333.0" y="73.7" text-anchor="middle">b, S / ללא שינוי</text><text x="333.0" y="84.2" text-anchor="middle">b, A / ללא שינוי</text><path d="M270.0,68.0 L270.0,122.0" marker-end="url(#ar)"/><text x="234.0" y="99.0" text-anchor="middle">b, S / שלוף</text><path d="M139.0,45.0 C127.0,23.0 161.0,23.0 149.0,44.5" marker-end="url(#ar)"/><text x="144.0" y="15.5" text-anchor="middle">a, S / דחוף A</text><text x="144.0" y="26.0" text-anchor="middle">a, A / דחוף A</text><path d="M5.0,56.0 L20.0,56.0" marker-end="url(#ar)"/><circle cx="32" cy="56" r="12"/><text class="q" x="32" y="59" text-anchor="middle">q0</text><circle cx="144" cy="56" r="12"/><text class="q" x="144" y="59" text-anchor="middle">q1</text><circle cx="270" cy="56" r="12"/><text class="q" x="270" y="59" text-anchor="middle">q2</text><circle cx="396" cy="56" r="12"/><text class="q" x="396" y="59" text-anchor="middle">q3</text><circle cx="270" cy="134" r="12"/><circle cx="270" cy="134" r="9"/><text class="q" x="270" y="137" text-anchor="middle">q4</text></svg>
+      <p class="small" style="text-align:center;margin:0">אוטומט מחסנית דטרמיניסטי לשפה <span class="m">{a<sup>n</sup>b<sup>2n</sup> | n &gt; 0}</span></p>
+    </div>
+    <ul>
+      <li>המחסנית סופרת את n. המצבים q2 ו־q3 מתחלפים, כך שה־b הראשון בכל זוג אינו משנה את המחסנית וה־b השני שולף אות אחת.</li>
+      <li>במעבר שאינו משנה את המחסנית רשומות שתי שורות, שורה לכל אות שיכולה להיות בראש המחסנית.</li>
+      <li>בדיקה על abb: אחרי קריאת a יש במחסנית S. ה־b הראשון מעביר ל־q2 ללא שינוי במחסנית. ה־b השני שולף את S ומעביר למצב המקבל q4.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="box key">
+    <h3>איך מתכננים</h3>
+    <ol>
+      <li>כותבים את התנאי כשוויון בין מה שנדחף ובין מה שנשלף. לדוגמה: בשפה <span class="m">a<sup>i</sup>b<sup>j</sup>c<sup>i-j</sup></span> מתקיים <span class="m">i = j + (i-j)</span>. דוחפים אות לכל a ושולפים אות לכל b ולכל c.</li>
+      <li>מחליטים מה סופרת המחסנית ומה סופרים המצבים. המחסנית סופרת את המונה שאינו חסום. המצבים זוכרים זוגיות, שארית, תוספת קבועה (<span class="m">+1</span>) וגבול קבוע (<span class="m">i ≥ 4</span>).</li>
+      <li>לכל מונה שיכול להיות 0 צריך מעבר שמדלג על החלק שלו במילה.</li>
+      <li>מריצים את האוטומט על המילה הקצרה ביותר בשפה ועל מילה שאינה בשפה. בכל צעד רושמים את תוכן המחסנית.</li>
+    </ol>
+  </div>
+  <div>
+    <table class="tight">
+      <tr><th>מה נדרש בשפה</th><th>איך מממשים</th></tr>
+      <tr><td class="ltr"><span class="m">a<sup>n</sup>b<sup>m</sup>c<sup>n+m</sup></span></td><td>דוחפים אות לכל a ולכל b ושולפים אות לכל c</td></tr>
+      <tr><td class="ltr"><span class="m">b<sup>3n+1</sup></span></td><td>עוברים בין שלושה מצבים ושולפים אות רק בכל b שלישי. את ה־b הנוסף קוראים בלי לשנות את המחסנית</td></tr>
+      <tr><td class="ltr"><span class="m">a<sup>n</sup>b<sup>k</sup>, n &lt; k</span></td><td>אחרי שהמחסנית התרוקנה נדרש לפחות b אחד נוסף. המצב שמגיעים אליו אחרי ה־b הזה מקבל ויש בו לולאה על b</td></tr>
+      <tr><td>שני מונים שכל אחד מהם דורש מספר אחר של b בהמשך המילה (<span class="m">b<sup>m+3k</sup></span>)</td><td>דוחפים אות שונה לכל מונה. האות שבראש המחסנית קובעת כמה b קוראים לפני ששולפים אותה</td></tr>
+      <tr><td>n אי־זוגי בנוסף להשוואה</td><td>שני מצבים מתחלפים בזמן הדחיפה</td></tr>
+    </table>
+  </div>
+</div>
+
+<h2>מכונת טיורינג</h2>
+<p>למכונת טיורינג יש סרט של תאים וראש קורא־כותב. בתא הראשון כתוב <span class="m">⊢</span>, אחריו הקלט ואחריו תאים ריקים שמסומנים Δ. הראש מתחיל על התא הראשון של הקלט. בכל צעד המכונה קוראת את התא שמתחת לראש, כותבת בו סימן, זזה תא אחד ימינה או שמאלה ועוברת למצב הבא. המכונה נעצרת כשאין מעבר שמתאים למצב ולסימן שנקרא. מילה מתקבלת אם המכונה נעצרת במצב מקבל. אם המכונה נעצרת במצב שאינו מקבל, המילה נדחית.</p>
+
+<div class="grid2">
+  <div class="box">
+    <h3>מכונה שמחשבת את <span class="m">x + y</span> במספרים אונריים</h3>
+    <svg class="fa" viewBox="0 0 322 104" width="322" height="104" style="font-size:9px" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" class="head"/></marker></defs><path d="M44.0,46.0 L106.0,46.0" marker-end="url(#ar)"/><text x="75.0" y="42.0" text-anchor="middle">1 / $, R</text><path d="M130.0,46.0 L192.0,46.0" marker-end="url(#ar)"/><text x="161.0" y="42.0" text-anchor="middle"># / 1, R</text><path d="M216.0,46.0 L278.0,46.0" marker-end="url(#ar)"/><text x="247.0" y="42.0" text-anchor="middle">Δ / $, R</text><path d="M43.0,50.8 Q118.0,84.0 193.0,50.8" marker-end="url(#ar)"/><text x="118.0" y="76.2" text-anchor="middle"># / $, R</text><path d="M113.0,35.0 C101.0,13.0 135.0,13.0 123.0,34.5" marker-end="url(#ar)"/><text x="118.0" y="16.0" text-anchor="middle">1 / 1, R</text><path d="M199.0,35.0 C187.0,13.0 221.0,13.0 209.0,34.5" marker-end="url(#ar)"/><text x="204.0" y="16.0" text-anchor="middle">1 / 1, R</text><path d="M5.0,46.0 L20.0,46.0" marker-end="url(#ar)"/><circle cx="32" cy="46" r="12"/><text class="q" x="32" y="49" text-anchor="middle">q0</text><circle cx="118" cy="46" r="12"/><text class="q" x="118" y="49" text-anchor="middle">q1</text><circle cx="204" cy="46" r="12"/><text class="q" x="204" y="49" text-anchor="middle">q2</text><circle cx="290" cy="46" r="12"/><circle cx="290" cy="46" r="9"/><text class="q" x="290" y="49" text-anchor="middle">q3</text></svg>
+    <ul>
+      <li><strong>סימון מעבר:</strong> <span class="m">1 / $, R</span> פירושו קוראים 1, כותבים $ וזזים ימינה. R הוא ימין ו־L הוא שמאל. בחלק מהשאלונים הכיוון כתוב במילים.</li>
+      <li><strong>מספר אונרי:</strong> המספר x נכתב כרצף של x סימני 1. המספר 0 אינו תופס אף תא. בין שני מספרים מפריד הסימן #.</li>
+      <li><strong>פלט:</strong> הפלט נכתב במקום כלשהו בסרט בין שני סימני $.</li>
+      <li>המכונה הופכת את ה־1 הראשון ל־$ ואת ה־# ל־1 ולכן מספר ה־1 אינו משתנה. כאשר <span class="m">x = 0</span> הראש מתחיל על # והמעבר התחתון מטפל במקרה הזה.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h3>מכונה שמקבלת שפה: <span class="m">{a<sup>n</sup>b<sup>n</sup> | n &gt; 0}</span></h3>
+    <svg class="fa" viewBox="0 0 322 166" width="322" height="166" style="font-size:9px" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" class="head"/></marker></defs><path d="M44.0,56.0 L140.0,56.0" marker-end="url(#ar)"/><text x="92.0" y="52.0" text-anchor="middle">a / X, R</text><path d="M164.0,56.0 L260.0,56.0" marker-end="url(#ar)"/><text x="212.0" y="52.0" text-anchor="middle">b / Y, L</text><path d="M260.4,58.9 Q152.0,86.0 43.6,58.9" marker-end="url(#ar)"/><text x="152.0" y="82.2" text-anchor="middle">X / X, R</text><path d="M32.0,68.0 L32.0,108.0" marker-end="url(#ar)"/><text x="62.0" y="91.0" text-anchor="middle">Y / Y, R</text><path d="M44.0,120.0 L140.0,120.0" marker-end="url(#ar)"/><text x="92.0" y="116.0" text-anchor="middle">Δ / Δ, R</text><path d="M147.0,45.0 C135.0,23.0 169.0,23.0 157.0,44.5" marker-end="url(#ar)"/><text x="152.0" y="15.5" text-anchor="middle">a / a, R</text><text x="152.0" y="26.0" text-anchor="middle">Y / Y, R</text><path d="M267.0,45.0 C255.0,23.0 289.0,23.0 277.0,44.5" marker-end="url(#ar)"/><text x="272.0" y="15.5" text-anchor="middle">a / a, L</text><text x="272.0" y="26.0" text-anchor="middle">Y / Y, L</text><path d="M27.0,131.0 C15.0,153.0 49.0,153.0 37.0,131.5" marker-end="url(#ar)"/><text x="32.0" y="157.2" text-anchor="middle">Y / Y, R</text><path d="M5.0,56.0 L20.0,56.0" marker-end="url(#ar)"/><circle cx="32" cy="56" r="12"/><text class="q" x="32" y="59" text-anchor="middle">q0</text><circle cx="152" cy="56" r="12"/><text class="q" x="152" y="59" text-anchor="middle">q1</text><circle cx="272" cy="56" r="12"/><text class="q" x="272" y="59" text-anchor="middle">q2</text><circle cx="32" cy="120" r="12"/><text class="q" x="32" y="123" text-anchor="middle">q3</text><circle cx="152" cy="120" r="12"/><circle cx="152" cy="120" r="9"/><text class="q" x="152" y="123" text-anchor="middle">q4</text></svg>
+    <ul>
+      <li>בכל סיבוב המכונה מסמנת a אחד ב־X, זזה ימינה אל ה־b הראשון שלא סומן, מסמנת אותו ב־Y וחוזרת שמאלה עד ה־X.</li>
+      <li>כשלא נשאר a לסמן, המכונה עוברת ב־q3 על כל ה־Y. היא מקבלת רק אם אחריהם בא Δ.</li>
+      <li>במילה aab המכונה נעצרת ב־q1 על Δ. q1 אינו מקבל ולכן המילה נדחית.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="grid2">
+  <div>
+    <p><strong>מעקב</strong> אחרי מכונת החיבור על הסרט <span class="m">⊢ 1 # 1</span>. בכל שורה רושמים את מספר הצעד, את המצב ואת הסרט ומסמנים את התא שמתחת לראש:</p>
+    <table class="trace">
+      <tr><th>צעד</th><th>מצב</th><th colspan="6">סרט</th><td class="dots"></td></tr>
+      <tr><th>0</th><th class="stt">q0</th><td class="">⊢</td><td class="hd">1</td><td class="">#</td><td class="">1</td><td class="">Δ</td><td class="">Δ</td><td class="dots">...</td></tr><tr><th>1</th><th class="stt">q1</th><td class="">⊢</td><td class="">$</td><td class="hd">#</td><td class="">1</td><td class="">Δ</td><td class="">Δ</td><td class="dots">...</td></tr><tr><th>2</th><th class="stt">q2</th><td class="">⊢</td><td class="">$</td><td class="">1</td><td class="hd">1</td><td class="">Δ</td><td class="">Δ</td><td class="dots">...</td></tr><tr><th>3</th><th class="stt">q2</th><td class="">⊢</td><td class="">$</td><td class="">1</td><td class="">1</td><td class="hd">Δ</td><td class="">Δ</td><td class="dots">...</td></tr><tr><th>4</th><th class="stt">q3</th><td class="">⊢</td><td class="">$</td><td class="">1</td><td class="">1</td><td class="">$</td><td class="hd">Δ</td><td class="dots">...</td></tr>
+    </table>
+    <p class="small">אחרי צעד 4 המכונה ב־q3. מ־q3 אין מעבר ולכן היא נעצרת. בין שני סימני ה־$ כתוב 11, כלומר 2.</p>
+  </div>
+  <div class="box key">
+    <h3>רכיבים שחוזרים בתכנון של מכונה</h3>
+    <ul>
+      <li><strong>זוגיות או שארית:</strong> עוברים ימינה על כל סימני ה־1 ומחליפים מצב בכל תא. המצב שבו מגיעים ל־# או ל־Δ מראה מהי השארית.</li>
+      <li><strong>כתיבת מספר בין שני סימני $ בלי לשנות אותו:</strong> לפני ה־1 הראשון אין תא פנוי ל־$. לכן הופכים את ה־1 הראשון ל־$. כדי שמספר ה־1 לא יקטן כותבים 1 על ה־Δ שבסוף המספר וכותבים $ בתא שאחריו.</li>
+      <li><strong><span class="m">x - 1</span>:</strong> הופכים את ה־1 הראשון ל־$ ואת ה־Δ שבסוף ל־$.</li>
+      <li><strong>השוואה, מינימום וחיסור:</strong> בכל סיבוב מסמנים 1 אחד מכל מספר. המספר שנגמר ראשון הוא הקטן.</li>
+      <li><strong>חלוקה ב־2:</strong> בכל סיבוב מסמנים 1 אחד משמאל ומוחקים 1 אחד מימין. בסוף מספר התאים המסומנים הוא חצי מהמספר.</li>
+    </ul>
+  </div>
+</div>
+
+<h2 class="exam">מה חוזר בשאלות המודלים החישוביים בבגרות</h2>
+
+<div class="box exam">
+  <p>בפרק מופיעים בדרך כלל אוטומט סופי, אוטומט מחסנית דטרמיניסטי ומכונת טיורינג.</p>
+  <ul>
+    <li><strong>אס״ד שאינו מלא.</strong> נוסח אופייני: "בנו אוטומט סופי דטרמיניסטי שאינו מלא המקבל את השפה L". יש גם שאלות שמבקשות אס״ד מלא ולכן בודקים בנוסח השאלה מה נדרש.</li>
+    <li><strong>אוטומט שחלק מהסרטוט שלו נתון.</strong> בשאלה נתון סרטוט שיש בו כל המצבים ויש להשלים בו אותיות קלט, מעברים, פעולות על המחסנית ומצבים מקבלים.</li>
+    <li><strong>שייכות של מילים.</strong> בשאלה נתונות כמה מילים. לכל אחת קובעים אם היא שייכת לשפה ומנמקים.</li>
+    <li><strong>רגולרית או לא.</strong> בשאלה נתונות שפות דומות שנבדלות בתנאי אחד ואחריהן שפות שמורכבות מהן בחיתוך, באיחוד, במשלים ובהיפוך.</li>
+    <li><strong>מכונת טיורינג.</strong> יש שאלות שדורשות כתיבה של מכונה שמחשבת פונקציה על מספרים אונריים. יש שאלות שבהן המכונה נתונה ונדרשים מעקב והסבר מה היא עושה.</li>
+  </ul>
+</div>
+
+<div class="grid2">
+  <div class="box exam">
+    <h3>שייכות של מילה לשפה והמילה הקצרה ביותר</h3>
+    <p>בודקים את התנאים לפי הסדר: סדר האותיות, אילו אותיות חייבות להופיע ואחר כך התנאי המספרי. בנימוק כותבים את ערכי המונים.</p>
+    <p><strong>לדוגמה:</strong> נתונה השפה <span class="m">a<sup>m</sup>b<sup>k</sup>c<sup>x</sup></span> שבה <span class="m">m, k, x &gt; 0</span> והזוגיות של m שווה לזוגיות של k או של x. המילה abbcc אינה בשפה, כי <span class="m">m = 1</span> אי־זוגי ואילו <span class="m">k = 2</span> ו־<span class="m">x = 2</span> זוגיים. המילה abbac נדחית בגלל סדר האותיות והמילה bbc נדחית כי אין בה a.</p>
+    <p>אחת מהמילים שבשאלה יכולה להיות ε. אם השפה דורשת מספר זוגי של מופעים ואוסרת רצף מסוים, ε שייכת לה: 0 הוא מספר זוגי ואין ב־ε אף רצף אסור.</p>
+    <p><strong>המילה הקצרה ביותר:</strong> מציבים בכל מונה את הערך הקטן ביותר שהתנאים מרשים. לדוגמה: בשפה <span class="m">c<sup>1+k+n</sup>b<sup>k</sup>a<sup>2n</sup></span> שבה <span class="m">n, k ≥ 1</span>, מציבים <span class="m">n = k = 1</span> ומקבלים cccbaa.</p>
+  </div>
+  <div class="box exam">
+    <h3>השלמה של אוטומט שחלק מהסרטוט שלו נתון</h3>
+    <ul>
+      <li>מתחילים מהמעברים שכבר מסומנים וכותבים ליד כל מצב מה הוא זוכר. ממספר המצבים אפשר להסיק מה האוטומט זוכר. לדוגמה: כשההפרש בין מספר ה־c למספר ה־d חייב להיות בין 0 ל־3, ארבעת המצבים q0-q3 זוכרים את ההפרש ומצב חמישי q4 הוא מלכודת.</li>
+      <li>שני מסלולים יכולים להגיע לאותו מצב כאשר מה שנשאר לבדוק זהה בשניהם. לדוגמה: בשפה שבתיבה הסמוכה נדרש x אי־זוגי כש־m אי־זוגי ו־k זוגי ונדרש x זוגי כש־m זוגי ו־k אי־זוגי. שני המסלולים מגיעים לאותו זוג מצבים שזוכר את הזוגיות של x.</li>
+      <li>לא מוסיפים מצבים ולא משנים את מה שנתון. בשאלות כאלה נכתב שתשובה שיש בה שינוי באוטומט הנתון לא תזוכה בנקודות.</li>
+      <li>באוטומט מחסנית משלימים לכל מעבר את האות שבראש המחסנית ואת הפעולה. מהמעברים שכבר מסומנים לומדים אילו אותיות נדחפות. בסוף מריצים את האוטומט על מילות הדוגמה שבשאלה.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="box exam">
+    <h3>שפות שמורכבות משפות אחרות</h3>
+    <p>מפשטים את הביטוי לפני שמכריעים אם השפה רגולרית:</p>
+    <ul>
+      <li>כשאין לשתי שפות מילה משותפת, החיתוך שלהן הוא <span class="m">∅</span> והאיחוד של המשלימים שלהן הוא <span class="m">Σ*</span>.</li>
+      <li>חיתוך של שפה לא רגולרית עם שפה סופית הוא שפה סופית ולכן רגולרית.</li>
+      <li>כאשר L1 אינה רגולרית ו־L3 סופית, גם <span class="m">L1 ∩ <span class="ov">L3</span></span> אינה רגולרית. הנימוק: <span class="m">L1 ∩ L3</span> סופית ולכן רגולרית. האיחוד של <span class="m">L1 ∩ L3</span> ושל <span class="m">L1 ∩ <span class="ov">L3</span></span> הוא L1. אילו גם <span class="m">L1 ∩ <span class="ov">L3</span></span> הייתה רגולרית, L1 הייתה רגולרית בגלל הסגירות לאיחוד וזו סתירה.</li>
+      <li>המשלים של <span class="m">Σ*</span> הוא <span class="m">∅</span> ולכן כל חיתוך איתו ריק.</li>
+      <li>כשמבקשים לכתוב את כל המילים של חיתוך, בדרך כלל אחת השפות מגבילה את אורך המילים. עוברים על המילים הקצרות לפי הסדר ובודקים כל אחת.</li>
+    </ul>
+  </div>
+  <div class="box exam">
+    <h3>אוטומט מחסנית בבגרות</h3>
+    <p>שאלה אופיינית מבקשת לבנות אוטומט מחסנית לשפה שמשלבת השוואה בין מונים עם תנאי נוסף שהמצבים בודקים. לפניכם שפות לדוגמה וליד כל אחת כתוב מה מיוחד בה:</p>
+    <ul>
+      <li><span class="m">(ab)<sup>k</sup>c<sup>m</sup>b<sup>m+3k</sup></span>: יש בה שני מונים שכל אחד מהם דורש מספר אחר של b בסוף המילה: b אחד לכל c ושלושה לכל ab.</li>
+      <li><span class="m">a<sup>i</sup>b<sup>j</sup>c<sup>i-j</sup></span> כאשר <span class="m">i ≥ 4</span> ו־<span class="m">i-j ≥ 3</span>: יש בה גבולות קבועים שהמצבים בודקים.</li>
+      <li><span class="m">c<sup>1+k+n</sup>b<sup>k</sup>a<sup>2n</sup></span>: יש בה סכום של שני מונים ומכפלה ב־2.</li>
+      <li><span class="m">a<sup>n</sup>b<sup>m</sup>a<sup>k</sup></span> כאשר <span class="m">m &gt; n</span> ו־<span class="m">n+k &gt; m</span>: התנאים בה הם אי־שוויונות.</li>
+    </ul>
+    <p>בשאלות "אם השפה רגולרית בנו אס״ד, אחרת בנו אוטומט מחסנית" ההכרעה היא חלק מהתשובה. כותבים אותה במפורש לפני הסרטוט.</p>
+  </div>
+</div>
+
+<div class="box exam">
+    <h3>מכונת טיורינג בבגרות</h3>
+    <ul class="two">
+      <li><strong>כתיבה של מכונה.</strong> ההנחיות חוזרות כמעט מילה במילה: אין צורך לשמור על הקלט ואפשר לשנות אותו לסימנים אחרים, הפלט יופיע במקום כלשהו בסרט בין שני סימני $ ואין צורך לבדוק את תקינות הקלט.</li>
+      <li><strong>מעקב.</strong> מראים בכל שלב את הסרט, את מיקום הראש ואת המצב, כמו בטבלת המעקב שבדף הזה.</li>
+      <li><strong>מה המכונה עושה.</strong> עונים במשפט אחד על הקלט והפלט ולא מתארים מעברים. לדוגמה: "המכונה מוחקת את ה־a הראשון במילה ומזיזה את המשך המילה תא אחד שמאלה".</li>
+      <li><strong>מקרים של אפס.</strong> יש שאלות ששואלות אם המכונה פועלת נכון כשאחד המספרים הוא 0. מריצים את המכונה על המקרה הזה ובודקים אם יש מעבר כשהראש מתחיל על # וכשהוא מגיע ל־<span class="m">⊢</span>.</li>
+    </ul>
+</div>
+
+<div class="box exam">
+    <h3>פונקציות שנדרשו בשאלות של כתיבת מכונה</h3>
+    <p>הפונקציות תלויות בזוגיות, בשארית או בהשוואה. לדוגמה:</p>
+    <ul class="two">
+      <li>פונקציה שמחזירה חצי מהמספר כשהוא זוגי ואת המספר פחות 1 כשהוא אי־זוגי.</li>
+      <li>פונקציה שמחזירה את <span class="m">x+1</span> כאשר <span class="m">x &lt; 2</span> ואת <span class="m">x-1</span> כאשר <span class="m">x ≥ 2</span>.</li>
+      <li>השוואה בין שני מספרים שמחזירה 1 אם הראשון גדול מהשני או שווה לו ו־2 אחרת.</li>
+      <li>פונקציה שמחזירה <span class="m">(x+y)/3</span> כשנתון שהסכום מתחלק ב־3.</li>
+      <li>פונקציה של שלושה מספרים x, y, z שמחזירה את x כשהוא מתחלק ב־3, את y כשהשארית של x בחלוקה ב־3 היא 1 ואת z כשהשארית היא 2.</li>
+      <li>פונקציה של שלושה מספרים שמחזירה את <span class="m">y+z</span> כאשר <span class="m">x = 0</span>, את <span class="m">x+y</span> כאשר x זוגי וגדול מ־0 ואת x כאשר הוא אי־זוגי.</li>
+    </ul>
+</div>
+
+<div class="box exam">
+  <h3>טענות על פעולות בין שפות</h3>
+  <p>לטענה נכונה כותבים הסבר כללי. לטענה שאינה נכונה מביאים דוגמה נגדית. מספיקות שפות שיש בכל אחת מהן מילה אחת.</p>
+  <table class="tight">
+    <tr><th>הטענה</th><th>הכרעה</th><th>דוגמה נגדית או הסבר</th></tr>
+    <tr><td class="ltr"><span class="m">R(R(L1)·R(L2)) = L1·L2</span></td><td>לא נכונה</td><td>צד שמאל שווה ל־<span class="m">L2·L1</span>. עבור <span class="m">L1 = {a}</span> ו־<span class="m">L2 = {b}</span> צד שמאל הוא <span class="m">{ba}</span> וצד ימין הוא <span class="m">{ab}</span></td></tr>
+    <tr><td class="ltr"><span class="m">L1·(L2 ∪ L3) = (L1·L2) ∪ (L1·L3)</span></td><td>נכונה</td><td>בשני הצדדים נמצאות המילים שמתחילות במילה מ־L1 וממשיכות במילה מ־L2 או מ־L3</td></tr>
+    <tr><td class="ltr"><span class="m">L1 ∩ (L2·L3) = (L1 ∩ L2)·(L1 ∩ L3)</span></td><td>לא נכונה</td><td>עבור <span class="m">L1 = {ab}</span>, <span class="m">L2 = {a}</span> ו־<span class="m">L3 = {b}</span> צד שמאל הוא <span class="m">{ab}</span> וצד ימין הוא <span class="m">∅</span></td></tr>
+    <tr><td class="ltr"><span class="m">L1<sup>n</sup>·L2<sup>n</sup> = (L1·L2)<sup>n</sup></span></td><td>לא נכונה</td><td>עבור <span class="m">L1 = {a}</span>, <span class="m">L2 = {b}</span> ו־<span class="m">n = 2</span> צד שמאל הוא <span class="m">{aabb}</span> וצד ימין הוא <span class="m">{abab}</span></td></tr>
+    <tr><td>חיתוך של שתי שפות לא רגולריות הוא בהכרח לא רגולרי</td><td>לא נכונה</td><td><span class="m">{a<sup>n</sup>b<sup>n</sup> | n ≥ 0} ∩ {b<sup>n</sup>a<sup>n</sup> | n ≥ 0} = {ε}</span> וזו שפה סופית</td></tr>
+  </table>
+</div>
+
+<h2>טעויות נפוצות</h2>
+<p>כל שורה כאן מתארת טעות שתלמידים עושים ולא הנחיה.</p>
+
+<div class="grid3">
+  <div class="box warn">
+    <h3>שפות ואוטומט סופי</h3>
+    <ul>
+      <li>לא בודקים את ε ולכן המצב ההתחלתי מסומן לא נכון.</li>
+      <li>מסרטטים מצב מלכודת כשנדרש אוטומט שאינו מלא או משמיטים מעברים כשנדרש אוטומט מלא.</li>
+      <li>מתבלבלים בין <span class="m">&gt;</span> ל־<span class="m">≥</span> או בין <span class="m">∅</span> ל־<span class="m">{ε}</span>.</li>
+      <li>קובעים ששפה אינה רגולרית בלי לבדוק אם אחד המונים שמשווים חסום.</li>
+    </ul>
+  </div>
+  <div class="box warn">
+    <h3>אוטומט מחסנית</h3>
+    <ul>
+      <li>לא מציינים במעבר מהי האות שבראש המחסנית או שולפים ממחסנית ריקה.</li>
+      <li>מסרטטים שני מעברים מאותו מצב לאותה אות בקלט ולאותה אות בראש המחסנית.</li>
+      <li>שוכחים את המקרה שבו אחד המונים הוא 0.</li>
+      <li>מסמנים כמקבל מצב שהאוטומט מגיע אליו לפני שהמחסנית התרוקנה.</li>
+    </ul>
+  </div>
+  <div class="box warn">
+    <h3>מכונת טיורינג</h3>
+    <ul>
+      <li>לא מטפלים בקלט שבו אחד המספרים הוא 0.</li>
+      <li>הראש מגיע ל־<span class="m">⊢</span> ואין משם מעבר ימינה.</li>
+      <li>שוכחים את אחד משני סימני ה־$.</li>
+      <li>המכונה זזה ימינה ושמאלה בלי לסמן תאים ולכן אינה נעצרת.</li>
+      <li>במעקב: מזיזים את הראש לפני שמעדכנים את התא או מדלגים על צעד.</li>
+    </ul>
+  </div>
+</div>
+
+</main>
+</body>
+</html>

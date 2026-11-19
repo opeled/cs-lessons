@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>דף עזר: רקורסיה</title>
+<link rel="stylesheet" href="sheets.css">
+<style>
+  /* code is shown character by character: no == or // ligatures */
+  pre, code, .big-o { font-variant-ligatures: none; }
+</style>
+<style id="tight">
+  /* slightly tighter spacing so the last page is not left almost empty */
+  body { line-height: 1.4; }
+  .box { padding: 2mm 2.6mm; margin-bottom: 2.3mm; }
+  .grid2 { gap: 2.3mm; margin-bottom: 2.3mm; }
+  h2 { margin: 4mm 0 1.6mm; }
+  p, ul, ol { margin-bottom: 1.4mm; }
+  pre { margin-bottom: 1.5mm; padding: 1.6mm 2.2mm; }
+  th, td { padding: 1mm 1.8mm; }
+</style>
+</head>
+<body>
+<nav class="site-nav"><a href="./">→ לכל דפי העזר</a><a href="pdf/01-recursion.pdf" download="01-רקורסיה.pdf">הורדת PDF להדפסה</a></nav>
+<main>
+
+<header class="sheet">
+  <h1>רקורסיה</h1>
+  <div class="meta">דף עזר לבגרות במדעי המחשב, שאלון 899271<br>הקוד בשפת <span dir="ltr">C#</span></div>
+</header>
+
+<h2>איך כותבים פעולה רקורסיבית</h2>
+
+<div class="box key">
+  <p>לפני שכותבים שורת קוד אחת, עונים בכתב על שלוש שאלות. אחרי שעונים על שלושתן נשאר בעיקר לתרגם את התשובות לקוד.</p>
+  <ol class="steps">
+    <li><strong><span class="hl1">תנאי העצירה.</span></strong> מהו הקלט הקטן ביותר שעבורו התשובה ידועה בלי חישוב? לדוגמה: שרשרת ריקה, עץ ריק, המספר 0.</li>
+    <li><strong><span class="hl2">הקריאה הרקורסיבית.</span></strong> על איזה קלט קטן יותר קוראים לפעולה? הקלט חייב להתקרב לתנאי העצירה בכל קריאה, אחרת הפעולה לא תסתיים.</li>
+    <li><strong><span class="hl3">שילוב התוצאה.</span></strong> מניחים שהקריאה הרקורסיבית החזירה תשובה נכונה עבור הקלט הקטן יותר. מה נשאר לעשות בקריאה הנוכחית כדי לקבל את התשובה לקלט כולו?</li>
+  </ol>
+</div>
+
+<div class="grid2" style="grid-template-columns: 9fr 11fr">
+  <div>
+    <p><strong>דוגמה:</strong> סכום הערכים בשרשרת חוליות. הצבעים מסמנים את התשובות לשלוש השאלות.</p>
+<pre>public static int Sum(Node&lt;int&gt; p)
+{
+    <span class="hl1">if (p == null)
+        return 0;</span>
+    int rest = <span class="hl2">Sum(p.GetNext())</span>;
+    <span class="hl3">return p.GetValue() + rest;</span>
+}</pre>
+    <p class="small">בשלב השילוב לא בודקים איך הקריאה חישבה את <code>rest</code>. סומכים על התוצאה שלה ומטפלים רק בחוליה הנוכחית.</p>
+  </div>
+  <div>
+    <table>
+      <tr><th style="white-space:nowrap">סוג הקלט</th><th>תנאי עצירה מקובל</th><th>הקלט הקטן יותר</th></tr>
+      <tr><td style="white-space:nowrap">מספר שלם</td><td class="ltr"><code>n == 0</code>, <code>n &lt; 10</code></td><td class="ltr"><code>n - 1</code>, <code>n / 10</code></td></tr>
+      <tr><td style="white-space:nowrap">מערך ואינדקס</td><td class="ltr"><code>i == a.Length</code>, <code>i == -1</code></td><td class="ltr"><code>i + 1</code>, <code>i - 1</code></td></tr>
+      <tr><td style="white-space:nowrap">שרשרת חוליות</td><td class="ltr"><code>p == null</code></td><td class="ltr"><code>p.GetNext()</code></td></tr>
+      <tr><td style="white-space:nowrap">עץ בינארי</td><td class="ltr"><code>t == null</code></td><td class="ltr"><code>t.GetLeft()</code>, <code>t.GetRight()</code></td></tr>
+      <tr><td>תור</td><td class="ltr"><code>q.IsEmpty()</code></td><td>התור אחרי <code>Remove</code></td></tr>
+    </table>
+  </div>
+</div>
+
+<h2>תבניות הרקורסיה שכדאי לזהות</h2>
+<p>רוב הפעולות הרקורסיביות בבגרות כתובות לפי אחת מהתבניות הבאות או לפי שילוב של שתיים מהן. כשמזהים את התבנית קל יותר לכתוב את הפעולה או לעקוב אחריה.</p>
+
+<div class="grid2">
+  <div class="box">
+    <h3>1. פעולה שמחזירה ערך ומחשבת אותו בדרך חזרה</h3>
+    <p>כך כותבים ספירה, סכום ומקסימום. החישוב נעשה אחרי שהקריאה הרקורסיבית חזרה.</p>
+<pre><span class="c">// <span dir="rtl">כמה חוליות בשרשרת ערכן זוגי</span></span>
+public static int CountEven(Node&lt;int&gt; p)
+{
+    if (p == null) return 0;
+    int rest = CountEven(p.GetNext());
+    if (p.GetValue() % 2 == 0)
+        return rest + 1;
+    return rest;
+}</pre>
+  </div>
+  <div class="box">
+    <h3>2. בדיקה שמחזירה אמת או שקר</h3>
+    <p>פעולה שבודקת אם קיים איבר מתאים מחזירה <code>false</code> עבור קלט ריק ומחברת את תוצאות הקריאות ב־<code>||</code>. פעולה שבודקת אם כל האיברים מתאימים מחזירה <code>true</code> עבור קלט ריק ומחברת אותן ב־<code>&amp;&amp;</code>.</p>
+<pre><span class="c">// <span dir="rtl">האם הערך x נמצא בעץ</span></span>
+public static bool Exists(BinNode&lt;int&gt; t, int x)
+{
+    if (t == null) return false;
+    if (t.GetValue() == x) return true;
+    return Exists(t.GetLeft(), x)
+        || Exists(t.GetRight(), x);
+}</pre>
+  </div>
+  <div class="box">
+    <h3>3. הוראות לפני הקריאה הרקורסיבית או אחריה</h3>
+    <p>מה שכתוב לפני הקריאה מתבצע מתחילת השרשרת לסופה. מה שכתוב אחריה מתבצע בדרך חזרה, כלומר מסוף השרשרת לתחילתה. ההערה שליד כל הדפסה מראה מה היא מדפיסה עבור השרשרת <span class="big-o">1 → 2 → 3</span>. הפלט המלא הוא <span class="big-o">1 2 3 3 2 1</span>.</p>
+<pre><span class="c">// <span dir="rtl">מדפיסה את הערכים לפי הסדר ואחר כך בסדר הפוך</span></span>
+public static void Print(Node&lt;int&gt; p)
+{
+    if (p == null) return;
+    Console.Write(p.GetValue());  <span class="c">// 1 2 3</span>
+    Print(p.GetNext());
+    Console.Write(p.GetValue());  <span class="c">// 3 2 1</span>
+}</pre>
+  </div>
+  <div class="box">
+    <h3>4. שתי קריאות רקורסיביות</h3>
+    <p>התבנית אופיינית לעצים. קוראים לפעולה על תת־העץ השמאלי ועל הימני ומשלבים את שתי התוצאות, לעיתים גם עם ערך השורש.</p>
+<pre><span class="c">// <span dir="rtl">גובה העץ</span></span>
+public static int Height(BinNode&lt;int&gt; t)
+{
+    if (t == null) return -1;
+    int left = Height(t.GetLeft());
+    int right = Height(t.GetRight());
+    return 1 + Math.Max(left, right);
+}</pre>
+  </div>
+  <div class="box">
+    <h3>5. פעולה שמחזירה חוליה ומחברת את השרשרת מחדש</h3>
+    <p>הפעולה מחזירה את החוליה הראשונה של השרשרת אחרי השינוי. בכל קריאה מחברים לחוליה הנוכחית את מה שחזר מהקריאה על המשך השרשרת.</p>
+<pre><span class="c">// <span dir="rtl">מוחקת מהשרשרת את כל החוליות שערכן x</span></span>
+public static Node&lt;int&gt; Delete(Node&lt;int&gt; p,
+                               int x)
+{
+    if (p == null) return null;
+    Node&lt;int&gt; rest = Delete(p.GetNext(), x);
+    if (p.GetValue() == x)
+        return rest;      <span class="c">// <span dir="rtl">מדלגים על החוליה</span></span>
+    p.SetNext(rest);
+    return p;
+}</pre>
+  </div>
+  <div class="box">
+    <h3>6. פרמטר שמעביר מידע לקריאות הבאות</h3>
+    <p>כשהחישוב תלוי במה שהיה לפני האיבר הנוכחי, מוסיפים פרמטר שבו מעבירים את המידע הזה. לעיתים צריך לכתוב פעולה נוספת שרק מזמנת את הפעולה הרקורסיבית עם ערך התחלתי לפרמטר.</p>
+<pre><span class="c">// <span dir="rtl">בכמה צמתים הערך גדול מכל הערכים שבמסלול מהשורש אליהם</span></span>
+public static int Count(BinNode&lt;int&gt; t, int max)
+{
+    if (t == null) return 0;
+    int c = 0;
+    if (t.GetValue() &gt; max)
+    { c = 1; max = t.GetValue(); }
+    return c + Count(t.GetLeft(), max)
+             + Count(t.GetRight(), max);
+}</pre>
+  </div>
+</div>
+
+<p>אותן תבניות מופיעות גם בפעולות על מספר ועל מערך. במקרים האלה אין מבנה נתונים שקטן מקריאה לקריאה ולכן פרמטר מספרי הוא שמתקרב לתנאי העצירה.</p>
+
+<div class="grid2">
+  <div class="box">
+    <h3>רקורסיה על הספרות של מספר</h3>
+    <p>בכל קריאה מטפלים בספרת האחדות <code>n % 10</code> וקוראים לפעולה על <code>n / 10</code>, שהוא המספר בלי ספרת האחדות. הספרות נבדקות מימין לשמאל.</p>
+<pre><span class="c">// <span dir="rtl">כמה פעמים הספרה d מופיעה במספר n</span></span>
+public static int CountDigit(int n, int d)
+{
+    int c = 0;
+    if (n % 10 == d) c = 1;
+    if (n &lt; 10) return c;
+    return c + CountDigit(n / 10, d);
+}</pre>
+    <p class="small">ביטוי כמו <code>G(n / 10) * 10 + n % 10</code>, שבו <code>G</code> היא הפעולה הרקורסיבית עצמה, בונה מספר חדש: הוא מצמיד את ספרת האחדות מימין לתוצאה שחזרה מהקריאה.</p>
+  </div>
+  <div class="box">
+    <h3>רקורסיה על מערך בעזרת אינדקס</h3>
+    <p>המערך עצמו אינו משתנה. האינדקס <code>i</code> קובע איזה חלק של המערך נשאר לטיפול והזימון הראשון קובע מאיזה תא מתחילים.</p>
+<pre><span class="c">// <span dir="rtl">סכום הערכים בתאים מהאינדקס i עד סוף המערך</span></span>
+public static int SumFrom(int[] a, int i)
+{
+    if (i == a.Length) return 0;
+    return a[i] + SumFrom(a, i + 1);
+}</pre>
+    <p class="small">הזימון הראשון כאן הוא <code>SumFrom(a, 0)</code>. פעולה שיורדת מסוף המערך מזומנת עם <code>a.Length - 1</code> ונעצרת כאשר <code>i == -1</code>. פעולה שמקבלת שני אינדקסים נעצרת כשהם שווים או כשהשמאלי עובר את הימני.</p>
+  </div>
+</div>
+
+<h2>איך עוקבים אחרי רקורסיה בלי להתבלבל</h2>
+
+<p>המעקב נרשם כעץ של קריאות. החיצים בעץ מראים מי זימן את מי ואיזה ערך חזר.</p>
+
+<div class="grid2">
+  <div class="box key">
+    <ol>
+      <li>לכל זימון מסרטטים מסגרת וכותבים בראשה את שם הפעולה עם ערכי הפרמטרים של הזימון הזה.</li>
+      <li>בתוך המסגרת רושמים את השורות שמתבצעות ואת התוצאה של כל בדיקה (<span style="color:#1d7a3a;font-weight:700">✓</span> או <span style="color:#c0392b;font-weight:700">✗</span>). מתחילים בתנאי העצירה.</li>
+      <li>בשורה שיש בה קריאה רקורסיבית עוצרים, מסרטטים מסגרת חדשה מתחת ומחברים אליה חץ. המסגרת הקודמת עדיין לא הסתיימה והיא מחכה לערך.</li>
+      <li>כשמסגרת מגיעה ל־<code>return</code>, כותבים את הערך המוחזר על חץ שעולה חזרה ורושמים אותו ליד השורה שחיכתה לו. אחר כך ממשיכים במסגרת שזימנה אותה.</li>
+      <li>הערך שמוחזר מהמסגרת הראשונה הוא התשובה.</li>
+    </ol>
+  </div>
+  <div>
+    <ul>
+      <li>כשיש שתי קריאות באותה מסגרת, מסיימים את כל הענף של הקריאה הראשונה לפני שמתחילים את השנייה.</li>
+      <li>ברקורסיה על עץ בינארי אפשר לרשום את המעקב על סרטוט העץ עצמו: כותבים ליד כל צומת את הערך שמוחזר מהקריאה על הצומת הזה, מהעלים אל השורש.</li>
+      <li>כשהפעולה משנה את המבנה (שרשרת, תור), מסרטטים אותו מחדש אחרי כל שינוי. בשאלות כאלה מבקשים להציג את המבנה בסיום הפעולה.</li>
+      <li>שימו לב שתנאי מורכב לא תמיד מחושב עד סופו. בביטוי <code>A &amp;&amp; B</code>, כאשר <code>A</code> שקר, <code>B</code> אינו מחושב. בביטוי <code>A || B</code>, כאשר <code>A</code> אמת, <code>B</code> אינו מחושב. כאשר <code>B</code> הוא קריאה רקורסיבית שלא חושבה, לא מסרטטים לה מסגרת במעקב.</li>
+      <li>כשפעולה מחזירה ערך לפני סוף הקלט (לדוגמה: <code>return true</code> ברגע שנמצא איבר מתאים), היא לא קוראת לעצמה שוב ולכן לא מסרטטים מסגרות נוספות.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="box">
+  <h3>קריאה אחת בכל מסגרת: <code>CountEven</code> (תבנית 1) על השרשרת <span class="big-o">4 → 7 → null</span></h3>
+  <svg viewBox="0 0 678 132" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;direction:ltr" role="img"><defs>
+<marker id="a-call" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/></marker>
+<marker id="a-ret" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0b5d8a"/></marker>
+<style>.m{font-family:"JetBrains Mono",Menlo,monospace;font-size:8.8px;font-variant-ligatures:none} .h{font-family:Heebo,Arial,sans-serif;font-size:9.5px}</style></defs><rect x="4" y="14" width="192" height="78" rx="5" fill="#fff" stroke="#16202e" stroke-width="1"/><path d="M4 31 v-12 a5 5 0 0 1 5 -5 h182 a5 5 0 0 1 5 5 v12 z" fill="#16202e"/><text x="11" y="26" class="m" fill="#fff" font-weight="600">CountEven(p → 4)</text><text x="11" y="42" class="m" fill="#16202e">p == null</text><text x="189" y="42" class="m" text-anchor="end" fill="#c0392b" font-weight="700">✗</text><text x="11" y="55" class="m" fill="#16202e">rest = CountEven(p.GetNext())</text><text x="189" y="55" class="m" text-anchor="end" fill="#0b5d8a" font-weight="700">→ 0</text><text x="11" y="68" class="m" fill="#16202e">p.GetValue() % 2 == 0</text><text x="189" y="68" class="m" text-anchor="end" fill="#1d7a3a" font-weight="700">✓</text><line x1="8" y1="74" x2="192" y2="74" stroke="#cfd6e2" stroke-dasharray="3 2"/><text x="11" y="86" class="m" fill="#0b5d8a" font-weight="700">return rest + 1</text><text x="189" y="86" class="m" text-anchor="end" fill="#0b5d8a" font-weight="700">= 1</text><rect x="243" y="44" width="192" height="78" rx="5" fill="#fff" stroke="#16202e" stroke-width="1"/><path d="M243 61 v-12 a5 5 0 0 1 5 -5 h182 a5 5 0 0 1 5 5 v12 z" fill="#16202e"/><text x="250" y="56" class="m" fill="#fff" font-weight="600">CountEven(p → 7)</text><text x="250" y="72" class="m" fill="#16202e">p == null</text><text x="428" y="72" class="m" text-anchor="end" fill="#c0392b" font-weight="700">✗</text><text x="250" y="85" class="m" fill="#16202e">rest = CountEven(p.GetNext())</text><text x="428" y="85" class="m" text-anchor="end" fill="#0b5d8a" font-weight="700">→ 0</text><text x="250" y="98" class="m" fill="#16202e">p.GetValue() % 2 == 0</text><text x="428" y="98" class="m" text-anchor="end" fill="#c0392b" font-weight="700">✗</text><line x1="247" y1="104" x2="431" y2="104" stroke="#cfd6e2" stroke-dasharray="3 2"/><text x="250" y="116" class="m" fill="#0b5d8a" font-weight="700">return rest</text><text x="428" y="116" class="m" text-anchor="end" fill="#0b5d8a" font-weight="700">= 0</text><rect x="482" y="74" width="192" height="52" rx="5" fill="#fff" stroke="#16202e" stroke-width="1"/><path d="M482 91 v-12 a5 5 0 0 1 5 -5 h182 a5 5 0 0 1 5 5 v12 z" fill="#16202e"/><text x="489" y="86" class="m" fill="#fff" font-weight="600">CountEven(p = null)</text><text x="489" y="102" class="m" fill="#16202e">p == null</text><text x="667" y="102" class="m" text-anchor="end" fill="#1d7a3a" font-weight="700">✓</text><line x1="486" y1="108" x2="670" y2="108" stroke="#cfd6e2" stroke-dasharray="3 2"/><text x="489" y="120" class="m" fill="#0b5d8a" font-weight="700">return 0</text><line x1="198" y1="49" x2="241" y2="52" stroke="#c0392b" stroke-width="1.4" marker-end="url(#a-call)"/><line x1="241" y1="112" x2="198" y2="57" stroke="#0b5d8a" stroke-width="1.4" marker-end="url(#a-ret)"/><text x="228.65" y="90.25" class="m" fill="#0b5d8a" font-weight="700" font-size="10.5" paint-order="stroke" stroke="#fff" stroke-width="3.5">0</text><line x1="437" y1="79" x2="480" y2="82" stroke="#c0392b" stroke-width="1.4" marker-end="url(#a-call)"/><line x1="480" y1="116" x2="437" y2="87" stroke="#0b5d8a" stroke-width="1.4" marker-end="url(#a-ret)"/><text x="467.65" y="105.95" class="m" fill="#0b5d8a" font-weight="700" font-size="10.5" paint-order="stroke" stroke="#fff" stroke-width="3.5">0</text></svg>
+  <p class="small"><span style="color:#c0392b;font-weight:700">חץ אדום</span> יוצא מהמסגרת שמזמנת אל המסגרת החדשה. על <span style="color:#0b5d8a;font-weight:700">חץ כחול</span> רשום הערך שחוזר אל המסגרת שזימנה.</p>
+  <p class="small">המסגרת של החוליה 4 נעצרת בשורה השנייה ומחכה. רק אחרי שחזר אליה 0 היא בודקת אם 4 זוגי ומחזירה 1.</p>
+</div>
+
+<div class="box">
+  <h3>שתי קריאות בכל מסגרת: הזימון <code>F(3)</code></h3>
+  <svg viewBox="0 0 706 282" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;direction:ltr" role="img"><defs>
+<marker id="a-call" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/></marker>
+<marker id="a-ret" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0b5d8a"/></marker>
+<style>.m{font-family:"JetBrains Mono",Menlo,monospace;font-size:8.8px;font-variant-ligatures:none} .h{font-family:Heebo,Arial,sans-serif;font-size:9.5px}</style></defs><rect x="226.0" y="6" width="148" height="78" rx="5" fill="#fff" stroke="#16202e" stroke-width="1"/><path d="M226.0 23 v-12 a5 5 0 0 1 5 -5 h138 a5 5 0 0 1 5 5 v12 z" fill="#16202e"/><text x="233.0" y="18" class="m" fill="#fff" font-weight="600">F(n = 3)</text><text x="233.0" y="34" class="m" fill="#16202e">n &lt;= 1</text><text x="367.0" y="34" class="m" text-anchor="end" fill="#c0392b" font-weight="700">✗</text><text x="233.0" y="47" class="m" fill="#16202e">p1 = F(n - 1)</text><text x="367.0" y="47" class="m" text-anchor="end" fill="#0b5d8a" font-weight="700">→ 2</text><text x="233.0" y="60" class="m" fill="#16202e">p2 = F(n - 2)</text><text x="367.0" y="60" class="m" text-anchor="end" fill="#0b5d8a" font-weight="700">→ 1</text><line x1="230.0" y1="66" x2="370.0" y2="66" stroke="#cfd6e2" stroke-dasharray="3 2"/><text x="233.0" y="78" class="m" fill="#0b5d8a" font-weight="700">return p1 + p2</text><text x="367.0" y="78" class="m" text-anchor="end" fill="#0b5d8a" font-weight="700">= 3</text><rect x="96.0" y="118" width="148" height="78" rx="5" fill="#fff" stroke="#16202e" stroke-width="1"/><path d="M96.0 135 v-12 a5 5 0 0 1 5 -5 h138 a5 5 0 0 1 5 5 v12 z" fill="#16202e"/><text x="103.0" y="130" class="m" fill="#fff" font-weight="600">F(n = 2)</text><text x="103.0" y="146" class="m" fill="#16202e">n &lt;= 1</text><text x="237.0" y="146" class="m" text-anchor="end" fill="#c0392b" font-weight="700">✗</text><text x="103.0" y="159" class="m" fill="#16202e">p1 = F(n - 1)</text><text x="237.0" y="159" class="m" text-anchor="end" fill="#0b5d8a" font-weight="700">→ 1</text><text x="103.0" y="172" class="m" fill="#16202e">p2 = F(n - 2)</text><text x="237.0" y="172" class="m" text-anchor="end" fill="#0b5d8a" font-weight="700">→ 1</text><line x1="100.0" y1="178" x2="240.0" y2="178" stroke="#cfd6e2" stroke-dasharray="3 2"/><text x="103.0" y="190" class="m" fill="#0b5d8a" font-weight="700">return p1 + p2</text><text x="237.0" y="190" class="m" text-anchor="end" fill="#0b5d8a" font-weight="700">= 2</text><rect x="356.0" y="118" width="148" height="52" rx="5" fill="#fff" stroke="#16202e" stroke-width="1"/><path d="M356.0 135 v-12 a5 5 0 0 1 5 -5 h138 a5 5 0 0 1 5 5 v12 z" fill="#16202e"/><text x="363.0" y="130" class="m" fill="#fff" font-weight="600">F(n = 1)</text><text x="363.0" y="146" class="m" fill="#16202e">n &lt;= 1</text><text x="497.0" y="146" class="m" text-anchor="end" fill="#1d7a3a" font-weight="700">✓</text><line x1="360.0" y1="152" x2="500.0" y2="152" stroke="#cfd6e2" stroke-dasharray="3 2"/><text x="363.0" y="164" class="m" fill="#0b5d8a" font-weight="700">return 1</text><rect x="12.0" y="230" width="148" height="52" rx="5" fill="#fff" stroke="#16202e" stroke-width="1"/><path d="M12.0 247 v-12 a5 5 0 0 1 5 -5 h138 a5 5 0 0 1 5 5 v12 z" fill="#16202e"/><text x="19.0" y="242" class="m" fill="#fff" font-weight="600">F(n = 1)</text><text x="19.0" y="258" class="m" fill="#16202e">n &lt;= 1</text><text x="153.0" y="258" class="m" text-anchor="end" fill="#1d7a3a" font-weight="700">✓</text><line x1="16.0" y1="264" x2="156.0" y2="264" stroke="#cfd6e2" stroke-dasharray="3 2"/><text x="19.0" y="276" class="m" fill="#0b5d8a" font-weight="700">return 1</text><rect x="180.0" y="230" width="148" height="52" rx="5" fill="#fff" stroke="#16202e" stroke-width="1"/><path d="M180.0 247 v-12 a5 5 0 0 1 5 -5 h138 a5 5 0 0 1 5 5 v12 z" fill="#16202e"/><text x="187.0" y="242" class="m" fill="#fff" font-weight="600">F(n = 0)</text><text x="187.0" y="258" class="m" fill="#16202e">n &lt;= 1</text><text x="321.0" y="258" class="m" text-anchor="end" fill="#1d7a3a" font-weight="700">✓</text><line x1="184.0" y1="264" x2="324.0" y2="264" stroke="#cfd6e2" stroke-dasharray="3 2"/><text x="187.0" y="276" class="m" fill="#0b5d8a" font-weight="700">return 1</text><line x1="265" y1="85" x2="165" y2="116" stroke="#c0392b" stroke-width="1.4" marker-end="url(#a-call)"/><line x1="175" y1="116" x2="275" y2="85" stroke="#0b5d8a" stroke-width="1.4" marker-end="url(#a-ret)"/><text x="227.0" y="105.05" class="m" fill="#0b5d8a" font-weight="700" font-size="10.5" paint-order="stroke" stroke="#fff" stroke-width="3.5">2</text><line x1="325" y1="85" x2="425" y2="116" stroke="#c0392b" stroke-width="1.4" marker-end="url(#a-call)"/><line x1="435" y1="116" x2="335" y2="85" stroke="#0b5d8a" stroke-width="1.4" marker-end="url(#a-ret)"/><text x="397.0" y="105.05" class="m" fill="#0b5d8a" font-weight="700" font-size="10.5" paint-order="stroke" stroke="#fff" stroke-width="3.5">1</text><line x1="135" y1="197" x2="81" y2="228" stroke="#c0392b" stroke-width="1.4" marker-end="url(#a-call)"/><line x1="91" y1="228" x2="145" y2="197" stroke="#0b5d8a" stroke-width="1.4" marker-end="url(#a-ret)"/><text x="122.3" y="217.05" class="m" fill="#0b5d8a" font-weight="700" font-size="10.5" paint-order="stroke" stroke="#fff" stroke-width="3.5">1</text><line x1="195" y1="197" x2="249" y2="228" stroke="#c0392b" stroke-width="1.4" marker-end="url(#a-call)"/><line x1="259" y1="228" x2="205" y2="197" stroke="#0b5d8a" stroke-width="1.4" marker-end="url(#a-ret)"/><text x="241.7" y="217.05" class="m" fill="#0b5d8a" font-weight="700" font-size="10.5" paint-order="stroke" stroke="#fff" stroke-width="3.5">1</text><rect x="512" y="136" width="186" height="103" rx="4" fill="#f4f6f9" stroke="#cfd6e2"/><text x="520" y="150" class="m" fill="#16202e" xml:space="preserve">public static int F(int n)</text><text x="520" y="163" class="m" fill="#16202e" xml:space="preserve">{</text><text x="520" y="176" class="m" fill="#16202e" xml:space="preserve">    if (n &lt;= 1) return 1;</text><text x="520" y="189" class="m" fill="#16202e" xml:space="preserve">    int p1 = F(n - 1);</text><text x="520" y="202" class="m" fill="#16202e" xml:space="preserve">    int p2 = F(n - 2);</text><text x="520" y="215" class="m" fill="#16202e" xml:space="preserve">    return p1 + p2;</text><text x="520" y="228" class="m" fill="#16202e" xml:space="preserve">}</text><text x="512" y="20" class="m" fill="#55627a">F(3) = 3</text></svg>
+  <p class="small"><span style="color:#c0392b;font-weight:700">חץ אדום</span> יוצא מהמסגרת שמזמנת אל המסגרת החדשה. על <span style="color:#0b5d8a;font-weight:700">חץ כחול</span> רשום הערך שחוזר אל המסגרת שזימנה.</p>
+  <p class="small">סדר הביצוע: <span class="big-o">F(3)</span>, <span class="big-o">F(2)</span>, <span class="big-o">F(1)</span>, <span class="big-o">F(0)</span> ורק אז <span class="big-o">F(1)</span> הימנית. הקריאה <span class="big-o">F(1)</span> מופיעה פעמיים בעץ ומחושבת פעמיים.</p>
+</div>
+
+<h2>סיבוכיות זמן הריצה של פעולה רקורסיבית</h2>
+
+<div class="box key">
+  <p><strong>זמן הריצה = מספר הקריאות × העבודה שנעשית בכל קריאה.</strong> סופרים קודם כמה קריאות יהיו ואחר כך בודקים מה נעשה בכל קריאה חוץ מהקריאה הרקורסיבית עצמה: מספר קבוע של צעדים, לולאה או זימון של פעולה אחרת.</p>
+</div>
+
+<table>
+  <tr><th>מה רואים בקוד</th><th>מספר הקריאות</th><th>העבודה בכל קריאה</th><th>סיבוכיות</th></tr>
+  <tr><td>קריאה אחת, הקלט קטן ב־1 (חוליה אחת, <code>n - 1</code>)</td><td>n</td><td>קבועה</td><td><span class="big-o">O(n)</span></td></tr>
+  <tr><td>קריאה אחת, הקלט קטן ב־1 ובכל קריאה יש לולאה או פעולת עזר שעוברת על הקלט</td><td>n</td><td>עד n</td><td><span class="big-o">O(n²)</span></td></tr>
+  <tr><td>קריאה אחת, הקלט קטן בחצי (<code>n / 2</code>)</td><td>log n</td><td>קבועה</td><td><span class="big-o">O(log n)</span></td></tr>
+  <tr><td>קריאה אחת על <code>n / 10</code> (עוברים על ספרות המספר)</td><td>מספר הספרות</td><td>קבועה</td><td><span class="big-o">O(log n)</span></td></tr>
+  <tr><td>שתי קריאות, כל אחת על קלט שקטן ב־1</td><td>כ־2ⁿ</td><td>קבועה</td><td><span class="big-o">O(2ⁿ)</span></td></tr>
+  <tr><td>עץ בינארי: קריאה על תת־העץ השמאלי וקריאה על הימני</td><td>כמספר הצמתים</td><td>קבועה</td><td><span class="big-o">O(n)</span></td></tr>
+  <tr><td>עץ בינארי שבו מזמנים בכל צומת פעולה שסורקת את כל תת־העץ שלו</td><td>כמספר הצמתים</td><td>עד n</td><td><span class="big-o">O(n²)</span> במקרה הגרוע</td></tr>
+</table>
+
+<div class="grid2">
+  <div class="box">
+    <h3>איך מנסחים תשובה על סיבוכיות</h3>
+    <ol>
+      <li>מגדירים את n: "נסמן ב־n את מספר החוליות בשרשרת". כשיש שני מבנים, כל אחד מקבל אות משלו: n ו־m.</li>
+      <li>כותבים כמה קריאות מתבצעות ומה נעשה בכל אחת.</li>
+      <li>כותבים את התוצאה. אם היא תלויה גם במבנה הקלט ולא רק בגודלו, מציינים שמדובר במקרה הגרוע.</li>
+    </ol>
+    <p class="small">בעץ, המקרה הגרוע לפעולה שיורדת במסלול אחד הוא עץ שבו לכל צומת בן יחיד, כי אז המסלול עובר בכל n הצמתים.</p>
+  </div>
+  <div class="box warn">
+    <h3>אותה קריאה פעמיים</h3>
+    <p>כשאותה קריאה רקורסיבית כתובה בקוד פעמיים, היא מתבצעת פעמיים יחד עם כל הקריאות שהיא פותחת. זה קורה שוב בכל אחת מהקריאות האלה ולכן הסיבוכיות יכולה לעלות מ־<span class="big-o">O(n)</span> ל־<span class="big-o">O(2ⁿ)</span>.</p>
+<pre>if (Height(t.GetLeft()) &gt; Height(t.GetRight()))
+    return Height(t.GetLeft()) + 1;   <span class="c">// <span dir="rtl">אותה קריאה</span></span></pre>
+    <p>כשכותבים פעולה, שומרים את התוצאה במשתנה ומשתמשים בו. כשמנתחים קוד נתון, בודקים אם אותה קריאה מופיעה בו פעמיים.</p>
+  </div>
+</div>
+
+<h2 class="exam">מה חוזר בשאלות הרקורסיה בבגרות</h2>
+
+<div class="box exam">
+  <p>שאלות הרקורסיה בבגרות דומות זו לזו כמעט תמיד. אלה הדברים שחוזרים בהן:</p>
+  <ul>
+    <li><strong>הקוד נתון.</strong> בשאלה אופיינית לא מבקשים לכתוב פעולה רקורסיבית, אלא לעקוב אחרי פעולה נתונה ולהסביר מה היא עושה. שמות הפעולות אינם רומזים על תפקידן (<code>What</code>, <code>Foo</code>, <code>Sod1</code>, <code>Secret</code>). בשאלות על עץ בינארי, לעומת זאת, מבקשים בדרך כלל לכתוב פעולה וכותבים אותה ברקורסיה.</li>
+    <li><strong>יש שתי פעולות והשנייה מזמנת את הראשונה.</strong> סעיף א עוסק בפעולה הראשונה. בסעיף ב נכתב לעיתים קרובות שאין צורך לעקוב אחרי הפעולה הראשונה.</li>
+    <li><strong>יש שני סוגים של פעולות.</strong> בחלק מהשאלות החישוב העיקרי נעשה אחרי שהקריאה הרקורסיבית חזרה (תבניות 1, 4 ו־5). בשאלות אחרות הפעולה היא בדיקה שמחזירה תשובה ברגע שהיא ידועה (תבנית 2).</li>
+    <li><strong>סוג הקלט משתנה משאלה לשאלה.</strong> הקלט יכול להיות עץ בינארי, שרשרת חוליות, תור, מערך או מספר שעוברים על ספרותיו.</li>
+  </ul>
+</div>
+
+<div class="grid2">
+  <div class="box exam">
+    <h3>מה עושים כשנכתב "אין צורך לעקוב"</h3>
+    <p>בסעיף א כבר הבנתם מה הפעולה הראשונה עושה. בסעיף ב, בכל מקום שבו היא מזומנת, רושמים מיד את התוצאה שלה לפי מה שהבנתם ולא עוקבים אחריה שוב.</p>
+    <p><strong>לדוגמה:</strong> נניח שבסעיף א מצאתם ש־<code>What(lst, x)</code> מוחקת מהשרשרת את כל החוליות שערכן x. הפעולה <code>Guess</code> עוברת על השרשרת. לכל חוליה היא מזמנת את <code>What</code> על החוליות שאחריה, עם הערך של החוליה הזאת. לכן <code>Guess</code> מוחקת ערכים כפולים ומשאירה מכל ערך את המופע הראשון.</p>
+  </div>
+  <div class="box exam">
+    <h3>הסיבוכיות של הפעולה השנייה</h3>
+    <p>כששואלים על סיבוכיות, הפעולה השנייה מזמנת בדרך כלל את הראשונה בכל קריאה והראשונה עוברת על כל המבנה. במקרה כזה מכפילים: יש n קריאות ובכל אחת מהן עבודה של עד n.</p>
+    <p><strong>בדוגמה של <code>What</code> ו־<code>Guess</code> שבתיבה הסמוכה:</strong> הסיבוכיות של <code>What</code> היא <span class="big-o">O(n)</span> כי היא מבצעת קריאה אחת לכל חוליה. <code>Guess</code> מזמנת את <code>What</code> פעם אחת לכל חוליה ולכן הסיבוכיות שלה היא <span class="big-o">O(n²)</span>.</p>
+    <p class="small">יש שאלות על תור שבהן מספר האיברים בתור אינו משתנה ורק פרמטר מספרי קטן מקריאה לקריאה. נניח שהפרמטר מתחיל במספר האיברים n וקטן ב־1 בכל קריאה. אם בכל קריאה פעולת עזר סורקת את כל התור, יש עד n קריאות שבכל אחת מהן עבודה של n והתוצאה היא <span class="big-o">O(n²)</span> במקרה הגרוע. כשפעולה משווה כל צומת של עץ שבו n צמתים לכל הצמתים של עץ שבו m צמתים, התוצאה היא <span class="big-o">O(n·m)</span>.</p>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="box exam">
+    <h3>"מה עושה הפעולה?"</h3>
+    <p>התשובה היא משפט אחד שנכון לכל קלט ולא תיאור של שורות הקוד. כך עונים גם כששואלים "מהי מטרת הפעולה?".</p>
+    <ul>
+      <li>תשובה לא טובה: "הפעולה בודקת אם הגענו לסוף השרשרת ואם לא, היא קוראת לעצמה...".</li>
+      <li>תשובה טובה: "הפעולה מחזירה את מספר החוליות שערכן זוגי".</li>
+      <li>בפעולה שמחזירה אמת או שקר כותבים מתי מוחזר <code>true</code>. לדוגמה: "הפעולה מחזירה true כאשר x נמצא במערך, אחרת false".</li>
+    </ul>
+    <p>כדי להגיע למשפט הזה שואלים: מה כל איבר מוסיף לתוצאה? איך מחברים את מה שחזר מהקריאות (סכום, מקסימום, "וגם", "או")? אם המעקב שנדרש בשאלה לא מספיק כדי להבין, עוקבים אחרי הפעולה על קלט קטן נוסף ובודקים שהמשפט מתאים גם לו.</p>
+    <p class="small">כשבשאלה נכתבה הנחה על הקלט (לדוגמה: "התור ממוין בסדר עולה"), המשפט מתאר מה הפעולה עושה כשהקלט מקיים את ההנחה.</p>
+  </div>
+  <div class="box exam">
+    <h3>סעיפים של חשיבה הפוכה</h3>
+    <p>יש סעיפים שבהם נותנים את התוצאה ומבקשים את הקלט:</p>
+    <ul>
+      <li>"הבא דוגמה למספר בעל 3 ספרות שעבורו זימון הפעולה יחזיר ערך שונה" (שונה מהערך שהתקבל במעקב).</li>
+      <li>"כתבו זימון נוסף שעבורו יוחזר הערך 50".</li>
+      <li>"בעבור עץ שיש לו 6 צמתים, מהו המספר הכי גבוה שהפעולה יכולה להחזיר? הציגו את העץ".</li>
+    </ul>
+    <p>מתחילים מהמשפט שכתבתם בתשובה ל"מה עושה הפעולה". לפיו מחליטים אילו איברים מגדילים את התוצאה ואילו מקטינים אותה ובונים קלט קטן. בסוף עוקבים אחרי הפעולה עם הקלט שבניתם ומוודאים שמתקבל הערך המבוקש. יש שאלות שבהן מבקשים להראות את המעקב הזה בתשובה.</p>
+  </div>
+</div>
+
+<div class="box exam">
+  <h3>מה צריך לבדוק בקוד הנתון לפני שמתחילים לעקוב</h3>
+  <ul>
+    <li><strong>איזה פרמטר מתקרב לתנאי העצירה.</strong> זה לא תמיד מבנה הנתונים. יש שאלות שבהן התור נשאר שלם ורק המספר <code>n</code> קטן. בשאלות אחרות המערך אינו משתנה והאינדקס <code>i</code> יורד מהתא האחרון.</li>
+    <li><strong>מהו תנאי העצירה שכתוב בקוד.</strong> פעולה על עץ יכולה להיעצר בעלה ולא בעץ ריק. שתי פעולות באותה שאלה יכולות להיעצר במקומות שונים: אחת כאשר <code>i == -1</code> והשנייה כאשר <code>i == 0</code>.</li>
+    <li><strong>האם הפעולה יכולה להחזיר תשובה לפני סוף הקלט.</strong> כשזה קורה במעקב, לא מסרטטים מסגרות נוספות מתחת לקריאה שהחזירה את התשובה.</li>
+    <li><strong>האם הפעולה משנה את המבנה.</strong> יש שאלות שבהן כל קריאה מעבירה איבר מראש התור לסופו ושואלים איך נראה התור בסיום. כשהפעולה מוחקת חוליות, מבקשים להציג את השרשרת אחרי המחיקה.</li>
+  </ul>
+  <p class="small">בפעולה שמעבירה איברים מראש התור לסופו ייתכן שישאלו מה יקרה אם תנאי העצירה יוחלף ב־<code>q.IsEmpty()</code>. התור אינו מתרוקן, כי כל קריאה מוציאה איבר ומכניסה אותו בחזרה. לכן הפעולה קוראת לעצמה בלי סוף והתוכנית נעצרת בשגיאת זמן ריצה.</p>
+</div>
+
+
+<h2>טעויות נפוצות</h2>
+<p style="break-after:avoid">כל שורה כאן מתארת טעות שתלמידים עושים ולא הנחיה.</p>
+
+<div class="grid2">
+  <div class="box warn">
+    <h3>בכתיבה</h3>
+    <ul>
+      <li>שוכחים <code>return</code> לפני הקריאה הרקורסיבית ולכן הערך שחזר הולך לאיבוד.</li>
+      <li>פונים ל־<code>p.GetValue()</code> או ל־<code>t.GetLeft()</code> לפני שבודקים ש־<code>p</code> או <code>t</code> אינו <code>null</code>. במערך פונים ל־<code>a[i]</code> לפני שבודקים שהאינדקס <code>i</code> בתחום.</li>
+      <li>קוראים לפעולה על אותו קלט בלי להקטין אותו ולכן הרקורסיה לא נעצרת.</li>
+      <li>מחזירים ערך לא מתאים בתנאי העצירה. הערך המתאים הוא 0 לסכום ולספירה, 1 למכפלה, <code>true</code> לבדיקה אם כל האיברים מתאימים ו־<code>false</code> לבדיקה אם קיים איבר מתאים.</li>
+      <li>בפעולה שמחזירה חוליה (תבנית 5) שוכחים את <code>SetNext</code> ולכן השינוי לא נשמר בשרשרת.</li>
+    </ul>
+  </div>
+  <div class="box warn">
+    <h3>במעקב</h3>
+    <ul>
+      <li>מחשבים את הערך המוחזר בדרך למטה, לפני שהקריאה שמתחת חזרה.</li>
+      <li>מתבלבלים בין מה שמתבצע לפני הקריאה ובין מה שמתבצע אחריה (תבנית 3).</li>
+      <li>ממשיכים לרשום קריאות אחרי שהפעולה כבר החזירה תשובה באמצע הקלט.</li>
+      <li>מניחים שתנאי העצירה הוא התנאי המקובל (קלט ריק) בלי לקרוא את התנאי שכתוב בקוד.</li>
+      <li>שוכחים שפרמטר מטיפוס <code>int</code> מועתק בכל קריאה. שינוי שלו בקריאה אחת אינו משפיע על הקריאה שזימנה אותה. לעומת זאת שרשרת, עץ ותור משותפים לכל הקריאות ושינוי בהם נשאר.</li>
+      <li>עוקבים שוב אחרי הפעולה הראשונה בסעיף שבו נכתב שאין צורך בכך ומבזבזים זמן.</li>
+    </ul>
+  </div>
+</div>
+
+</main>
+</body>
+</html>

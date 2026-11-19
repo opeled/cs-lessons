@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>דף עזר: שרשרת חוליות</title>
+<link rel="stylesheet" href="sheets.css">
+<style>
+  svg.chain { display: block; width: 100%; height: auto; direction: ltr; margin: 0 0 1.5mm; }
+  svg.chain rect { fill: #fff; stroke: var(--ink); stroke-width: .8; }
+  svg.chain text { font-family: "JetBrains Mono", Menlo, monospace; font-size: 9px; fill: var(--ink); }
+  svg.chain text.lbl { font-weight: 600; fill: var(--accent); }
+  svg.chain circle { fill: var(--ink); }
+  svg.chain .ar { stroke: var(--ink); stroke-width: .9; fill: none; }
+  svg.chain .new { stroke: var(--accent); stroke-width: 1.3; fill: none; }
+  svg.chain .old { stroke: #9aa5b5; stroke-width: .9; stroke-dasharray: 3 2; fill: none; }
+  svg.chain .gone rect { stroke: #9aa5b5; stroke-dasharray: 3 2; }
+  svg.chain .gone text { fill: #9aa5b5; }
+  svg.chain .gone circle { fill: #9aa5b5; }
+  svg.chain marker path { fill: var(--ink); }
+  svg.chain marker.mnew path { fill: var(--accent); }
+  svg.chain marker.mold path { fill: #9aa5b5; }
+  table.dates { font-size: 8.5pt; }
+  table.dates td, table.dates th { padding: .55mm 1.6mm; }
+  td.nw { white-space: nowrap; }
+  .stack > .box:last-child { margin-bottom: 0; }
+</style>
+<style id="tight">
+  /* slightly tighter spacing so the last page is not left almost empty */
+  body { line-height: 1.4; }
+  .box { padding: 2mm 2.6mm; margin-bottom: 2.3mm; }
+  .grid2 { gap: 2.3mm; margin-bottom: 2.3mm; }
+  h2 { margin: 4mm 0 1.6mm; }
+  p, ul, ol { margin-bottom: 1.4mm; }
+  pre { margin-bottom: 1.5mm; padding: 1.6mm 2.2mm; }
+  th, td { padding: 1mm 1.8mm; }
+</style>
+</head>
+<body>
+<nav class="site-nav"><a href="./">→ לכל דפי העזר</a><a href="pdf/03-linked-list.pdf" download="03-שרשרת חוליות.pdf">הורדת PDF להדפסה</a></nav>
+<main>
+
+<header class="sheet">
+  <h1>שרשרת חוליות</h1>
+  <div class="meta">דף עזר לבגרות במדעי המחשב, שאלון 899271<br>הקוד בשפת C#</div>
+</header>
+
+<h2>איך חושבים על שרשרת חוליות</h2>
+
+<div class="box key">
+  <p>משתנה מטיפוס <code>Node&lt;int&gt;</code> אינו מכיל חוליה. הוא מכיל הפניה לחוליה. בסרטוט הוא מופיע כחץ שמפנה אל החוליה. אל השרשרת כולה מגיעים רק דרך ההפניה לחוליה הראשונה שלה. החוליה הראשונה נקראת ראש השרשרת. לפני שכותבים קוד מסרטטים שרשרת קטנה עם ההפניות ועונים על שלוש שאלות:</p>
+  <ol class="steps">
+    <li><strong>האם ההוראה משנה את השרשרת?</strong> ההוראה <code>p = p.GetNext()</code> מזיזה רק את ההפניה <code>p</code> והשרשרת נשארת כפי שהייתה. רק <code>SetNext</code> ו־<code>SetValue</code> משנות את השרשרת עצמה.</li>
+    <li><strong>האם ההפניה יכולה להיות <code>null</code>?</strong> לפני כל <code>p.GetValue()</code> ולפני כל <code>p.GetNext()</code> מוודאים ש־<code>p</code> אינה <code>null</code>. בודקים את הקוד על שרשרת ריקה, על שרשרת בת חוליה אחת ועל המצב שבו ההפניה מגיעה לחוליה האחרונה.</li>
+    <li><strong>האם החוליה הראשונה יכולה להתחלף?</strong> אם כן, הפעולה חייבת להחזיר את ההפניה לחוליה הראשונה החדשה.</li>
+  </ol>
+</div>
+
+<div class="grid2">
+  <div>
+    <svg class="chain" viewBox="0 0 330 64" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="mA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker></defs>
+      <text class="lbl" x="6" y="23">lst</text>
+      <line class="ar" x1="30" y1="20" x2="53" y2="20" marker-end="url(#mA)"/>
+      <rect x="56" y="10" width="30" height="20"/><rect x="86" y="10" width="16" height="20"/><text x="71" y="23" text-anchor="middle">4</text><circle cx="94" cy="20" r="1.8"/>
+      <line class="ar" x1="94" y1="20" x2="131" y2="20" marker-end="url(#mA)"/>
+      <rect x="134" y="10" width="30" height="20"/><rect x="164" y="10" width="16" height="20"/><text x="149" y="23" text-anchor="middle">7</text><circle cx="172" cy="20" r="1.8"/>
+      <line class="ar" x1="172" y1="20" x2="209" y2="20" marker-end="url(#mA)"/>
+      <rect x="212" y="10" width="30" height="20"/><rect x="242" y="10" width="16" height="20"/><text x="227" y="23" text-anchor="middle">6</text><circle cx="250" cy="20" r="1.8"/>
+      <line class="ar" x1="250" y1="20" x2="283" y2="20" marker-end="url(#mA)"/>
+      <text x="287" y="23">null</text>
+      <text class="lbl" x="149" y="60" text-anchor="middle">p</text>
+      <line class="ar" x1="149" y1="50" x2="149" y2="33" marker-end="url(#mA)"/>
+    </svg>
+    <p class="small">בסרטוט <code>p</code> מפנה לחוליה השנייה. <code>p.GetValue()</code> הוא 7 ו־<code>p.GetNext()</code> היא החוליה שערכה 6. כשהשרשרת ריקה, ההפניה אליה היא <code>null</code>.</p>
+    <p>כל חוליה היא גם ראש של השרשרת שמתחילה בה. לכן אפשר להעביר את <code>p</code> או את <code>p.GetNext()</code> לפעולה שמקבלת שרשרת והפעולה תטפל רק בחוליה שקיבלה ובחוליות שאחריה.</p>
+  </div>
+  <div>
+    <table>
+      <tr><th>הפעולה</th><th>מה מתקבל</th></tr>
+      <tr><td class="ltr"><code>new Node&lt;int&gt;(x)</code></td><td>חוליה חדשה שערכה x</td></tr>
+      <tr><td class="ltr"><code>new Node&lt;int&gt;(x, q)</code></td><td>חוליה חדשה שערכה x ואחריה q</td></tr>
+      <tr><td class="ltr"><code>p.GetValue()</code></td><td>הערך שבחוליה</td></tr>
+      <tr><td class="ltr"><code>p.GetNext()</code></td><td>החוליה הבאה או <code>null</code></td></tr>
+      <tr><td class="ltr"><code>p.SetValue(x)</code></td><td>הערך שבחוליה משתנה ל־x</td></tr>
+      <tr><td class="ltr"><code>p.SetNext(q)</code></td><td>החוליה שאחרי p היא מעכשיו q</td></tr>
+      <tr><td class="ltr"><code>p.HasNext()</code></td><td><code>true</code> אם יש חוליה אחרי p</td></tr>
+    </table>
+  </div>
+</div>
+
+<h2>סריקה של שרשרת</h2>
+
+<div class="grid2">
+  <div class="box">
+    <h3>מעבר על כל החוליות</h3>
+<pre>public static int Sum(Node&lt;int&gt; lst)
+{
+    int sum = 0;
+    Node&lt;int&gt; p = lst;
+    while (p != null)
+    {
+        sum += p.GetValue();
+        p = p.GetNext();
+    }
+    return sum;
+}</pre>
+    <p>באותו מבנה של לולאה סופרים חוליות ומחפשים מקסימום. את המקסימום מאתחלים בערך של החוליה הראשונה ולא ב־0, כי ייתכנו ערכים שליליים.</p>
+  </div>
+  <div class="box">
+    <h3>חיפוש שמחזיר הפניה לחוליה</h3>
+<pre>public static Node&lt;int&gt; Find(Node&lt;int&gt; lst,
+                             int x)
+{
+    Node&lt;int&gt; p = lst;
+    while (p != null &amp;&amp; p.GetValue() != x)
+        p = p.GetNext();
+    return p;
+}</pre>
+    <p>בתנאי הלולאה בודקים קודם <code>p != null</code> ורק אחר כך פונים ל־<code>p.GetValue()</code>. כאשר x אינו בשרשרת, הפעולה מחזירה <code>null</code>. אם הפעולה צריכה להחזיר <code>bool</code>, כותבים בסופה <code>return p != null;</code></p>
+  </div>
+</div>
+
+<table>
+  <tr><th>מה רוצים לעשות</th><th>תנאי הלולאה</th><th>הערה</th></tr>
+  <tr><td>לעבור על כל החוליות</td><td class="ltr"><code>p != null</code></td><td>אחרי הלולאה <code>p</code> היא <code>null</code></td></tr>
+  <tr><td>לעצור על החוליה האחרונה</td><td class="ltr"><code>p.GetNext() != null</code></td><td>כך מגיעים לחוליה האחרונה כשרוצים לחבר אחריה חוליה. בשרשרת ריקה התנאי הזה גורם לשגיאה, כי <code>p</code> היא <code>null</code></td></tr>
+  <tr><td>לבדוק את החוליה שאחרי <code>p</code></td><td class="ltr"><code>p != null &amp;&amp; p.GetNext() != null</code></td><td>התנאי מתאים כשמשווים חוליה לחוליה הבאה או מוחקים את החוליה הבאה</td></tr>
+</table>
+
+<p>כשצריך להגיע לחלק מסוים של השרשרת (לחצי השני או לשלוש החוליות האחרונות), סופרים קודם את החוליות בסריקה אחת. אחר כך מחשבים מהספירה כמה חוליות יש לפני החלק הזה, מסמנים את המספר ב־k ומתקדמים מראש השרשרת k חוליות: <code>for (int i = 0; i &lt; k; i++) p = p.GetNext();</code></p>
+
+<h2>הכנסה ומחיקה של חוליות</h2>
+
+<div class="grid2">
+  <div class="box">
+    <h3>הכנסת חוליה אחרי החוליה p</h3>
+    <svg class="chain" viewBox="0 0 330 90" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="mB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker>
+        <marker id="mBn" class="mnew" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker>
+        <marker id="mBo" class="mold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker>
+      </defs>
+      <text class="lbl" x="71" y="11" text-anchor="middle">p</text>
+      <line class="ar" x1="71" y1="13" x2="71" y2="20" marker-end="url(#mB)"/>
+      <rect x="56" y="22" width="30" height="20"/><rect x="86" y="22" width="16" height="20"/><text x="71" y="35" text-anchor="middle">4</text><circle cx="94" cy="32" r="1.8"/>
+      <line class="old" x1="96" y1="32" x2="187" y2="32" marker-end="url(#mBo)"/>
+      <rect x="190" y="22" width="30" height="20"/><rect x="220" y="22" width="16" height="20"/><text x="205" y="35" text-anchor="middle">7</text><circle cx="228" cy="32" r="1.8"/>
+      <line class="ar" x1="228" y1="32" x2="261" y2="32" marker-end="url(#mB)"/>
+      <text x="265" y="35">null</text>
+      <text class="lbl" x="97" y="77" text-anchor="middle">q</text>
+      <line class="ar" x1="103" y1="74" x2="115" y2="74" marker-end="url(#mB)"/>
+      <rect x="118" y="64" width="30" height="20"/><rect x="148" y="64" width="16" height="20"/><text x="133" y="77" text-anchor="middle">5</text><circle cx="156" cy="74" r="1.8"/>
+      <line class="new" x1="156" y1="74" x2="200" y2="45" marker-end="url(#mBn)"/>
+      <text class="lbl" x="186" y="68">1</text>
+      <line class="new" x1="94" y1="33" x2="125" y2="62" marker-end="url(#mBn)"/>
+      <text class="lbl" x="97" y="55">2</text>
+    </svg>
+<pre>Node&lt;int&gt; q = new Node&lt;int&gt;(x);
+q.SetNext(p.GetNext());   <span class="c">// 1</span>
+p.SetNext(q);             <span class="c">// 2</span></pre>
+    <p>סדר השורות חשוב. אם מבצעים קודם את שורה 2, ההפניה להמשך השרשרת אובדת. אפשר לכתוב גם בשורה אחת: <code>p.SetNext(new Node&lt;int&gt;(x, p.GetNext()));</code></p>
+  </div>
+  <div class="box">
+    <h3>מחיקת החוליה שאחרי p</h3>
+    <svg class="chain" viewBox="0 0 330 60" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="mC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker>
+        <marker id="mCn" class="mnew" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker>
+        <marker id="mCo" class="mold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker>
+      </defs>
+      <text class="lbl" x="66" y="20" text-anchor="middle">p</text>
+      <line class="ar" x1="66" y1="22" x2="66" y2="30" marker-end="url(#mC)"/>
+      <rect x="56" y="32" width="30" height="20"/><rect x="86" y="32" width="16" height="20"/><text x="71" y="45" text-anchor="middle">4</text><circle cx="94" cy="42" r="1.8"/>
+      <line class="old" x1="96" y1="42" x2="131" y2="42" marker-end="url(#mCo)"/>
+      <g class="gone"><rect x="134" y="32" width="30" height="20"/><rect x="164" y="32" width="16" height="20"/><text x="149" y="45" text-anchor="middle">7</text><circle cx="172" cy="42" r="1.8"/></g>
+      <line class="old" x1="172" y1="42" x2="209" y2="42" marker-end="url(#mCo)"/>
+      <rect x="212" y="32" width="30" height="20"/><rect x="242" y="32" width="16" height="20"/><text x="227" y="45" text-anchor="middle">6</text><circle cx="250" cy="42" r="1.8"/>
+      <line class="ar" x1="250" y1="42" x2="283" y2="42" marker-end="url(#mC)"/>
+      <text x="287" y="45">null</text>
+      <path class="new" d="M94,40 C 118,2 198,2 225,30" marker-end="url(#mCn)"/>
+    </svg>
+<pre>p.SetNext(p.GetNext().GetNext());</pre>
+    <p>כדי למחוק חוליה צריך הפניה לחוליה שלפניה. לכן עוצרים חוליה אחת לפני החוליה שרוצים למחוק ובודקים את <code>p.GetNext().GetValue()</code>. את הוראת המחיקה מותר לבצע רק כאשר <code>p.GetNext()</code> אינה <code>null</code>. לחוליה הראשונה אין חוליה קודמת ולכן מוחקים אותה כך: <code>lst = lst.GetNext();</code></p>
+  </div>
+</div>
+
+<div class="box key">
+  <h3>מתי החוליה הראשונה מתחלפת ומה עושים אז</h3>
+  <p>פעולה שמקבלת את <code>lst</code> מקבלת עותק של ההפניה. השמה ל־<code>lst</code> בתוך הפעולה אינה משנה את המשתנה של מי שזימן אותה. החוליה הראשונה יכולה להתחלף בהכנסה בתחילת השרשרת, במחיקת החוליה הראשונה, בהכנסה לשרשרת ממוינת ובהעברת חוליות מסוף השרשרת לתחילתה. פעולה שעלולה להחליף את החוליה הראשונה מחזירה <code>Node&lt;int&gt;</code> והזימון שלה נכתב כך: <code>lst = RemoveAll(lst, x);</code></p>
+  <p>כאשר השרשרת היא תכונה של מחלקה והפעולה היא פעולה פנימית של המחלקה, מעדכנים את התכונה עצמה: <code>this.lst = this.lst.GetNext();</code></p>
+  <p>כשמפצלים שרשרת לשתיים אחרי החוליה <code>cut</code>, שומרים קודם את ההפניה לחוליות שאחריה ורק אחר כך מנתקים: <code>Node&lt;int&gt; rest = cut.GetNext(); cut.SetNext(null);</code></p>
+</div>
+
+<div class="grid2">
+  <div class="box">
+    <h3>מחיקת כל החוליות שערכן x</h3>
+<pre>public static Node&lt;int&gt; RemoveAll(
+                    Node&lt;int&gt; lst, int x)
+{
+    while (lst != null &amp;&amp; lst.GetValue() == x)
+        lst = lst.GetNext();
+    Node&lt;int&gt; p = lst;
+    while (p != null &amp;&amp; p.GetNext() != null)
+    {
+        if (p.GetNext().GetValue() == x)
+            p.SetNext(p.GetNext().GetNext());
+        else
+            p = p.GetNext();
+    }
+    return lst;
+}</pre>
+    <p>הלולאה הראשונה מוחקת את החוליות שערכן x בתחילת השרשרת. בלולאה השנייה לא מתקדמים אחרי מחיקה, כי גם החוליה הבאה עלולה להכיל את x.</p>
+  </div>
+  <div class="box">
+    <h3>הכנסה לשרשרת ממוינת בסדר עולה</h3>
+<pre>public static Node&lt;int&gt; InsertSorted(
+                    Node&lt;int&gt; lst, int x)
+{
+    if (lst == null || x &lt;= lst.GetValue())
+        return new Node&lt;int&gt;(x, lst);
+    Node&lt;int&gt; p = lst;
+    while (p.GetNext() != null
+           &amp;&amp; p.GetNext().GetValue() &lt; x)
+        p = p.GetNext();
+    p.SetNext(new Node&lt;int&gt;(x, p.GetNext()));
+    return lst;
+}</pre>
+    <p>בודקים את הקוד על ארבעה מקרים: שרשרת ריקה, הכנסה לפני החוליה הראשונה, הכנסה באמצע והכנסה אחרי החוליה האחרונה. הלולאה עוצרת על החוליה האחרונה שערכה קטן מ־x.</p>
+  </div>
+</div>
+
+<h2>בניית שרשרת חדשה</h2>
+
+<div class="grid2">
+  <div class="box">
+    <h3>כשהסדר אינו חשוב: הכנסה בתחילת השרשרת</h3>
+<pre>Node&lt;int&gt; result = null;
+Node&lt;int&gt; p = lst;
+while (p != null)
+{
+    if (p.GetValue() % 2 == 0)
+        result = new Node&lt;int&gt;(p.GetValue(),
+                               result);
+    p = p.GetNext();
+}
+return result;</pre>
+    <p>הקוד בונה שרשרת חדשה מהערכים הזוגיים של <code>lst</code>. הערכים מתקבלים בסדר הפוך לסדר שבו נסרקו. כאשר כל ערך צריך להופיע פעם אחת, בודקים לפני ההכנסה בעזרת פעולת חיפוש שהערך עדיין לא נמצא ב־<code>result</code>.</p>
+  </div>
+  <div class="box">
+    <h3>כשצריך לשמור על הסדר: הפניה לחוליה האחרונה</h3>
+<pre>Node&lt;int&gt; first = null, last = null;
+Node&lt;int&gt; p = lst;
+while (p != null)
+{
+    if (p.GetValue() % 2 == 0)
+    {
+        Node&lt;int&gt; q = new Node&lt;int&gt;(p.GetValue());
+        if (first == null)
+            first = q;
+        else
+            last.SetNext(q);
+        last = q;
+    }
+    p = p.GetNext();
+}
+return first;</pre>
+    <p>גם כאן נבנית שרשרת של הערכים הזוגיים, הפעם בסדר המקורי. <code>last</code> מפנה תמיד לחוליה האחרונה שהוכנסה ולכן כל הכנסה מתבצעת בזמן <span class="big-o">O(1)</span>.</p>
+    <p><strong>חוליית דמה.</strong> יש שאלות שבהן הקוד יוצר בהתחלה חוליה שהערך שלה אינו חשוב (זו חוליית הדמה), מחבר אחריה את החוליות ומחזיר בסוף את החוליה שאחרי חוליית הדמה.</p>
+  </div>
+</div>
+
+<h2>שתי שרשראות ושרשרת של עצמים</h2>
+
+<div class="grid2">
+  <div class="stack">
+  <div class="box">
+    <h3>בדיקה שחוזרים עליה מכל חוליה</h3>
+<pre>Node&lt;int&gt; start = lst2;
+while (start != null)
+{
+    if (Check(lst1, start))
+        return true;
+    start = start.GetNext();
+}
+return false;</pre>
+    <p>לדוגמה: <code>Check</code> בודקת אם השרשרת <code>lst1</code> מופיעה ב־<code>lst2</code> החל מהחוליה <code>start</code>. מזמנים אותה שוב ושוב ובכל פעם מעבירים לה חוליה אחרת בתור ראש השרשרת. אחרי בדיקה שנכשלה מתקדמים חוליה אחת בלבד.</p>
+  </div>
+  <div class="box">
+    <h3>שרשרת שהערכים שלה הם עצמים</h3>
+<pre>Node&lt;Game&gt; p = lst;
+while (p != null)
+{
+    Game g = p.GetValue();
+    if (g.GetPrice() &lt; 50)
+        g.SetPrice(g.GetPrice() + 5);
+    p = p.GetNext();
+}</pre>
+    <p><code>Game</code> הוא משחק שיש לו שם ומחיר. <code>GetValue</code> מחזירה הפניה לעצם שבחוליה ולכן <code>g.SetPrice</code> משנה את העצם שבשרשרת. חוליה חדשה נוצרת כך: <code>new Node&lt;Game&gt;(new Game("a", 30))</code>.</p>
+    <p class="small">כשהערך הוא תור (<code>Node&lt;Queue&lt;int&gt;&gt;</code>), פעולה שמוציאה איברים מהתור <code>p.GetValue()</code> מרוקנת את התור שבשרשרת עצמה.</p>
+  </div>
+  </div>
+  <div class="box">
+    <h3>התקדמות בשתי שרשראות ממוינות בסדר עולה</h3>
+<pre><span class="c">// <span dir="rtl">כמה ערכים מופיעים בשתי השרשראות</span></span>
+int count = 0;
+while (a != null &amp;&amp; b != null)
+{
+    if (a.GetValue() &lt; b.GetValue())
+        a = a.GetNext();
+    else if (a.GetValue() &gt; b.GetValue())
+        b = b.GetNext();
+    else
+    {
+        count++;
+        a = a.GetNext();
+        b = b.GetNext();
+    }
+}</pre>
+    <p><code>a</code> ו־<code>b</code> מפנות לראשי שתי השרשראות. בכל סיבוב מקדמים את ההפניה לחוליה שערכה קטן יותר. אף הפניה אינה חוזרת אחורה ולכן זמן הריצה הוא <span class="big-o">O(n + m)</span>, כאשר n ו־m הם מספר החוליות בכל אחת מהשרשראות. הקוד נכון רק כאשר בכל שרשרת הערכים שונים זה מזה.</p>
+    <p>כשמשווים חוליה מול חוליה (האם שתי שרשראות זהות, האם אחת היא התחלה של השנייה), מקדמים את שתי ההפניות בכל סיבוב. כשמוצאים שני ערכים שונים מחזירים <code>false</code>. הלולאה נעצרת כשאחת השרשראות נגמרת ואחריה בודקים איזו מהן נגמרה. לדוגמה: השרשראות זהות רק אם שתיהן נגמרו יחד, כלומר <code>a == null &amp;&amp; b == null</code>.</p>
+  </div>
+</div>
+
+<h2>מעקב אחרי פעולה על שרשרת</h2>
+
+<div class="grid2">
+  <div>
+    <ol>
+      <li>מסרטטים את השרשרת: מלבן לכל חוליה, חץ לחוליה הבאה ו־<code>null</code> בסוף.</li>
+      <li>מסמנים כל משתנה מטיפוס חוליה (<code>lst</code>, <code>p</code>, <code>temp</code>) בתווית עם חץ אל החוליה שהוא מפנה אליה.</li>
+      <li>בהוראה <code>p = p.GetNext()</code> מעבירים את התווית <code>p</code> לחוליה הבאה. החיצים שבין החוליות אינם משתנים.</li>
+      <li>בהוראה <code>p.SetNext(q)</code> מוחקים את החץ שיוצא מהחוליה של <code>p</code> ומסרטטים חץ חדש אל החוליה של <code>q</code>.</li>
+      <li>בסוף קוראים את השרשרת מההפניה שהפעולה מחזירה, לאורך החיצים, עד <code>null</code>.</li>
+    </ol>
+    <p>בדוגמה שמשמאל הפעולה מחזירה הפניה לחוליה שערכה 3. אם לא שומרים את הערך המוחזר, המשתנה של מי שזימן את הפעולה עדיין מפנה לחוליה הראשונה המקורית והשרשרת שלו מתחילה ב־1.</p>
+  </div>
+  <div>
+    <p>מעקב אחרי <code>RemoveAll(lst, 1)</code> על השרשרת <span class="big-o">1 → 3 → 1 → 1 → 4 → null</span></p>
+    <table>
+      <tr><th class="c">הערך ב־p</th><th class="c">הערך אחרי p</th><th>מה מתבצע</th><th>השרשרת מ־lst</th></tr>
+      <tr><td class="c">-</td><td class="c">-</td><td>ערך החוליה הראשונה הוא 1 ולכן <code>lst</code> מתקדמת</td><td class="ltr"><span class="big-o">3→1→1→4</span></td></tr>
+      <tr><td class="c">3</td><td class="c">1</td><td>מוחקים ו־<code>p</code> נשארת במקומה</td><td class="ltr"><span class="big-o">3→1→4</span></td></tr>
+      <tr><td class="c">3</td><td class="c">1</td><td>מוחקים ו־<code>p</code> נשארת במקומה</td><td class="ltr"><span class="big-o">3→4</span></td></tr>
+      <tr><td class="c">3</td><td class="c">4</td><td><code>p</code> מתקדמת</td><td class="ltr"><span class="big-o">3→4</span></td></tr>
+      <tr><td class="c">4</td><td class="c">null</td><td>הלולאה מסתיימת</td><td class="ltr"><span class="big-o">3→4</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<h2>סיבוכיות זמן הריצה של פעולות על שרשרת</h2>
+
+<table>
+  <tr><th>מה הפעולה עושה</th><th>סיבוכיות</th><th>נימוק</th></tr>
+  <tr><td>סכום, ספירה, מקסימום, חיפוש ערך, מחיקה לפי ערך, הכנסה לשרשרת ממוינת</td><td><span class="big-o">O(n)</span></td><td>סריקה אחת. במקרה הגרוע מגיעים עד סוף השרשרת</td></tr>
+  <tr><td>הכנסה בתחילת השרשרת, הכנסה או מחיקה אחרי חוליה נתונה</td><td><span class="big-o">O(1)</span></td><td>משנים הפניה אחת או שתיים, בלי סריקה</td></tr>
+  <tr><td>הכנסה בסוף השרשרת</td><td><span class="big-o">O(n)</span></td><td>צריך להגיע קודם לחוליה האחרונה</td></tr>
+  <tr><td>הגעה לחוליה שבמקום k</td><td><span class="big-o">O(k)</span></td><td>בשרשרת, שלא כמו במערך, אין גישה ישירה לפי מקום</td></tr>
+  <tr><td>לכל חוליה סורקים את השרשרת או מזמנים פעולה שסורקת</td><td><span class="big-o">O(n²)</span></td><td>לכל אחת מ־n החוליות מבצעים עד n צעדים</td></tr>
+  <tr><td>שתי שרשראות ואף הפניה אינה חוזרת אחורה</td><td><span class="big-o">O(n + m)</span></td><td>כל חוליה בכל שרשרת נבדקת פעם אחת</td></tr>
+  <tr><td>לכל חוליה בשרשרת אחת סורקים את השנייה</td><td><span class="big-o">O(n · m)</span></td><td>לכל אחת מ־n החוליות מבצעים עד m צעדים</td></tr>
+</table>
+
+<p>שתי סריקות שבאות זו אחרי זו הן <span class="big-o">O(n)</span>. רק סריקה שנמצאת בתוך סריקה אחרת נותנת <span class="big-o">O(n²)</span>. בתשובה מגדירים את n ("נסמן ב־n את מספר החוליות בשרשרת") ומציינים שמדובר במקרה הגרוע.</p>
+
+<h2 class="exam">מה חוזר בשאלות השרשרת בבגרות</h2>
+
+<div class="box exam">
+  <ul>
+    <li><strong>ברוב השאלות נדרשים לכתוב פעולה.</strong> שאלת מעקב על שרשרת נדירה יותר והפעולה שמופיעה בה היא בדרך כלל רקורסיבית.</li>
+    <li><strong>סעיף ב׳ נשען על סעיף א׳.</strong> בסעיף א׳ כותבים פעולה שמטפלת בשרשרת החל מהחוליה שהיא מקבלת. בסעיף ב׳ מזמנים אותה בתוך לולאה, בדרך כלל פעם אחת לכל חוליה.</li>
+    <li><strong>יש שאלות שבהן הערך שבחוליה הוא עצם.</strong> לדוגמה: משחק שיש לו שם ומחיר, ספרה ומספר המופעים שלה, טווח של מספרים או תור. אל תכונה של העצם ניגשים כך: <code>p.GetValue().GetPrice()</code>.</li>
+    <li><strong>יש שאלות שבהן השרשרת היא תכונה של מחלקה.</strong> בשאלות כאלה הפעולה היא פעולה פנימית של המחלקה. היא אינה מחזירה את ראש השרשרת אלא מעדכנת את התכונה כשהחוליה הראשונה מתחלפת.</li>
+    <li><strong>יש שאלות שכוללות גם סעיף סיבוכיות.</strong> בסעיף כזה קובעים את סיבוכיות זמן הריצה ומנמקים. יש שאלות שדורשות מראש פתרון בסיבוכיות מסוימת, לדוגמה <span class="big-o">O(n)</span>.</li>
+  </ul>
+</div>
+
+
+
+<div class="box exam">
+  <h3>ההערות שבשאלה קובעות איך פותרים</h3>
+  <table>
+    <tr><th>מה כתוב בשאלה</th><th>מה זה אומר על הפתרון</th></tr>
+    <tr><td>"אין חשיבות לסדר"</td><td>מכניסים כל חוליה חדשה בתחילת השרשרת</td></tr>
+    <tr><td>"יישארו באותו הסדר", "לפי הסדר"</td><td>כשמוחקים, מזמנים רק את <code>SetNext</code> של החוליה הקודמת. כשבונים שרשרת חדשה, מכניסים כל חוליה בסופה</td></tr>
+    <tr><td>"חובה לשמור על השרשרת"</td><td>מזיזים רק משתנים כמו <code>p</code> ולא מזמנים את <code>SetNext</code> ואת <code>SetValue</code></td></tr>
+    <tr><td>"אין להשתמש במערך"</td><td>עובדים עם הפניות ועם מונים בלבד</td></tr>
+    <tr><td>"כל ערך יופיע פעם אחת בלבד"</td><td>לפני כל הכנסה מחפשים את הערך בשרשרת התוצאה</td></tr>
+    <tr><td>שרשראות ממוינות וסיבוכיות <span class="big-o">O(n)</span></td><td>משתמשים בשתי הפניות שאינן חוזרות אחורה</td></tr>
+    <tr><td>"הניחו שהשרשרת אינה ריקה"</td><td>מותר לפנות ל־<code>lst.GetValue()</code> בלי בדיקה. בלי הנחה כזאת מטפלים בשרשרת ריקה</td></tr>
+  </table>
+</div>
+
+<div class="grid2">
+  <div class="box exam">
+    <h3>מקרי קצה שהשאלות בודקות</h3>
+    <ul>
+      <li><strong>מחיקה של כמה חוליות רצופות מתחילת השרשרת.</strong> יש שאלות שבדוגמה שלהן שתי החוליות הראשונות נמחקות. פתרון שמוחק רק חוליה ראשונה אחת או שמתקדם אחרי כל מחיקה נכשל בדוגמה כזאת.</li>
+      <li><strong>מספר שגדול מאורך השרשרת.</strong> כשהפעולה צריכה לעבור על <code>len</code> חוליות, <code>len</code> יכול להיות גדול ממספר החוליות שבשרשרת. לכן תנאי הלולאה בודק גם שהמונה קטן מ־<code>len</code> וגם ש־<code>p != null</code>.</li>
+      <li><strong>שרשרת אחת קצרה מהאחרת.</strong> כשמשווים שתי שרשראות, כל אחת מהן יכולה להסתיים לפני האחרת. לכן בודקים ששתי ההפניות אינן <code>null</code>.</li>
+      <li><strong>התחלה מכל חוליה.</strong> כשמחפשים שרשרת אחת בתוך שרשרת אחרת, מתקדמים חוליה אחת בלבד אחרי כל ניסיון שנכשל. לדוגמה: <span class="big-o">1→2</span> נמצאת בתוך <span class="big-o">1→1→2</span> רק החל מהחוליה השנייה.</li>
+      <li><strong>השוואה בין שני חלקים של השרשרת.</strong> כשכל ערך בחצי הראשון צריך להיות קטן מכל ערך בחצי השני, משווים את המקסימום של החצי הראשון למינימום של החצי השני ולא חוליה מול חוליה.</li>
+    </ul>
+  </div>
+  <div class="box exam">
+    <h3>שאלות המעקב: פעולה רקורסיבית שמחזירה חוליה</h3>
+    <p><strong>לדוגמה:</strong> הפעולה <code>What(lst, x)</code> מוחקת מהשרשרת את כל החוליות שערכן x ומחזירה את ראש השרשרת. אם ערך החוליה הראשונה הוא 1, בזימון <code>What(lst, 1)</code> גם החוליה הראשונה נמחקת. לכן מציגים את השרשרת שמתחילה בחוליה שהפעולה מחזירה ולא את השרשרת שמתחילה ב־<code>lst</code>.</p>
+    <p>בהמשך אותה שאלה מופיעה פעולה נוספת, <code>Guess</code>, שעוברת על החוליות. לכל חוליה היא מזמנת את <code>What</code> על החוליות שאחריה עם הערך של אותה חוליה. כך נשאר מכל ערך רק המופע הראשון. הסיבוכיות של <code>Guess</code> היא <span class="big-o">O(n²)</span>.</p>
+    <p><strong>דוגמה נוספת:</strong> הפעולה <code>Sod1(lst, ch)</code> מקבלת שרשרת של תווים ותו <code>ch</code> ומחזירה הפניה לחוליה הראשונה שערכה <code>ch</code>. כשאין חוליה כזאת היא מחזירה <code>null</code>. במעקב כותבים שהפעולה מחזירה חוליה ולא תו. כשצריך לבדוק אם תו אחד מופיע בשרשרת מיד אחרי תו אחר, מזמנים את <code>Sod1</code> פעם לכל תו, שומרים את שתי ההפניות במשתנים <code>a</code> ו־<code>b</code> ובודקים: <code>a != null &amp;&amp; a.GetNext() == b</code>.</p>
+    <p class="small">הסבר על מעקב אחרי רקורסיה נמצא בדף הרקורסיה.</p>
+  </div>
+</div>
+
+<h2 style="break-before: page;">טעויות נפוצות</h2>
+
+<p>כל שורה כאן מתארת טעות שתלמידים עושים ולא הנחיה.</p>
+
+<div>
+  <div class="box warn">
+    <h3>בכתיבה</h3>
+    <ul>
+      <li>פונים ל־<code>p.GetNext().GetValue()</code> בלי לבדוק ש־<code>p.GetNext()</code> אינה <code>null</code>.</li>
+      <li>כותבים <code>p != null</code> בלולאה שצריכה לעצור על החוליה האחרונה.</li>
+      <li>מוחקים חוליה וגם מתקדמים. כשיש שתי חוליות רצופות למחיקה, השנייה נשארת בשרשרת.</li>
+      <li>שוכחים שהחוליה הראשונה יכולה להתחלף או משנים את <code>lst</code> בתוך הפעולה ולא מחזירים אותה. המשתנה של מי שזימן את הפעולה ממשיך להפנות לחוליה הראשונה הישנה.</li>
+      <li>מזמנים פעולה שמחזירה הפניה לחוליה הראשונה החדשה בלי לשמור את הערך המוחזר: <code>RemoveAll(lst, x);</code> במקום <code>lst = RemoveAll(lst, x);</code></li>
+      <li>בהכנסה אחרי <code>p</code> מבצעים את <code>p.SetNext(q)</code> לפני <code>q.SetNext(p.GetNext())</code> והמשך השרשרת אובד.</li>
+      <li>מתקדמים בלולאה עם <code>lst</code> עצמה בפעולה שצריכה להחזיר את ראש השרשרת.</li>
+      <li>משנים את השרשרת בשאלה שנכתב בה שחובה לשמור עליה.</li>
+      <li>מכניסים חוליות בתחילת השרשרת כשהתוצאה צריכה להישאר באותו סדר.</li>
+      <li>מאתחלים מקסימום ב־0 כשבשרשרת יכולים להיות מספרים שליליים.</li>
+    </ul>
+  </div>
+  <div class="box warn">
+    <h3>במעקב ובסיבוכיות</h3>
+    <ul>
+      <li>משנים חץ בסרטוט בגלל ההוראה <code>p = p.GetNext()</code>. ההוראה הזאת מזיזה רק את התווית <code>p</code>.</li>
+      <li>מציגים את השרשרת שמתחילה ב־<code>lst</code> המקורית במקום את השרשרת שהפעולה מחזירה.</li>
+      <li>מניחים שפעולה ששינתה הפניות יצרה עותק של השרשרת. כל המשתנים שמפנים לאותן חוליות רואים את השינוי.</li>
+      <li>קובעים <span class="big-o">O(n²)</span> לשתי סריקות שבאות זו אחרי זו.</li>
+      <li>קובעים <span class="big-o">O(n)</span> לפעולה שיש בה לולאה אחת ולא שמים לב שבתוך הלולאה מזומנת פעולה שסורקת את השרשרת.</li>
+      <li>כותבים סיבוכיות בלי להגדיר את n ובלי לנמק.</li>
+      <li>כותבים שהפעולה מחזירה ערך כשהיא מחזירה הפניה לחוליה.</li>
+    </ul>
+  </div>
+</div>
+
+</main>
+</body>
+</html>

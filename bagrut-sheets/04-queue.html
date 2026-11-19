@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>דף עזר: תור</title>
+<link rel="stylesheet" href="sheets.css">
+<style>
+  svg.fig { display: block; width: 100%; height: auto; margin: 0 0 2mm; direction: ltr; }
+  svg.fig text { font-family: Heebo, Arial, sans-serif; font-size: 11px; fill: #16202e; }
+  svg.fig text.mono { font-family: "JetBrains Mono", Menlo, monospace; font-size: 10.5px; }
+  svg.fig text.lbl { fill: #55627a; font-size: 10px; }
+  pre, code { font-variant-ligatures: none; }
+  .keep { break-inside: avoid; }
+  table.long { break-inside: auto; }
+  table.long tr { break-inside: avoid; }
+  table.tight td, table.tight th { padding-top: .7mm; padding-bottom: .7mm; }
+  h2.tight { margin-top: 3mm; }
+  p.lead { break-after: avoid; }
+  td.q { direction: ltr; text-align: left; font-family: "JetBrains Mono", Menlo, monospace; font-size: 8.6pt; white-space: nowrap; }
+</style>
+</head>
+<body>
+<nav class="site-nav"><a href="./">→ לכל דפי העזר</a><a href="pdf/04-queue.pdf" download="04-תור.pdf">הורדת PDF להדפסה</a></nav>
+<main>
+
+<header class="sheet">
+  <h1>תור <span dir="ltr">(Queue&lt;T&gt;)</span></h1>
+  <div class="meta">דף עזר לבגרות במדעי המחשב, שאלון 899271<br>הקוד בשפת C#</div>
+</header>
+
+<h2>מהו תור ואילו פעולות יש לו</h2>
+
+<div class="grid2">
+  <div>
+    <div class="box key">
+      <p>בתור, האיבר שנכנס ראשון הוא האיבר שיוצא ראשון. איבר חדש נכנס תמיד לסוף התור. האיבר שיוצא הוא תמיד האיבר שבראש התור.</p>
+    </div>
+    <table>
+      <tr><th>הפעולה</th><th>מה היא עושה</th></tr>
+      <tr><td class="ltr"><code>new Queue&lt;int&gt;()</code></td><td>יוצרת תור ריק של מספרים שלמים</td></tr>
+      <tr><td class="ltr"><code>q.Insert(x)</code></td><td>מכניסה את x לסוף התור</td></tr>
+      <tr><td class="ltr"><code>q.Remove()</code></td><td>מוציאה את האיבר שבראש התור ומחזירה אותו</td></tr>
+      <tr><td class="ltr"><code>q.Head()</code></td><td>מחזירה את האיבר שבראש התור בלי להוציא אותו</td></tr>
+      <tr><td class="ltr"><code>q.IsEmpty()</code></td><td>מחזירה <code>true</code> כשאין בתור איברים</td></tr>
+    </table>
+  </div>
+  <div>
+    <svg class="fig" viewBox="0 0 340 78" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="ah" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#0b5d8a"/></marker>
+      </defs>
+      <text x="105" y="12" text-anchor="middle" class="lbl">ראש התור</text>
+      <text x="237" y="12" text-anchor="middle" class="lbl">סוף התור</text>
+      <g fill="#fff" stroke="#55627a" stroke-width="0.8">
+        <rect x="83" y="18" width="44" height="26"/>
+        <rect x="127" y="18" width="44" height="26"/>
+        <rect x="171" y="18" width="44" height="26"/>
+        <rect x="215" y="18" width="44" height="26"/>
+      </g>
+      <rect x="83" y="18" width="44" height="26" fill="#e6f1f7" stroke="#0b5d8a" stroke-width="1"/>
+      <text x="105" y="35" text-anchor="middle" class="mono">5</text>
+      <text x="149" y="35" text-anchor="middle" class="mono">11</text>
+      <text x="193" y="35" text-anchor="middle" class="mono">6</text>
+      <text x="237" y="35" text-anchor="middle" class="mono">9</text>
+      <line x1="80" y1="31" x2="44" y2="31" stroke="#0b5d8a" stroke-width="1" marker-end="url(#ah)"/>
+      <line x1="298" y1="31" x2="262" y2="31" stroke="#0b5d8a" stroke-width="1" marker-end="url(#ah)"/>
+      <text x="62" y="60" text-anchor="middle" class="mono">Remove()</text>
+      <text x="62" y="73" text-anchor="middle" class="mono">Head()</text>
+      <text x="280" y="60" text-anchor="middle" class="mono">Insert(x)</text>
+    </svg>
+    <ul>
+      <li>לתור אין אינדקסים. אין לו גם פעולה שמחזירה את מספר האיברים, אלא אם נתונה בשאלה פעולה כזאת.</li>
+      <li>אפשר לראות רק את האיבר שבראש התור. כדי להגיע לאיבר אחר מוציאים את כל האיברים שלפניו. לכן אי אפשר לסרוק תור בלי להוציא ממנו איברים.</li>
+      <li>זימון של <code>Remove</code> או של <code>Head</code> על תור ריק גורם לשגיאת זמן ריצה. לפני כל זימון כזה בודקים שהתור אינו ריק.</li>
+      <li>משתנה מטיפוס תור מכיל הפניה לתור. פעולה שמקבלת תור ומוציאה ממנו איברים משנה את התור המקורי, כלומר את התור שהועבר אליה בזימון. ההשמה <code>Queue&lt;int&gt; t = q;</code> אינה יוצרת תור נוסף: t ו־q מפנים לאותו תור.</li>
+    </ul>
+  </div>
+</div>
+
+<h2>שלוש דרכים לסרוק תור ולהשאיר אותו כפי שהיה</h2>
+<p>בשלוש הדרכים כל איבר יוצא מהתור פעם אחת, נבדק וחוזר לתור. ההבדל ביניהן הוא איך יודעים שהסריקה הסתיימה.</p>
+
+<div class="grid2">
+  <div class="box">
+    <h3>1. תור עזר</h3>
+    <p>מעבירים את כל האיברים לתור עזר ובסוף מחזירים אותם לתור המקורי. הסדר נשמר, כי גם תור העזר מוציא את האיברים בסדר שבו הם נכנסו אליו.</p>
+<pre>public static int Count(Queue&lt;int&gt; q, int x)
+{
+    Queue&lt;int&gt; temp = new Queue&lt;int&gt;();
+    int count = 0;
+    while (!q.IsEmpty())
+    {
+        int v = q.Remove();
+        if (v == x) count++;
+        temp.Insert(v);
+    }
+    while (!temp.IsEmpty())
+        q.Insert(temp.Remove());
+    return count;
+}</pre>
+    <p class="small">הדרך הזאת מתאימה לכל שאלה: לא צריך לדעת את מספר האיברים ולא צריך ערך מיוחד שמסמן את סוף הסריקה.</p>
+  </div>
+  <div>
+    <div class="box" style="margin-bottom:3mm">
+      <h3>2. סמן בסוף התור</h3>
+      <p>מכניסים לסוף התור סמן, כלומר ערך שאינו יכול להופיע בתור. כל איבר שנבדק חוזר לסוף התור. כשהסמן מגיע לראש התור, כל האיברים כבר נבדקו.</p>
+<pre>q.Insert(-1);            <span class="c">// <span dir="rtl">הסמן</span></span>
+while (q.Head() != -1)
+{
+    int v = q.Remove();
+    if (v == x) count++;
+    q.Insert(v);
+}
+q.Remove();              <span class="c">// <span dir="rtl">מוציאים את הסמן</span></span></pre>
+      <p class="small">בוחרים את הסמן לפי מה שנתון בשאלה על הערכים בתור. בקוד שלמעלה הסמן הוא <span dir="ltr">-1</span>, כי ההנחה היא שאין בתור מספרים שליליים. כשכל המספרים בתור גדולים מ־0, הסמן יכול להיות גם 0.</p>
+    </div>
+    <div class="box">
+      <h3>3. מספר האיברים ידוע</h3>
+      <p>כשמספר האיברים n ידוע, מעבירים איבר מראש התור לסופו n פעמים. אחרי n העברות התור חוזר לסדר המקורי.</p>
+<pre>for (int i = 0; i &lt; n; i++)
+{
+    int v = q.Remove();
+    if (v == x) count++;
+    q.Insert(v);
+}</pre>
+    </div>
+  </div>
+</div>
+
+<table class="tight">
+  <tr><th>מה מחשבים בסריקה</th><th>לפני הלולאה</th><th>בגוף הלולאה (v הוא האיבר שהוצא)</th></tr>
+  <tr><td>סכום</td><td class="ltr"><code>int sum = 0;</code></td><td class="ltr"><code>sum += v;</code></td></tr>
+  <tr><td>מקסימום (בתור שאינו ריק)</td><td class="ltr"><code>int max = q.Head();</code></td><td class="ltr"><code>if (v &gt; max) max = v;</code></td></tr>
+  <tr><td>חיפוש של ערך x</td><td class="ltr"><code>bool found = false;</code></td><td class="ltr"><code>if (v == x) found = true;</code></td></tr>
+  <tr><td>מספר האיברים בתור</td><td class="ltr"><code>int n = 0;</code></td><td class="ltr"><code>n++;</code></td></tr>
+</table>
+
+<h2 class="tight">האם צריך לשמור על התור</h2>
+
+<div class="grid2">
+  <div class="box key">
+    <h3>כשכתוב "חובה לשמור על מבנה התור"</h3>
+    <ul>
+      <li>בסיום הפעולה התור מכיל את אותם איברים באותו סדר, גם כשהפעולה מחזירה <code>false</code>.</li>
+      <li>לא כותבים <code>return</code> בתוך הסריקה. שומרים את התשובה במשתנה ומחזירים אותה אחרי שכל האיברים חזרו לתור.</li>
+      <li>דרך נוספת: יוצרים העתק של התור (ראו "העתקה של תור") ומוציאים איברים רק מההעתק.</li>
+    </ul>
+  </div>
+  <div class="box key">
+    <h3>כשכתוב "אין צורך לשמור על התור"</h3>
+    <ul>
+      <li>סורקים בלולאה <code>while (!q.IsEmpty())</code> ומוציאים איברים בלי להחזיר אותם. מותר גם לכתוב <code>return</code> באמצע הסריקה.</li>
+      <li>בסיום הפעולה התור ריק או שחסרים בו איברים. זימון נוסף של הפעולה על אותו תור עלול להחזיר תשובה אחרת.</li>
+    </ul>
+  </div>
+</div>
+
+<h2>פעולות שכדאי להכיר</h2>
+
+<div class="grid2">
+  <div class="box">
+    <h3>העתקה של תור</h3>
+    <p>כל איבר שיוצא מהתור נכנס גם להעתק וגם לתור עזר.</p>
+<pre>public static Queue&lt;int&gt; Copy(Queue&lt;int&gt; q)
+{
+    Queue&lt;int&gt; copy = new Queue&lt;int&gt;();
+    Queue&lt;int&gt; temp = new Queue&lt;int&gt;();
+    while (!q.IsEmpty())
+    {
+        int v = q.Remove();
+        copy.Insert(v);
+        temp.Insert(v);
+    }
+    while (!temp.IsEmpty())
+        q.Insert(temp.Remove());
+    return copy;
+}</pre>
+  </div>
+  <div class="box">
+    <h3>השוואה בין שני תורים</h3>
+    <p>שני תורים זהים כשיש בהם אותם ערכים באותו סדר. משווים בין העתקים של שני התורים. לכן התורים המקוריים נשמרים גם כשהפעולה מחזירה <code>false</code> באמצע הלולאה.</p>
+<pre>public static bool Same(Queue&lt;int&gt; q1,
+                        Queue&lt;int&gt; q2)
+{
+    Queue&lt;int&gt; a = Copy(q1);
+    Queue&lt;int&gt; b = Copy(q2);
+    while (!a.IsEmpty() &amp;&amp; !b.IsEmpty())
+        if (a.Remove() != b.Remove())
+            return false;
+    return a.IsEmpty() &amp;&amp; b.IsEmpty();
+}</pre>
+    <p class="small">אם באחד ההעתקים נשארו איברים, מספר האיברים בשני התורים שונה והפעולה מחזירה <code>false</code>.</p>
+  </div>
+</div>
+<div class="grid2">
+  <div class="box">
+    <h3>הכנסה לתור ממוין בסדר עולה</h3>
+    <p>מעבירים לתור עזר את האיברים שקטנים מ־x או שווים לו, מכניסים את x לתור העזר, מעבירים אליו את שאר האיברים ובסוף מחזירים את כל האיברים לתור המקורי.</p>
+<pre>public static void InsertSorted(Queue&lt;int&gt; q,
+                                int x)
+{
+    Queue&lt;int&gt; temp = new Queue&lt;int&gt;();
+    while (!q.IsEmpty() &amp;&amp; q.Head() &lt;= x)
+        temp.Insert(q.Remove());
+    temp.Insert(x);
+    while (!q.IsEmpty())
+        temp.Insert(q.Remove());
+    while (!temp.IsEmpty())
+        q.Insert(temp.Remove());
+}</pre>
+  </div>
+  <div class="box">
+    <h3>הוצאה של איברים מסוימים</h3>
+    <p>מעבירים לתור עזר רק את האיברים שצריכים להישאר ובסוף מחזירים אותם לתור המקורי.</p>
+<pre>public static void RemoveAll(Queue&lt;int&gt; q,
+                             int x)
+{
+    Queue&lt;int&gt; temp = new Queue&lt;int&gt;();
+    while (!q.IsEmpty())
+    {
+        int v = q.Remove();
+        if (v != x) temp.Insert(v);
+    }
+    while (!temp.IsEmpty())
+        q.Insert(temp.Remove());
+}</pre>
+  </div>
+</div>
+<div class="grid2">
+  <div class="box">
+    <h3>טיפול בקבוצות של איברים שווים</h3>
+    <p>מוציאים את האיבר הראשון. סורקים את שאר התור. איבר ששווה לאיבר הראשון שייך לקבוצה שלו ולכן אינו חוזר לתור. אם השאלה דורשת, סופרים אותו או מוסיפים אותו לסכום של הקבוצה. איבר אחר עובר לתור עזר ובסוף הסריקה חוזר לתור. חוזרים על כל התהליך עד שהתור ריק.</p>
+<pre><span class="c">// <span dir="rtl">הפעולה מחזירה כמה ערכים שונים יש בתור. בסיום הפעולה התור ריק</span></span>
+public static int CountDifferent(Queue&lt;int&gt; q)
+{
+    Queue&lt;int&gt; temp = new Queue&lt;int&gt;();
+    int count = 0;
+    while (!q.IsEmpty())
+    {
+        int first = q.Remove();
+        count++;
+        while (!q.IsEmpty())
+        {
+            int v = q.Remove();
+            if (v != first) temp.Insert(v);
+        }
+        while (!temp.IsEmpty())
+            q.Insert(temp.Remove());
+    }
+    return count;
+}</pre>
+  </div>
+  <div class="box">
+    <h3>תור של עצמים</h3>
+    <p>האיבר ש־<code>Remove</code> ו־<code>Head</code> מחזירות הוא עצם. ניגשים לתכונות שלו רק בעזרת הפעולות <code>Get</code> ו־<code>Set</code> של המחלקה. בדוגמה, למחלקה <code>Student</code> יש הפעולה <code>GetGrade</code> שמחזירה את הציון של התלמיד.</p>
+<pre>public static int CountPassed(Queue&lt;Student&gt; q)
+{
+    int count = 0;
+    while (!q.IsEmpty())
+    {
+        Student s = q.Remove();
+        if (s.GetGrade() &gt;= 55) count++;
+    }
+    return count;
+}</pre>
+    <ul>
+      <li>הביטוי <code>q.Head().GetGrade()</code> מחזיר את הציון של העצם שבראש התור בלי להוציא אותו מהתור.</li>
+      <li>כשהפעולה צריכה להחזיר תור חדש (res) שבו עצמים חדשים, יוצרים כל עצם בעזרת הפעולה הבונה ומכניסים אותו לתור החדש: <code>res.Insert(new Student(name, g));</code></li>
+      <li>התור שומר הפניות לעצמים. לכן שינוי של עצם בעזרת <code>Set</code> נראה גם בתור, אבל המקום של העצם בתור נשאר כפי שהיה.</li>
+      <li>בתור של עצמים הסמן (דרך 2) יכול להיות <code>null</code>.</li>
+    </ul>
+  </div>
+</div>
+
+<h2>מעקב אחרי קוד שמשתמש בתור</h2>
+
+<div class="grid2 keep">
+  <div>
+    <ol>
+      <li>לפני שמתחילים, מוצאים בסרטוט את הכיתוב "ראש התור". כותבים את התור בטבלת המעקב באותו כיוון שבו הוא מסורטט בשאלה.</li>
+      <li>בכל סיבוב של הלולאה רושמים שורה חדשה: תוכן התור, ערכי המשתנים וערכי התנאים.</li>
+      <li><code>Remove</code> מוציאה את האיבר שבראש התור (במעקב מוחקים אותו מהשורה). <code>Insert</code> מכניסה איבר לסוף התור. <code>Head</code> אינה משנה את התור.</li>
+      <li>בהוראה <code>q.Insert(q.Remove());</code> האיבר שבראש התור עובר לסופו. מספר האיברים אינו משתנה.</li>
+      <li>בסיום רושמים את הערך המוחזר וגם את מצב התור, כי לעיתים שואלים איך נראה התור בסיום הפעולה.</li>
+    </ol>
+<pre>q.Insert(-1);
+int max = -1;
+while (q.Head() != -1)
+{
+    int v = q.Remove();
+    if (v &gt; max) max = v;
+    q.Insert(v);
+}
+q.Remove();</pre>
+  </div>
+  <div>
+    <p>זהו מעקב אחרי הקוד שמימין למטה. בתור יש מספרים חיוביים. ראש התור בצד שמאל והתור ההתחלתי הוא <span class="big-o">4, 9, 2</span>.</p>
+    <table>
+      <tr><th>השלב</th><th class="c">v</th><th class="c">max</th><th>התור בסוף השלב</th></tr>
+      <tr><td>לפני הלולאה</td><td class="c">-</td><td class="c"><span dir="ltr">-1</span></td><td class="q">4, 9, 2, -1</td></tr>
+      <tr><td>סיבוב 1</td><td class="c">4</td><td class="c">4</td><td class="q">9, 2, -1, 4</td></tr>
+      <tr><td>סיבוב 2</td><td class="c">9</td><td class="c">9</td><td class="q">2, -1, 4, 9</td></tr>
+      <tr><td>סיבוב 3</td><td class="c">2</td><td class="c">9</td><td class="q">-1, 4, 9, 2</td></tr>
+      <tr><td>אחרי הלולאה</td><td class="c">-</td><td class="c"><strong>9</strong></td><td class="q">4, 9, 2</td></tr>
+    </table>
+    <p class="small">אחרי סיבוב 3 הסמן נמצא בראש התור ולכן הלולאה מסתיימת. ההוראה האחרונה מוציאה את הסמן והתור חוזר למצבו ההתחלתי.</p>
+    <p>בפעולה רקורסיבית שמקבלת תור, כל הקריאות עובדות על אותו תור. שינוי שקריאה אחת עשתה בתור נשאר גם בקריאות שאחריה. לכן רושמים את מצב התור בכל קריאה.</p>
+  </div>
+</div>
+
+<h2>סיבוכיות זמן ריצה של פעולות על תור</h2>
+
+<table>
+  <tr><th>מה רואים בקוד</th><th>סיבוכיות</th><th>הנימוק</th></tr>
+  <tr><td><code>Insert</code>, <code>Remove</code>, <code>Head</code>, <code>IsEmpty</code></td><td><span class="big-o">O(1)</span></td><td>מספר קבוע של צעדים, בלי קשר למספר האיברים</td></tr>
+  <tr><td>סריקה אחת של התור (בכל אחת משלוש הדרכים). גם העתקה של תור, השוואה בין שני תורים והכנסה לתור ממוין</td><td><span class="big-o">O(n)</span></td><td>כל איבר יוצא ונכנס מספר קבוע של פעמים</td></tr>
+  <tr><td>לולאה שעוברת על איברי התור ובכל סיבוב שלה מזומנת פעולה שסורקת תור (ספירה, חיפוש, העתקה)</td><td><span class="big-o">O(n²)</span></td><td>n סיבובים ובכל אחד עד n צעדים</td></tr>
+  <tr><td>מוציאים איבר, סורקים את כל האיברים שנשארו וחוזרים על כך עד שהתור ריק</td><td><span class="big-o">O(n²)</span> במקרה הגרוע</td><td><span class="big-o">(n-1) + (n-2) + ... + 1</span></td></tr>
+  <tr><td>פעולה רקורסיבית שמזמנת בכל קריאה פעולה שסורקת את כל התור</td><td><span class="big-o">O(n²)</span> במקרה הגרוע</td><td>עד n קריאות ובכל אחת סריקה של n איברים</td></tr>
+</table>
+
+<div class="grid2">
+  <div class="box">
+    <h3>איך מנסחים תשובה על סיבוכיות</h3>
+    <ol>
+      <li>מגדירים את n: "נסמן ב־n את מספר האיברים בתור".</li>
+      <li>כותבים כמה פעמים מתבצעת הלולאה החיצונית וכמה צעדים מתבצעים בכל סיבוב שלה, כולל פעולות עזר שמזומנות בתוכה.</li>
+      <li>כשהתשובה תלויה בתוכן התור, מתארים את המקרה הגרוע. לדוגמה: בפעולה שמטפלת בקבוצות של איברים שווים כותבים "במקרה הגרוע כל הערכים שונים. בסריקה הראשונה עוברים על <span class="big-o">n-1</span> איברים, בשנייה על <span class="big-o">n-2</span> וכן הלאה ולכן הסיבוכיות היא <span class="big-o">O(n²)</span>".</li>
+    </ol>
+  </div>
+  <div class="box warn">
+    <h3>פעולת עזר בתוך תנאי הלולאה</h3>
+<pre>for (int i = 0; i &lt; Size(q); i++)   <span class="c">// <span dir="rtl">לא כך</span></span>
+
+int n = Size(q);                    <span class="c">// <span dir="rtl">כך</span></span>
+for (int i = 0; i &lt; n; i++)</pre>
+    <p>התנאי של הלולאה נבדק מחדש בכל סיבוב. כשהפעולה <code>Size</code> סופרת את האיברים בסריקה של התור, הסיבוכיות של הלולאה הראשונה היא <span class="big-o">O(n²)</span> גם אם הגוף שלה קצר. בנוסף, אם גוף הלולאה מוציא איברים, מספר האיברים משתנה במהלך הלולאה. לכן שומרים את מספר האיברים במשתנה לפני הלולאה.</p>
+  </div>
+</div>
+
+<h2 class="exam">מה חוזר בשאלות על תור בבגרות</h2>
+
+<div class="box exam">
+  <ul>
+    <li><strong>שאלות כתיבה ושאלות מעקב.</strong> יש שאלות שבהן כותבים פעולה ויש שאלות שבהן עוקבים אחרי קוד נתון או אחרי אלגוריתם שמתואר במילים.</li>
+    <li><strong>סעיף ב שנשען על סעיף א.</strong> לעיתים קרובות נכתב בסעיף ב שמותר או שחובה להשתמש בפעולה מסעיף א. גם מי שלא הצליח בסעיף א יכול לזמן את הפעולה בסעיף ב לפי הכותרת שלה.</li>
+    <li><strong>ההערות שמתחת לשאלה.</strong> ההערות קובעות מה מותר בפתרון. בשאלת כתיבה נכתב בדרך כלל אם צריך לשמור על התור. יש שאלות שבהן נאסר להשתמש במערך או בשרשרת חוליות ונכתב שפתרון כזה לא יזוכה בנקודות. בשאלות האלה משתמשים רק בתורי עזר ובמשתנים רגילים.</li>
+    <li><strong>תור של עצמים.</strong> האיברים בתור יכולים להיות עצמים של מחלקה שמוגדרת בשאלה (לדוגמה: הזמנה, קובייה, חולה, נבדק).</li>
+    <li><strong>סיבוכיות.</strong> יש שאלות שבהן צריך לכתוב את הסיבוכיות של כל סעיף ולנמק אותה.</li>
+  </ul>
+</div>
+
+<div class="grid2">
+  <div class="box exam">
+    <h3>ההערה על שמירת התור משתנה מסעיף לסעיף</h3>
+    <p>יש שאלות שבהן נכתב בסעיף א "חובה לשמור על מבנה התור" ובסעיף ב "אין צורך לשמור". קוראים את ההערה של כל סעיף בנפרד. בסעיף שבו אין צורך לשמור כותבים את הפתרון הקצר שמוציא איברים בלי להחזיר אותם.</p>
+  </div>
+  <div class="box exam">
+    <h3>בודקים את ראש התור לפני שמוציאים איבר</h3>
+    <p>לדוגמה: בשאלה אחת מעבירים קוביות מראש התור לקופסה. לקופסה יש פעולת הכנסה שמחזירה <code>false</code> כשהקובייה אינה מתאימה לקופסה. לפי השאלה, קובייה כזאת צריכה להישאר בראש התור. לכן מעבירים לפעולת ההכנסה את <code>q.Head()</code> ומזמנים את <code>Remove</code> רק אחרי שההכנסה הצליחה. מי שמוציא לפני הבדיקה מאבד את הקובייה או משנה את הסדר כשהוא מחזיר אותה לסוף התור.</p>
+  </div>
+</div>
+<div class="grid2">
+  <div class="box exam">
+    <h3>מקום בתור ואיברים שכנים</h3>
+    <p>יש שאלות שבהן נדרש לבדוק איבר לפי המקום שלו או לפי השכנים שלו. לדוגמה: בודקים את האיבר במקום ה־k ואת שני שכניו, משווים את M האיברים האחרונים של תור אחד ל־M הראשונים של תור אחר או מחפשים רצף של איברים שווים.</p>
+    <ul>
+      <li>שומרים במשתנה את המקום של האיבר ומגדילים אותו ב־1 בכל הוצאה.</li>
+      <li>שומרים במשתנה את האיבר הקודם. את האיבר הבא מקבלים בעזרת <code>Head</code>, אחרי שבודקים שהתור אינו ריק.</li>
+      <li>לאיבר הראשון ולאיבר האחרון יש רק שכן אחד ולכן מטפלים בהם בנפרד.</li>
+      <li>כדי להגיע ל־M האיברים האחרונים סופרים קודם את האיברים (n) ואז מעבירים לסוף התור את <span class="big-o">n-M</span> הראשונים.</li>
+    </ul>
+  </div>
+  <div class="box exam">
+    <h3>קבוצות של עצמים עם אותו מזהה (לדוגמה: שם לקוח)</h3>
+    <p>בשאלה אחת נדרש לאחד הזמנות של אותו לקוח ובשאלה אחרת נדרש למצוא את העיר שבה מספר החולים הגדול ביותר. בשאלות כאלה האיברים אינם ממוינים, מותר לשנות את התור והפתרון בנוי כמו הפעולה שבסעיף "טיפול בקבוצות של איברים שווים".</p>
+    <ul>
+      <li>כשנכתב שהמזהה (לדוגמה: קוד העיר) אינו קשור למספר האיברים בתור, המזהה יכול להיות גדול ממספר האיברים ולא ידוע מה הערך הגדול ביותר שלו. לכן אי אפשר להשתמש בו כאינדקס במערך מונים.</li>
+      <li>כשסעיף ב מחלק את הקבוצות לפי סכום (לדוגמה: לקוחות לפי סך כל המוצרים שלהם), מאחדים קודם את ההזמנות של כל לקוח (זו הפעולה שנכתבה בסעיף א) ורק אחר כך בודקים את הסכום. שימו לב לערך הגבול של התנאי: כשהתנאי הוא "10 ומעלה", גם לקוח שהזמין 10 מוצרים עומד בתנאי.</li>
+      <li>כשבתור המוחזר צריכה להופיע קודם קבוצה אחת ואחריה קבוצה שנייה, ממלאים שני תורים ובסוף מעבירים את איברי התור השני לסוף התור הראשון.</li>
+    </ul>
+  </div>
+</div>
+<div class="grid2">
+  <div class="box exam">
+    <h3>הכנסה לתור ממוין: מה קורה כשיש שוויון</h3>
+    <p>לדוגמה: התור ממוין לפי רמת דחיפות בסדר יורד וחולה חדש נכנס אחרי החולים שכבר ממתינים באותה רמה. לכן מעבירים לתור העזר את כל מי שהדחיפות שלו גדולה מזו של החדש <strong>או שווה לה</strong>. אם משמיטים מהתנאי את השוויון, החולה החדש נכנס לפני החולים שממתינים באותה רמה.</p>
+    <p>כשהדחיפות של חולה שכבר נמצא בתור משתנה, שינוי התכונה בעזרת <code>Set</code> אינו מזיז את החולה בתור. מוציאים את החולה מהתור, מעדכנים את הדחיפות שלו ומכניסים אותו מחדש בעזרת פעולת ההכנסה לתור ממוין.</p>
+  </div>
+  <div class="box exam">
+    <h3>כשבשאלה נתונה פעולת Size</h3>
+    <p>כשבשאלה נתונה פעולה שמחזירה את מספר האיברים, זה רמז לסריקה בדרך 3. לדוגמה: כדי לבדוק אם יש בתור שני איברים שסכומם x, מוציאים איבר ובודקים את הסכום שלו עם כל אחד מהאיברים שנשארו. את האיברים שנשארו סורקים בהעברה מראש התור לסופו.</p>
+    <p>בשאלה אחרת נדרש לבדוק אם תור אחד מתקבל מהשני בהעברות מראש התור לסופו. מעבירים איבר מראש התור לסופו לכל היותר n פעמים ואחרי כל העברה בודקים אם שני התורים זהים. בלי ההגבלה ל־n העברות הלולאה אינה מסתיימת כשהתורים שונים.</p>
+  </div>
+</div>
+<div class="grid2">
+  <div class="box exam">
+    <h3>מעקב אחרי פעולה עם סמן ואחרי פעולה שמזמנת אותה</h3>
+    <p>לדוגמה: נתונה פעולה <code>Mmm</code> שמכניסה 0 לסוף תור של מספרים חיוביים וסורקת את התור עד שה־0 מגיע לראש התור (דרך 2). בטבלת המעקב רושמים בכל סיבוב את תוכן התור, את ערכי המשתנים ואת ערכי התנאים.</p>
+    <ul>
+      <li>הלולאה ממשיכה עד שהסמן מגיע לראש התור, גם אחרי שהתשובה כבר ידועה. כך התור חוזר למצבו ההתחלתי. מאותה סיבה הסיבוכיות היא <span class="big-o">O(n)</span> בכל מקרה.</li>
+      <li>לפני המעקב מבררים מה הפעולה בודקת. לדוגמה: <code>Mmm</code> מקבלת גם מספר z ובודקת אם יש בתור רצף של z איברים שווים וסמוכים. אין לבלבל בין האורך של רצף כזה לבין מספר הפעמים שערך מופיע בתור כולו.</li>
+      <li>יש שאלות שבהן פעולה רקורסיבית <code>What</code> מזמנת את <code>Mmm</code> בכל קריאה. בקריאה הראשונה z שווה למספר האיברים בתור (n) ובכל קריאה נוספת z קטן ב־1. התור עצמו אינו משתנה בין הקריאות. הרקורסיה נעצרת כש־<code>Mmm</code> מחזירה <code>true</code> ולכל המאוחר כש־z מגיע ל־1, כי איבר אחד הוא רצף של איבר אחד. לכן יש עד n קריאות שכל אחת מהן סורקת n איברים: <span class="big-o">O(n²)</span> במקרה הגרוע.</li>
+    </ul>
+  </div>
+  <div class="box exam">
+    <h3>רקורסיה שמעבירה את ראש התור לסופו</h3>
+    <p>יש שאלות שבהן כל קריאה מוציאה את האיבר שבראש התור ומכניסה אותו לסוף התור. במעקב מציגים את התור אחרי כל קריאה, את הערך המוחזר ואת מצב התור בסיום. התור בפעולה כזאת אינו מתרוקן. לכן אם תנאי העצירה הוא <code>q.IsEmpty()</code>, הרקורסיה אינה נעצרת והתוכנית מסתיימת בשגיאת זמן ריצה.</p>
+    <p class="small">יש שאלות שבהן כל איבר בתור הוא ספרה של מספר וראש התור הוא ספרת האחדות. כדי לחשב את המספר מכפילים את הספרה הראשונה שיוצאת ב־1, את השנייה ב־10, את השלישית ב־100 וכן הלאה. החישוב <code>num * 10 + d</code> אינו מתאים כאן, כי הוא בונה את המספר עם הספרות בסדר הפוך.</p>
+  </div>
+</div>
+
+<p class="small">בסרטוטים שבשאלות הבגרות ראש התור מסורטט בדרך כלל בצד שמאל, הפוך מכיוון הקריאה בעברית. לכן בודקים את הכיתוב "ראש התור" בכל שאלה מחדש.</p>
+
+<h2>טעויות נפוצות</h2>
+<p class="lead">כל שורה כאן מתארת טעות שתלמידים עושים ולא הנחיה.</p>
+
+<div class="grid2">
+  <div class="box warn">
+    <h3>בכתיבה</h3>
+    <ul>
+      <li>כותבים <code>return false</code> באמצע הסריקה בסעיף שבו חובה לשמור על התור. חלק מהאיברים נשארים בתור העזר והתור המקורי אינו חוזר למצבו.</li>
+      <li>מזמנים <code>Head</code> או <code>Remove</code> בלי לבדוק שהתור אינו ריק. טעות דומה: כותבים את הבדיקה <code dir="ltr">!q.IsEmpty()</code> אחרי הזימון של <code>Head</code> ולא לפניו, לדוגמה <code dir="ltr">q.Head() &lt;= x &amp;&amp; !q.IsEmpty()</code>.</li>
+      <li>כותבים <code>while (!q.IsEmpty())</code> ובגוף הלולאה מחזירים כל איבר לאותו תור. התור אינו מתרוקן והלולאה אינה מסתיימת. בסריקה כזאת משתמשים בסמן או במספר האיברים.</li>
+      <li>כותבים <code>Queue&lt;int&gt; copy = q;</code> ומניחים שנוצר העתק. שני המשתנים מפנים לאותו תור.</li>
+      <li>שוכחים להוציא את הסמן בסיום הסריקה או בוחרים סמן שיכול להופיע בתור.</li>
+      <li>מאתחלים מקסימום ב־0 גם כשייתכנו בתור ערכים שליליים, במקום לאתחל אותו באיבר הראשון.</li>
+      <li>ניגשים לתכונה של עצם בלי פעולת <code>Get</code> או יוצרים עצם חדש בלי להעביר ערכים לפעולה הבונה.</li>
+    </ul>
+  </div>
+  <div class="box warn">
+    <h3>במעקב ובסיבוכיות</h3>
+    <ul>
+      <li>קוראים את התור בכיוון ההפוך ומתחילים מהאיבר שבסוף התור.</li>
+      <li>מתייחסים ל־<code>Head</code> כאילו הוציאה את האיבר או שוכחים ש־<code>Remove</code> מוציאה אותו.</li>
+      <li>בפעולה עם סמן עוצרים את המעקב כשהתשובה ידועה ולא ממשיכים עד שהסמן מגיע לראש התור.</li>
+      <li>בפעולה רקורסיבית מניחים שהתור קטן בכל קריאה, גם כשהקוד מחזיר כל איבר לתור.</li>
+      <li>מחשבים את הסיבוכיות רק לפי הלולאה שרואים בפעולה ושוכחים שפעולת העזר שמזומנת בתוכה סורקת את התור בעצמה.</li>
+      <li>כותבים <span class="big-o">O(n²)</span> בלי להגדיר את n ובלי לתאר את המקרה הגרוע.</li>
+    </ul>
+  </div>
+</div>
+
+</main>
+</body>
+</html>

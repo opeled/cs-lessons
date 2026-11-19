@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>דף עזר: יעילות וסיבוכיות</title>
+<link rel="stylesheet" href="sheets.css">
+<style>
+  .order { direction: ltr; text-align: center; font-family: "JetBrains Mono", Menlo, monospace; font-weight: 600; font-size: 9.5pt; margin: 1mm 0 1.5mm; }
+  td.nw { white-space: nowrap; }
+  pre, code { font-variant-ligatures: none; }
+  .m { direction: ltr; unicode-bidi: isolate; white-space: nowrap; }
+</style>
+</head>
+<body>
+<nav class="site-nav"><a href="./">→ לכל דפי העזר</a><a href="pdf/02-complexity.pdf" download="02-יעילות וסיבוכיות.pdf">הורדת PDF להדפסה</a></nav>
+<main>
+
+<header class="sheet">
+  <h1>יעילות וסיבוכיות</h1>
+  <div class="meta">דף עזר לבגרות במדעי המחשב, שאלון 899271<br>הקוד בשפת C#</div>
+</header>
+
+<h2>איך קובעים סיבוכיות זמן ריצה</h2>
+
+<div class="box key">
+  <p>סיבוכיות זמן הריצה מתארת איך מספר הצעדים שהקוד מבצע גדל כאשר הקלט גדל. לא סופרים שניות וגם לא את המספר המדויק של הצעדים. מחפשים את קצב הגידול (נקרא גם סדר הגודל) ורושמים אותו בסימון O. את הסיבוכיות קובעים בארבעה שלבים:</p>
+  <ol class="steps">
+    <li><strong>מגדירים את גודל הקלט.</strong> בוחרים אות וכותבים מה היא מייצגת, לדוגמה: "נסמן ב־n את מספר החוליות בשרשרת". כשיש שני קלטים בוחרים שתי אותיות, n ו־m.</li>
+    <li><strong>סופרים כמה פעמים מתבצעת כל לולאה במקרה הגרוע.</strong> המקרה הגרוע הוא הקלט שבו הקוד מבצע הכי הרבה צעדים. לדוגמה: בחיפוש זה קלט שבו הערך אינו נמצא.</li>
+    <li><strong>מחברים או מכפילים.</strong> כשלולאות באות זו אחר זו מחברים את מספרי הסיבובים שלהן. כשלולאה נמצאת בתוך לולאה מכפילים אותם. זימון של פעולה אינו נחשב צעד אחד. סופרים אותו לפי מספר הצעדים שהפעולה המזומנת מבצעת.</li>
+    <li><strong>מפשטים.</strong> מוחקים מספרים קבועים (גם כאלה שמכפילים את n) ומשאירים את המחובר שגדל הכי מהר. לדוגמה: <span class="m">3n + 5</span> הוא <span class="big-o">O(n)</span> ו־<span class="m">n² + n</span> הוא <span class="big-o">O(n²)</span>.</li>
+  </ol>
+</div>
+
+<p>אלה סדרי הגודל הנפוצים, מהיעיל ביותר (משמאל) עד היעיל פחות (מימין):</p>
+<div class="order">O(1) &lt; O(log n) &lt; O(n) &lt; O(n log n) &lt; O(n²) &lt; O(n³) &lt; O(2ⁿ)</div>
+
+<div class="grid2">
+  <div class="box">
+    <h3>לולאה פנימית שתלויה בחיצונית</h3>
+<pre>for (int i = 0; i &lt; n - 1; i++)
+    for (int j = i + 1; j &lt; n; j++)
+        if (a[i] == a[j])
+            count++;</pre>
+    <p>בסיבוב הראשון של הלולאה החיצונית, הלולאה הפנימית מתבצעת <span class="m">n-1</span> פעמים. בסיבוב השני <span class="m">n-2</span> פעמים וכך הלאה עד 1. הסכום הוא <span class="m">n(n-1)/2</span>, בערך חצי מ־<span class="m">n²</span>. לכן הסיבוכיות היא <span class="big-o">O(n²)</span>. הלולאה הפנימית מתקצרת מסיבוב לסיבוב, אבל סדר הגודל נשאר <span class="m">n²</span>.</p>
+  </div>
+  <div class="box">
+    <h3>לולאה בתוך לולאה שאינה O(n²)</h3>
+<pre>int i = 0;
+while (i &lt; n)
+{
+    int j = i;
+    while (j &lt; n &amp;&amp; a[j] == a[i])
+        j++;
+    count++;
+    i = j;
+}</pre>
+    <p>הקוד סופר במשתנה <code>count</code> את הרצפים של ערכים שווים במערך <code>a</code> שאורכו n. הלולאה הפנימית מקדמת את <code>j</code> עד סוף הרצף שמתחיל בתא <code>i</code>. אחריה <code>i</code> מקבל את הערך של <code>j</code> ולכן הלולאה הפנימית אינה עוברת פעמיים על אותו תא. בכל הסיבובים של הלולאה החיצונית יחד <code>j</code> מתקדם n פעמים ולכן הסיבוכיות היא <span class="big-o">O(n)</span> ולא <span class="big-o">O(n²)</span>. לפני שמכפילים, בודקים כמה פעמים הלולאה הפנימית מתבצעת בסך הכול.</p>
+  </div>
+</div>
+
+<h2>טבלת זיהוי: מה רואים בקוד ומהי הסיבוכיות</h2>
+
+<table>
+  <tr><th style="width:36%">מה רואים בקוד</th><th>שורת קוד אופיינית</th><th>מספר הסיבובים</th><th>סיבוכיות</th></tr>
+  <tr><td>קוד בלי לולאה או לולאה שמספר הסיבובים שלה קבוע</td><td class="ltr"><code>for (i = 0; i &lt; 10; i++)</code></td><td class="nw">קבוע</td><td class="nw"><span class="big-o">O(1)</span></td></tr>
+  <tr><td>לולאה אחת על כל הקלט</td><td class="ltr"><code>for (i = 0; i &lt; n; i++)</code></td><td class="nw">n</td><td class="nw"><span class="big-o">O(n)</span></td></tr>
+  <tr><td>לולאה בקפיצות קבועות או על חצי מהקלט</td><td class="ltr"><code>for (i = 0; i &lt; n; i += 2)</code></td><td class="nw"><span class="m">n / 2</span></td><td class="nw"><span class="big-o">O(n)</span></td></tr>
+  <tr><td>שתי לולאות על הקלט, זו אחר זו</td><td class="ltr"><code>for (...) { }  for (...) { }</code></td><td class="nw"><span class="m">n + n</span></td><td class="nw"><span class="big-o">O(n)</span></td></tr>
+  <tr><td>לולאה בתוך לולאה, שתיהן עד n</td><td class="ltr"><code>for (i...) for (j = 0; j &lt; n; j++)</code></td><td class="nw"><span class="m">n · n</span></td><td class="nw"><span class="big-o">O(n²)</span></td></tr>
+  <tr><td>לולאה פנימית שתלויה בחיצונית</td><td class="ltr"><code>for (j = i + 1; j &lt; n; j++)</code></td><td class="nw"><span class="m">n(n-1)/2</span></td><td class="nw"><span class="big-o">O(n²)</span></td></tr>
+  <tr><td>שלוש לולאות זו בתוך זו</td><td class="ltr"><code>for (i...) for (j...) for (k...)</code></td><td class="nw"><span class="m">n · n · n</span></td><td class="nw"><span class="big-o">O(n³)</span></td></tr>
+  <tr><td>משתנה הלולאה מוכפל ב־2 או מחולק ב־2 בכל סיבוב</td><td class="ltr"><code>for (i = 1; i &lt; n; i *= 2)</code></td><td class="nw"><span class="m">log n</span></td><td class="nw"><span class="big-o">O(log n)</span></td></tr>
+  <tr><td>לולאה על הספרות של המספר n</td><td class="ltr"><code>while (n &gt; 0) { ... n /= 10; }</code></td><td class="nw">מספר הספרות</td><td class="nw"><span class="big-o">O(log n)</span></td></tr>
+  <tr><td>שני קלטים, לולאה אחרי לולאה</td><td class="ltr"><code>for (i &lt; n) { }  for (j &lt; m) { }</code></td><td class="nw"><span class="m">n + m</span></td><td class="nw"><span class="big-o">O(n + m)</span></td></tr>
+  <tr><td>שני קלטים, לולאה בתוך לולאה</td><td class="ltr"><code>for (i &lt; n) for (j &lt; m)</code></td><td class="nw"><span class="m">n · m</span></td><td class="nw"><span class="big-o">O(n·m)</span></td></tr>
+  <tr><td>לולאה שמזמנת פעולה שעוברת על הקלט</td><td class="ltr"><code>while (p != null) { Exists(lst, x) }</code></td><td class="nw"><span class="m">n · n</span></td><td class="nw"><span class="big-o">O(n²)</span></td></tr>
+  <tr><th colspan="4">בפעולה רקורסיבית מכפילים את מספר הקריאות במספר הצעדים שבכל קריאה (הפירוט בדף הרקורסיה)</th></tr>
+  <tr><td>קריאה אחת על קלט שקטן ב־1</td><td class="ltr"><code>F(p.GetNext())</code> , <code>F(n - 1)</code></td><td class="nw">n קריאות</td><td class="nw"><span class="big-o">O(n)</span></td></tr>
+  <tr><td>קריאה רקורסיבית אחת ובכל קריאה יש גם מעבר על הקלט</td><td class="ltr"><code>Help(p);  F(p.GetNext());</code></td><td class="nw"><span class="m">n · n</span></td><td class="nw"><span class="big-o">O(n²)</span></td></tr>
+  <tr><td>קריאה אחת על קלט שקטן פי 2 או פי 10</td><td class="ltr"><code>F(n / 2)</code> , <code>F(n / 10)</code></td><td class="nw"><span class="m">log n</span> קריאות</td><td class="nw"><span class="big-o">O(log n)</span></td></tr>
+  <tr><td>עץ בינארי: קריאה לכל אחד מהבנים</td><td class="ltr"><code>F(t.GetLeft()) + F(t.GetRight())</code></td><td class="nw">קריאה לכל צומת</td><td class="nw"><span class="big-o">O(n)</span></td></tr>
+  <tr><td>שתי קריאות על קלט שקטן ב־1</td><td class="ltr"><code>F(n - 1) + F(n - 1)</code></td><td class="nw">כ־2ⁿ קריאות</td><td class="nw"><span class="big-o">O(2ⁿ)</span></td></tr>
+</table>
+
+<div class="grid2">
+  <div class="box">
+    <h3>זימון של פעולה בתוך לולאה</h3>
+<pre>Node&lt;int&gt; p = lst;
+while (p != null)
+{
+    if (Exists(p.GetNext(), p.GetValue()))
+        return true;
+    p = p.GetNext();
+}
+return false;</pre>
+    <p>בקוד נראית לולאה אחת, אבל הפעולה <code>Exists</code> מחפשת את הערך בהמשך השרשרת ולכן עוברת בעצמה על החוליות. יש n סיבובים (n הוא מספר החוליות). בכל סיבוב <code>Exists</code> עוברת על עד n חוליות ולכן הסיבוכיות היא <span class="big-o">O(n²)</span>.</p>
+    <p class="small">זימון של פעולת עזר פעם אחת או פעמיים מחוץ ללולאה אינו מעלה את סדר הגודל: <span class="big-o">O(n) + O(n)</span> הוא <span class="big-o">O(n)</span>.</p>
+  </div>
+  <div class="box">
+    <h3>מעבר על תור והחזרת האיברים</h3>
+<pre>public static int Count(Queue&lt;int&gt; q, int x)
+{
+    Queue&lt;int&gt; temp = new Queue&lt;int&gt;();
+    int count = 0;
+    while (!q.IsEmpty())           <span class="c">// n</span>
+    {
+        if (q.Head() == x) count++;
+        temp.Insert(q.Remove());
+    }
+    while (!temp.IsEmpty())        <span class="c">// n</span>
+        q.Insert(temp.Remove());
+    return count;
+}</pre>
+    <p>שתי הלולאות באות זו אחר זו ולכן מחברים: <span class="m">n + n</span>. הסיבוכיות היא <span class="big-o">O(n)</span>. היא עולה ל־<span class="big-o">O(n²)</span> רק כאשר כל המעבר הזה, כולל ההחזרה, נמצא בתוך לולאה נוספת שמתבצעת עד n פעמים.</p>
+  </div>
+</div>
+
+<h2>איך מגדירים את n ומהו המקרה הגרוע</h2>
+
+<div class="grid2">
+  <div class="box">
+    <h3>מה מייצגת האות n</h3>
+    <ul>
+      <li>בשרשרת חוליות: מספר החוליות.</li>
+      <li>בתור: מספר האיברים.</li>
+      <li>בעץ בינארי: מספר הצמתים.</li>
+      <li>במערך או במחרוזת: האורך. במערך דו־ממדי מסמנים ב־n את מספר השורות וב־m את מספר העמודות. מעבר על כל התאים הוא <span class="big-o">O(n·m)</span>.</li>
+      <li>במספר שלם: הערך שלו או מספר הספרות שלו. כותבים במפורש באיזה מהשניים בחרתם.</li>
+    </ul>
+    <p>אם השאלה כבר הגדירה אות ("n הוא מספר המתחרים באוסף"), משתמשים באות של השאלה ובהגדרה שלה.</p>
+  </div>
+  <div class="box">
+    <h3>המקרה הגרוע</h3>
+    <p>כשמספר הצעדים תלוי בערכים שבקלט ולא רק בגודלו, קובעים את הסיבוכיות לפי הקלט שבו הקוד מבצע הכי הרבה צעדים וכותבים "במקרה הגרוע".</p>
+    <ul>
+      <li>חיפוש: הערך אינו נמצא או נמצא במקום האחרון שנבדק.</li>
+      <li>הכנסה לשרשרת ממוינת: הערך גדול מכל הערכים.</li>
+      <li>מחיקת כפילויות: כל הערכים שונים זה מזה ולכן דבר אינו נמחק והמבנה אינו מתקצר.</li>
+      <li>ירידה מהשורש שממשיכה בכל צומת רק לבן אחד: לכל צומת יש בן יחיד ולכן המסלול עובר בכל הצמתים.</li>
+    </ul>
+    <p>פקודת <code>return</code> בתוך לולאה מקצרת את הריצה רק בחלק מהקלטים. היא אינה משנה את הסיבוכיות במקרה הגרוע.</p>
+  </div>
+</div>
+
+<h2>איך מנסחים תשובה על סיבוכיות</h2>
+
+<div class="box key">
+  <p>בשאלון כתוב "נמקו את תשובתכם". תשובה שיש בה רק <span class="big-o">O(n)</span> אינה מנומקת. בתשובה כותבים שלושה דברים:</p>
+  <ol>
+    <li>מה מייצגת האות n.</li>
+    <li>כמה פעמים מתבצעת כל לולאה (או כמה קריאות רקורסיביות יש) ומה נעשה בכל סיבוב.</li>
+    <li>התוצאה, עם המילים "במקרה הגרוע" כשהיא תלויה בערכים שבקלט.</li>
+  </ol>
+  <p><strong>לדוגמה:</strong> "נסמן ב־n את מספר האיברים בתור. הלולאה החיצונית מתבצעת עד n פעמים. בכל סיבוב שלה הלולאה הפנימית עוברת על כל האיברים שנשארו בתור, כלומר על n איברים לכל היותר. לכן סיבוכיות זמן הריצה במקרה הגרוע היא <span class="big-o">O(n²)</span>."</p>
+</div>
+
+<h2>פעולות על שרשרת חוליות, תור ועץ בינארי</h2>
+
+<p>כל פעולות הממשק של חוליה, של תור ושל חוליה בינארית מתבצעות ב־<span class="big-o">O(1)</span>. כך גם גישה לתא במערך. הסיבוכיות של הקוד שלכם נקבעת לפי מספר הפעמים שהוא מזמן אותן.</p>
+
+<table>
+  <tr><th>המבנה</th><th>מה הקוד עושה</th><th>סיבוכיות</th></tr>
+  <tr><td rowspan="3">שרשרת חוליות</td><td>הכנסת חוליה בתחילת השרשרת או אחרי חוליה שכבר יש הפניה אליה</td><td class="nw"><span class="big-o">O(1)</span></td></tr>
+  <tr><td>ספירת החוליות, חיפוש ערך, הגעה לחוליה האחרונה, הכנסה בסוף השרשרת</td><td class="nw"><span class="big-o">O(n)</span></td></tr>
+  <tr><td>הכנסה לשרשרת ממוינת במקום המתאים (במקרה הגרוע מגיעים עד סוף השרשרת)</td><td class="nw"><span class="big-o">O(n)</span></td></tr>
+  <tr><td rowspan="2">תור</td><td>ספירה, סכום, חיפוש או העתקה, כולל החזרת האיברים לתור</td><td class="nw"><span class="big-o">O(n)</span></td></tr>
+  <tr><td>לכל איבר עוברים על כל שאר האיברים בתור</td><td class="nw"><span class="big-o">O(n²)</span></td></tr>
+  <tr><td rowspan="2">עץ בינארי</td><td>סריקה של כל הצמתים (תחילית, תוכית או סופית)</td><td class="nw"><span class="big-o">O(n)</span></td></tr>
+  <tr><td>ירידה מהשורש שממשיכה בכל צומת רק לבן אחד (במקרה הגרוע לכל צומת יש בן יחיד)</td><td class="nw"><span class="big-o">O(n)</span></td></tr>
+  <tr><td>שני מבנים</td><td>לכל איבר במבנה הראשון עוברים על כל המבנה השני</td><td class="nw"><span class="big-o">O(n·m)</span></td></tr>
+</table>
+
+<h2>פתרון יעיל והשוואה בין שני פתרונות</h2>
+
+<p><strong>איך קובעים איזה משני הפתרונות יעיל יותר.</strong> קובעים את הסיבוכיות של כל פתרון לפי אותה הגדרה של n. הפתרון שסדר הגודל שלו נמוך יותר הוא היעיל יותר. בתשובה כותבים את הסיבוכיות של כל פתרון ואת המסקנה, לדוגמה: "הפעולה הראשונה יעילה יותר, כי סיבוכיות זמן הריצה שלה היא <span class="big-o">O(n)</span> ושל הפעולה השנייה היא <span class="big-o">O(n²)</span>".</p>
+
+<div class="grid2">
+  <div class="box">
+    <h3>כשנדרש פתרון ב־O(n)</h3>
+    <p>בקוד שלכם לא תהיה לולאה שעוברת על כל הקלט בכל סיבוב של לולאה אחרת. אסור גם לזמן בתוך לולאה פעולה שעוברת על הקלט. הדרכים המקובלות להימנע מכך:</p>
+    <ul>
+      <li>עוברים על הקלט פעם אחת עם משתני עזר (מונה, סכום, מקסימום) ולא עוברים עליו שוב לכל איבר.</li>
+      <li>את הערכים שאינם משתנים (אורך השרשרת, סכום כולל) מחשבים פעם אחת לפני הלולאה.</li>
+      <li>כשהקלט ממוין משתמשים בשתי הפניות שרק מתקדמות, כמו בדוגמה שמשמאל.</li>
+      <li>כשהערכים הם מספרים שלמים בין 0 ל־k משתמשים במערך מונים שבו התא <code>c[v]</code> סופר כמה פעמים הופיע הערך v. מעבר על הקלט ועל המונים הוא <span class="big-o">O(n + k)</span>.</li>
+    </ul>
+  </div>
+  <div>
+    <p><strong>שתי הפניות על שתי שרשראות ממוינות.</strong> הלולאה סופרת במשתנה <code>count</code> את הערכים שמופיעים גם בשרשרת <code>a</code> וגם בשרשרת <code>b</code>. בכל שרשרת הערכים מסודרים בסדר עולה ושונים זה מזה.</p>
+<pre>while (a != null &amp;&amp; b != null)
+{
+    if (a.GetValue() &lt; b.GetValue())
+        a = a.GetNext();
+    else if (a.GetValue() &gt; b.GetValue())
+        b = b.GetNext();
+    else
+    {
+        count++;
+        a = a.GetNext();
+        b = b.GetNext();
+    }
+}</pre>
+    <p class="small">בכל סיבוב לפחות אחת מההפניות מתקדמת ואף אחת אינה חוזרת אחורה. לכן יש לכל היותר <span class="m">n + m</span> סיבובים והסיבוכיות היא <span class="big-o">O(n + m)</span>, כאשר n ו־m הם מספרי החוליות בשתי השרשראות. פתרון שמחפש כל ערך של <code>a</code> מתחילת <code>b</code> הוא <span class="big-o">O(n·m)</span>.</p>
+  </div>
+</div>
+
+<h2 class="exam">מה חוזר בשאלות הסיבוכיות בבגרות</h2>
+
+<div class="box exam">
+  <p>בבחינת הבגרות כמעט אין שאלה שלמה על סיבוכיות. שואלים עליה בסעיף קצר בסוף שאלה על שרשרת, על תור, על עץ או על מערך, בנוסח קבוע: "מהי סיבוכיות זמן הריצה של הפעולה? נמקו את תשובתכם". הסעיף מופיע בארבע צורות:</p>
+  <ul>
+    <li><strong>סיבוכיות של פעולה שכתבתם בסעיף הקודם.</strong> זו הצורה הנפוצה ביותר. התשובה תלויה בקוד שלכם.</li>
+    <li><strong>סיבוכיות של קוד נתון,</strong> אחרי סעיף מעקב ואחרי הסעיף "מה עושה הפעולה". יש שאלות שבהן נתונות שתי פעולות והשנייה מזמנת את הראשונה. בשאלה אופיינית כזאת הסיבוכיות של הראשונה היא <span class="big-o">O(n)</span> ושל השנייה <span class="big-o">O(n²)</span>.</li>
+    <li><strong>דרישת סיבוכיות שכתובה בשאלה.</strong> לדוגמה: "הפעולה חייבת לעבוד בסיבוכיות זמן ריצה של O(N)".</li>
+    <li><strong>השוואה בין שתי פעולות נתונות</strong> שעושות אותו דבר: "מי מבין שתי הפעולות יעילה יותר?".</li>
+  </ul>
+  <p>התשובה היא בדרך כלל <span class="big-o">O(n)</span> או <span class="big-o">O(n²)</span> ולעיתים <span class="big-o">O(n·m)</span>, <span class="big-o">O(n + k)</span> או <span class="big-o">O(n³)</span>. תשובה עם log אינה אופיינית לסעיפים האלה.</p>
+</div>
+
+<div class="grid2">
+  <div class="box exam">
+    <h3>פעולה שמזמנת פעולה אחרת</h3>
+    <p>כאן טועים הכי הרבה: סופרים את הזימון כצעד אחד. בפעולה רואים לולאה אחת או קריאה רקורסיבית אחת, אבל בכל סיבוב או בכל קריאה הפעולה מזמנת פעולה אחרת שעוברת בעצמה על הקלט.</p>
+    <ul>
+      <li>כשפעולה מזמנת לכל חוליה פעולת עזר שהיא <span class="big-o">O(n)</span>, הסיבוכיות של הפעולה המזמנת היא <span class="big-o">O(n²)</span>.</li>
+      <li>כך גם ברקורסיה. לדוגמה: פעולה רקורסיבית בודקת אם יש במערך באורך n שני ערכים שסכומם נתון. היא מבצעת עד n קריאות רקורסיביות ובכל קריאה מזמנת פעולת עזר שמחפשת ערך במערך. לכן הסיבוכיות שלה היא <span class="big-o">O(n²)</span>.</li>
+      <li>יש שאלות שבהן כתוב מהי הסיבוכיות של פעולת עזר נתונה, לדוגמה <span class="big-o">O(n)</span>. משתמשים בנתון הזה כשמנמקים את הסיבוכיות של הפעולה שכתבתם.</li>
+    </ul>
+  </div>
+  <div class="box exam">
+    <h3>תור: החזרת האיברים ולולאה חיצונית</h3>
+    <p><strong>זימון חוזר של פעולה שעוברת על התור.</strong> לדוגמה: פעולת עזר מקבלת תור ומספר z ובודקת אם יש בתור רצף של z ערכים שווים. היא עוברת על התור פעם אחת ולכן היא <span class="big-o">O(n)</span>. פעולה רקורסיבית מקבלת את התור ואת מספר האיברים שבו. בכל קריאה היא מזמנת את פעולת העזר ומקטינה את המספר ב־1, עד שפעולת העזר מחזירה true. התור אינו מתקצר ויש עד n קריאות. לכן הסיבוכיות היא <span class="big-o">O(n²)</span> במקרה הגרוע.</p>
+    <p><strong>לכל איבר עוברים על שאר התור.</strong> לדוגמה: פעולה שמאחדת את ההזמנות של אותו לקוח ומשתמשת רק בתורים. בכל סיבוב מוציאים הזמנה, עוברים על כל שאר התור ומחזירים אליו את ההזמנות של הלקוחות האחרים. במקרה הגרוע כל הזמנה שייכת ללקוח אחר ויש n סיבובים. לכן התשובה היא <span class="big-o">O(n²)</span>. כשפעולה אחרת מזמנת את הפעולה הזאת פעם אחת ואחר כך עוברת פעם אחת על התור המאוחד, הסיבוכיות אינה עולה: <span class="big-o">O(n²) + O(n)</span> הוא <span class="big-o">O(n²)</span>.</p>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="box exam">
+    <h3>כשגודל הקלט אינו רק n</h3>
+    <ul>
+      <li><strong>שני קלטים.</strong> כשעוברים על העץ השני לכל צומת בעץ הראשון, הסיבוכיות היא <span class="big-o">O(n·m)</span>, כאשר n ו־m הם מספרי הצמתים בשני העצים. התשובה <span class="big-o">O(n²)</span> נכונה רק אם הגדרתם את n כמספר הצמתים בעץ הגדול מבין השניים.</li>
+      <li><strong>פרמטר מספרי נוסף.</strong> כשלולאה אחת עוברת על מערך באורך n ואחריה לולאה אחרת עוברת על מערך מונים באורך k, הסיבוכיות היא <span class="big-o">O(n + k)</span> ולא <span class="big-o">O(n·k)</span>.</li>
+      <li><strong>ערך ששמור בחוליה.</strong> לדוגמה: בכל חוליה שמורים ערך ומספר המופעים שלו. כדי להכניס ערך עוברים על החוליות ולכן n הוא מספר החוליות ולא מספר המופעים.</li>
+      <li><strong>אות שהשאלה הגדירה.</strong> לדוגמה: N הוא אורך השרשרת הארוכה מבין השתיים והפעולה נדרשת לעבוד ב־<span class="big-o">O(N)</span>. מעבר אחד על שתיהן הוא עד <span class="m">2N</span> צעדים ולכן עומד בדרישה.</li>
+    </ul>
+  </div>
+  <div class="box exam">
+    <h3>מעברים זה אחר זה, יציאה מוקדמת ושני אינדקסים</h3>
+    <ul>
+      <li><strong>שני מעברים זה אחר זה.</strong> לדוגמה: סופרים את החוליות במעבר אחד ומטפלים בהן במעבר נוסף. התשובה היא <span class="big-o">O(n)</span> ולא <span class="big-o">O(n²)</span>.</li>
+      <li><strong>יציאה מוקדמת.</strong> לדוגמה: שלוש לולאות זו בתוך זו מחפשות שלושה איברים שסכומם נתון. הן מסתיימות כשהאיברים נמצאו, אבל במקרה הגרוע הלולאות מגיעות אליהם רק בסוף או שאין איברים כאלה. לכן הסיבוכיות היא <span class="big-o">O(n³)</span>. כך גם בחיפוש רקורסיבי בשרשרת: התשובה היא <span class="big-o">O(n)</span>, לפי המקרה שבו הערך אינו נמצא.</li>
+      <li><strong>שני אינדקסים בלולאה אחת.</strong> לדוגמה: נתונות שתי פעולות על מערך ממוין. הראשונה בודקת כל זוג תאים במערך והיא <span class="big-o">O(n²)</span>. השנייה מקדמת אינדקס אחד מכל קצה של המערך עד שהאינדקסים נפגשים. היא <span class="big-o">O(n)</span> ולכן יעילה יותר.</li>
+    </ul>
+  </div>
+</div>
+
+
+
+<h2>טעויות נפוצות</h2>
+<p>ברשימה הזאת כל שורה היא טעות של תלמידים. אין לפעול לפיה.</p>
+
+<div class="grid2">
+  <div class="box warn">
+    <h3>בחישוב</h3>
+    <ul>
+      <li>מכפילים לולאות שבאות זו אחר זו או מחברים לולאות שנמצאות זו בתוך זו.</li>
+      <li>סופרים זימון של פעולה כצעד אחד, בלי לבדוק אם הפעולה המזומנת עוברת על הקלט.</li>
+      <li>קובעים <span class="big-o">O(n²)</span> רק מפני שיש לולאה בתוך לולאה, בלי לבדוק כמה פעמים הלולאה הפנימית מתבצעת בסך הכול.</li>
+      <li>קובעים את התשובה לפי קלט שבו יש יציאה מוקדמת ולא לפי המקרה הגרוע.</li>
+      <li>מניחים שכל פעולה רקורסיבית היא <span class="big-o">O(2ⁿ)</span>. פעולה עם קריאה רקורסיבית אחת על המשך השרשרת היא <span class="big-o">O(n)</span>.</li>
+    </ul>
+  </div>
+  <div class="box warn">
+    <h3>בניסוח</h3>
+    <ul>
+      <li>כותבים את התשובה בלי להגדיר מה מייצגת האות n או משתמשים באות n לשני קלטים שונים.</li>
+      <li>משאירים קבועים בתשובה: <span class="big-o">O(2n)</span> או <span class="big-o">O(n²/2)</span>. התשובות המפושטות הן <span class="big-o">O(n)</span> ו־<span class="big-o">O(n²)</span>.</li>
+      <li>כותבים רק את התוצאה, בלי המשפט שמסביר כמה פעמים מתבצעת כל לולאה.</li>
+      <li>מנמקים את הסיבוכיות של פתרון אחר ולא של הקוד שכתבתם בסעיף הקודם.</li>
+      <li>שוכחים את המילים "במקרה הגרוע" כשמספר הצעדים תלוי בערכים שבקלט.</li>
+    </ul>
+  </div>
+</div>
+
+</main>
+</body>
+</html>

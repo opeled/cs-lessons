@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>דף עזר: מערכים, מחרוזות ומספרים</title>
+<link rel="stylesheet" href="sheets.css">
+<style>
+  table.tight td, table.tight th { padding: .9mm 1.6mm; }
+  .box h3 + pre { margin-top: 1mm; }
+  pre, code, .big-o { font-variant-ligatures: none; }
+  td.lc { direction: ltr; text-align: center; }
+  .grid2 > div { break-inside: avoid; }
+</style>
+</head>
+<body>
+<nav class="site-nav"><a href="./">→ לכל דפי העזר</a><a href="pdf/06-arrays-strings.pdf" download="06-מערכים ומחרוזות.pdf">הורדת PDF להדפסה</a></nav>
+<main>
+
+<header class="sheet">
+  <h1>מערכים, מחרוזות ומספרים</h1>
+  <div class="meta">דף עזר לבגרות במדעי המחשב, שאלון 899271<br>הקוד בשפת C#</div>
+</header>
+
+<h2>איך ניגשים לשאלת כתיבה על מערכים, מחרוזות ומספרים</h2>
+
+<div class="box key">
+  <ol class="steps">
+    <li><strong>קוראים את כותרת הפעולה.</strong> מה הפעולה מקבלת? האם היא מחזירה ערך, מדפיסה או משנה את המערך שקיבלה? כותרת שניתנה בשאלה מעתיקים כמו שהיא. פעולה חיצונית נכתבת עם <code>public static</code> ופעולה פנימית בלי <code>static</code>.</li>
+    <li><strong>מסמנים כל משפט שמתחיל ב"הניחו" וכל הערה.</strong> לדוגמה: "הניחו שבמערך יש לפחות מספר אי־זוגי אחד" אומר שאין צורך לטפל במערך שאין בו מספר כזה. "אין לשנות את המערך" אומר שאת התוצאה בונים במערך חדש.</li>
+    <li><strong>מזהים את התבנית.</strong> כמעט כל שאלה נפתרת באחת משמונה התבניות שבהמשך או בשילוב של שתיים מהן. הטבלה שלמטה עוזרת לזהות את התבנית לפי הניסוח.</li>
+    <li><strong>עוקבים אחרי הקוד שכתבתם עם הדוגמה שבשאלה.</strong> בודקים במיוחד את הסיבוב הראשון ואת הסיבוב האחרון של הלולאה, כי שם נמצאות רוב הטעויות באינדקסים.</li>
+  </ol>
+</div>
+
+<table class="tight">
+  <tr><th>מה כתוב בשאלה</th><th>התבנית</th><th>מה כתוב בשאלה</th><th>התבנית</th></tr>
+  <tr><td>"מספר ה...", "סכום", "ממוצע"</td><td>1. מונה וצובר</td><td>"לכל מוצר", "לכל ספרה", "כמה פעמים מופיע"</td><td>5. מערך מונים</td></tr>
+  <tr><td>"הגדול ביותר", "הקטן ביותר", "האינדקס של..."</td><td>2. הגדול ביותר</td><td>"מחזירה מערך חדש הכולל רק..."</td><td>6. סינון</td></tr>
+  <tr><td>"מחזירה true אם קיים...", "אם כל..."</td><td>3. האם קיים, האם כולם</td><td>"מוסיפה", "מכניסה", "זזות ימינה"</td><td>7. הזזה</td></tr>
+  <tr><td>"תאים סמוכים", "רצף", "בסדר עולה"</td><td>4. שכנים ורצפים</td><td>"שני איברים ש...", "אין איבר אחר ש..."</td><td>8. כל הזוגות</td></tr>
+</table>
+
+<h2>מערך חד־ממדי: שמונה תבניות</h2>
+<div class="grid2">
+  <div class="box">
+    <h3>1. מונה, צובר וממוצע</h3>
+<pre>int count = 0, sum = 0;
+for (int i = 0; i &lt; a.Length; i++)
+    if (a[i] &gt; 0)
+    {
+        count++;
+        sum += a[i];
+    }
+double avg = (double)sum / count;</pre>
+    <p class="small">התוצאה של חילוק שני שלמים היא מספר שלם (<code>7 / 2</code> הוא 3) ולכן ממירים ל־<code>double</code> לפני החילוק. כשייתכן ש־<code>count</code> הוא 0, בודקים זאת לפני שמחלקים.</p>
+  </div>
+  <div class="box">
+    <h3>2. הערך הגדול ביותר והאינדקס שלו</h3>
+<pre>public static int MaxIndex(int[] a)
+{
+    int best = 0;
+    for (int i = 1; i &lt; a.Length; i++)
+        if (a[i] &gt; a[best])
+            best = i;
+    return best;
+}</pre>
+    <p class="small"><code>best</code> הוא אינדקס ולא ערך. הוא מתחיל ב־0, האינדקס של התא הראשון. כששומרים את הערך הגדול ביותר במקום את האינדקס שלו, מתחילים מ־<code>a[0]</code> ולא מהמספר 0, כי ייתכן שכל הערכים שליליים. כשכותבים <code>&gt;</code> נשמר המופע הראשון של הערך הגדול ביותר וכשכותבים <code>&gt;=</code> נשמר המופע האחרון. הערך עצמו הוא <code>a[best]</code>.</p>
+  </div>
+  <div class="box">
+    <h3>3. האם קיים, האם כולם</h3>
+<pre>public static bool Exists(int[] a, int x)
+{
+    for (int i = 0; i &lt; a.Length; i++)
+        if (a[i] == x)
+            return true;
+    return false;
+}</pre>
+    <p class="small">זהו חיפוש סדרתי. מחזירים <code>false</code> רק אחרי הלולאה. מי שכותב <code>else return false</code> בתוך הלולאה בודק רק את התא הראשון. ב"האם כולם" הסדר הפוך: בתוך הלולאה מחזירים <code>false</code> כשתא אינו מקיים את התנאי ואחריה מחזירים <code>true</code>.</p>
+  </div>
+  <div class="box">
+    <h3>4. שכנים ורצפים (הרצף העולה הארוך ביותר)</h3>
+<pre>int cur = 1, best = 1;
+for (int i = 1; i &lt; a.Length; i++)
+{
+    if (a[i] &gt; a[i - 1]) cur++;
+    else cur = 1;
+    if (cur &gt; best) best = cur;
+}</pre>
+    <p class="small">כשניגשים ל־<code>a[i - 1]</code> הלולאה מתחילה ב־1. כשניגשים ל־<code>a[i + 1]</code> תנאי הלולאה הוא <code>i &lt; a.Length - 1</code>. רצף חדש מתחיל באורך 1 ולא באורך 0, כי התא הנוכחי כבר שייך אליו. את <code>best</code> מעדכנים בכל סיבוב, אחרת רצף שמגיע עד סוף המערך לא נבדק.</p>
+  </div>
+  <div class="box">
+    <h3>5. מערך מונים</h3>
+    <p>כשהערכים הם מספרים קטנים (ספרות, מספרי מוצר, מספרי קומה), הערך עצמו משמש אינדקס במערך של מונים.</p>
+<pre><span class="c">// <span dir="rtl">כל הערכים במערך הם בין 0 ל־9</span></span>
+int[] cnt = new int[10];
+for (int i = 0; i &lt; a.Length; i++)
+    cnt[a[i]]++;</pre>
+    <p class="small">במערך חדש של מספרים שלמים יש 0 בכל התאים. בסוף הלולאה <code>cnt[d]</code> הוא מספר המופעים של הערך d. לערכים מ־0 עד k דרוש מערך בגודל <code>k + 1</code>. כשהערכים מתחילים ב־1 (לדוגמה: שירים שמספרם 1 עד 40) יוצרים מערך בגודל 41 ולא משתמשים בתא 0. דרך אחרת היא מערך בגודל 40, שבו המונה של הערך x נמצא בתא <code>cnt[x - 1]</code>. באותה צורה צוברים סכום לכל ערך בהוראה <code>sum[key] += value</code> (לדוגמה: סכום המכירות של כל מוצר).</p>
+  </div>
+  <div class="box">
+    <h3>6. סינון למערך חדש בגודל מדויק</h3>
+<pre>public static int[] Positives(int[] a)
+{
+    int count = 0;
+    for (int i = 0; i &lt; a.Length; i++)
+        if (a[i] &gt; 0) count++;
+    int[] res = new int[count];
+    int k = 0;
+    for (int i = 0; i &lt; a.Length; i++)
+        if (a[i] &gt; 0)
+        {
+            res[k] = a[i];
+            k++;
+        }
+    return res;
+}</pre>
+    <p class="small">גודל של מערך נקבע כשיוצרים אותו. לכן סופרים קודם ורק אחר כך יוצרים וממלאים. למערך החדש יש אינדקס משלו (<code>k</code>). התנאי בשתי הלולאות חייב להיות זהה.</p>
+  </div>
+  <div class="box">
+    <h3>7. הזזה, הכנסה ומחיקה</h3>
+    <p>במערך שמלא רק בחלקו, <code>count</code> הוא מספר התאים המלאים והם נמצאים באינדקסים 0 עד <code>count - 1</code>.</p>
+<pre><span class="c">// <span dir="rtl">מכניסים ערך חדש לאינדקס pos</span></span>
+for (int i = count; i &gt; pos; i--)
+    a[i] = a[i - 1];
+a[pos] = x;
+count++;
+
+<span class="c">// <span dir="rtl">מוחקים את התא שבאינדקס pos</span></span>
+for (int i = pos; i &lt; count - 1; i++)
+    a[i] = a[i + 1];
+count--;</pre>
+    <p class="small">לפני הכנסה בודקים שיש מקום: <code>count &lt; a.Length</code>. כשמזיזים ימינה הלולאה עוברת מהסוף להתחלה וכשמזיזים שמאלה היא עוברת מההתחלה לסוף. אחרת ערך של תא נדרס לפני שהועתק. כשהמערך מלא והשאלה קובעת שהערך האחרון יוצא ממנו, לולאת ההכנסה מתחילה ב־<code>i = a.Length - 1</code> ולא מגדילים את <code>count</code>.</p>
+  </div>
+  <div class="box">
+    <h3>8. כל הזוגות</h3>
+<pre><span class="c">// <span dir="rtl">האם יש שני תאים שסכומם k</span></span>
+for (int i = 0; i &lt; a.Length - 1; i++)
+    for (int j = i + 1; j &lt; a.Length; j++)
+        if (a[i] + a[j] == k)
+            return true;
+return false;</pre>
+    <p class="small"><code>j</code> מתחיל ב־<code>i + 1</code> ולכן תא אינו נבדק מול עצמו וכל זוג נבדק פעם אחת. כשמחפשים לכל תא "תא אחר" שמקיים את התנאי שבשאלה, <code>j</code> עובר על כל המערך ומדלגים על המקרה <code>j == i</code>. סיבוכיות זמן הריצה היא <span class="big-o">O(n²)</span>.</p>
+    <p class="small">באותה צורה בודקים אם כל הערכים של מערך אחד מופיעים במערך אחר: לכל תא במערך הראשון מחפשים את הערך שלו במערך השני (תבנית 3).</p>
+  </div>
+</div>
+
+<table class="tight">
+  <tr><th>מה רוצים לעשות</th><th>הלולאה</th><th>הערה</th></tr>
+  <tr><td>כל התאים מהסוף להתחלה</td><td class="ltr"><code>for (int i = a.Length - 1; i &gt;= 0; i--)</code></td><td>לדוגמה: המופע האחרון של ערך</td></tr>
+  <tr><td>תא ושני השכנים שלו</td><td class="ltr"><code>for (int i = 1; i &lt; a.Length - 1; i++)</code></td><td>ניגשים ל־<code>a[i - 1]</code> ול־<code>a[i + 1]</code></td></tr>
+  <tr><td>זוגות סימטריים (פלינדרום)</td><td class="ltr"><code>for (int i = 0; i &lt; a.Length / 2; i++)</code></td><td>בן הזוג של <code>a[i]</code> הוא <code>a[a.Length - 1 - i]</code></td></tr>
+  <tr><td>מערך שמלא רק בחלקו</td><td class="ltr"><code>for (int i = 0; i &lt; count; i++)</code></td><td>עד מספר התאים המלאים ולא עד <code>Length</code></td></tr>
+  <tr><td>שני מערכים במקביל</td><td class="ltr"><code>for (int i = 0; i &lt; a.Length &amp;&amp; i &lt; b.Length; i++)</code></td><td>אותו <code>i</code> בשני המערכים, עד סוף המערך הקצר מביניהם</td></tr>
+  <tr><td>החלפה בין שני תאים</td><td class="ltr"><code>int t = a[i]; a[i] = a[j]; a[j] = t;</code></td><td>בלי המשתנה <code>t</code> אחד הערכים הולך לאיבוד</td></tr>
+</table>
+
+<div class="box warn">
+  <h3>מערך חדש או שינוי של המערך שהתקבל</h3>
+  <p>פעולה שמקבלת מערך מקבלת הפניה אליו. השמה לתא (<code>arr[i] = 5</code>) משנה את המערך של מי שזימן את הפעולה. לעומת זאת ההשמה <code>arr = temp</code> בתוך הפעולה משנה רק את ההפניה המקומית והמערך המקורי נשאר כמו שהיה. כשבונים את התוצאה במערך עזר ונדרש לשנות את המערך שהתקבל, מעתיקים בסוף תא אחרי תא: <code>arr[i] = temp[i]</code>.</p>
+</div>
+
+<h2>מערך דו־ממדי</h2>
+
+<div class="grid2">
+  <div>
+    <p>מערך של 3 שורות ו־4 עמודות: <code>int[,] m = new int[3, 4]</code>. התא שבשורה r ובעמודה c הוא <code>m[r, c]</code>. מספר השורות הוא <code>m.GetLength(0)</code> ומספר העמודות הוא <code>m.GetLength(1)</code>.</p>
+<pre>int rows = m.GetLength(0);
+int cols = m.GetLength(1);
+for (int r = 0; r &lt; rows; r++)
+{
+    int sum = 0;        <span class="c">// <span dir="rtl">סכום השורה r</span></span>
+    for (int c = 0; c &lt; cols; c++)
+        sum += m[r, c];
+    Console.WriteLine(sum);
+}</pre>
+    <p class="small">לסכום של כל עמודה הלולאה החיצונית עוברת על העמודות והפנימית על השורות. את המשתנה <code>sum</code> מאפסים בתוך הלולאה החיצונית, אחרת הסכומים מצטברים משורה לשורה.</p>
+  </div>
+  <div>
+    <table class="tight">
+      <tr><th>מה רוצים לעשות</th><th>איך כותבים</th></tr>
+      <tr><td>המערך ריבועי</td><td class="ltr"><code>rows == cols</code></td></tr>
+      <tr><td>האלכסון הראשי</td><td class="ltr"><code>m[i, i]</code></td></tr>
+      <tr><td>האלכסון המשני</td><td class="ltr"><code>m[i, cols - 1 - i]</code></td></tr>
+    </table>
+<pre><span class="c">// <span dir="rtl">סכום ארבעת השכנים של תא אחד</span></span>
+int s = 0;
+if (r &gt; 0)        s += m[r - 1, c];
+if (r &lt; rows - 1) s += m[r + 1, c];
+if (c &gt; 0)        s += m[r, c - 1];
+if (c &lt; cols - 1) s += m[r, c + 1];</pre>
+    <p class="small">לתא שבקצה המערך חסר שכן באחד הכיוונים לפחות. לפני כל גישה לשכן בודקים שהאינדקס שלו בתוך המערך.</p>
+  </div>
+</div>
+
+<h2>מחרוזות ותווים</h2>
+
+<div class="grid2">
+  <div>
+    <table class="tight">
+      <tr><th>הביטוי</th><th>מה מתקבל</th></tr>
+      <tr><td class="ltr"><code>s.Length</code></td><td>מספר התווים במחרוזת</td></tr>
+      <tr><td class="ltr"><code>s[i]</code></td><td>התו שבאינדקס i, מטיפוס <code>char</code></td></tr>
+      <tr><td class="ltr"><code>s.Substring(i, len)</code></td><td><code>len</code> תווים החל מאינדקס i</td></tr>
+      <tr><td class="ltr"><code>s.Substring(i)</code></td><td>מאינדקס i עד סוף המחרוזת</td></tr>
+      <tr><td class="ltr"><code>s.IndexOf(c)</code></td><td>האינדקס של המופע הראשון של c. כש־c לא מופיע מתקבל <code>-1</code></td></tr>
+      <tr><td class="ltr"><code>s1 == s2</code></td><td>האם התוכן של שתי המחרוזות זהה</td></tr>
+      <tr><td class="ltr"><code>s1.CompareTo(s2)</code></td><td>מספר שלילי כש־s1 לפני s2 בסדר מילוני, 0 כשהן שוות ומספר חיובי אחרת</td></tr>
+      <tr><td class="ltr"><code>s + c</code>, <code>s += c</code></td><td>שרשור של תו או של מחרוזת לסוף המחרוזת s</td></tr>
+    </table>
+    <p class="small">תו נכתב בין שני גרשים (<code>'a'</code>) ומחרוזת במירכאות (<code>"a"</code>). המחרוזת הריקה היא <code>""</code>.</p>
+  </div>
+  <div>
+    <table class="tight">
+      <tr><th>חשבון בתווים</th><th>מה מתקבל</th></tr>
+      <tr><td class="ltr"><code>c - '0'</code></td><td>הערך המספרי של תו שהוא ספרה: <code>'7' - '0'</code> הוא 7</td></tr>
+      <tr><td class="ltr"><code>c - 'a'</code></td><td>המיקום של אות קטנה באלפבית האנגלי: <code>'a'</code> במקום 0 ו־<code>'z'</code> במקום 25</td></tr>
+      <tr><td class="ltr"><code>(char)('a' + k)</code></td><td>האות הקטנה שבמיקום k</td></tr>
+      <tr><td class="ltr"><code>c &gt;= 'a' &amp;&amp; c &lt;= 'z'</code></td><td>האם c אות קטנה</td></tr>
+      <tr><td class="ltr"><code>c &gt;= '0' &amp;&amp; c &lt;= '9'</code></td><td>האם c ספרה</td></tr>
+      <tr><td class="ltr"><code>(char)(c - 'a' + 'A')</code></td><td>האות הגדולה שמתאימה לאות הקטנה c</td></tr>
+    </table>
+    <p class="small">תוצאה של חיבור או חיסור בתווים היא מספר שלם. כדי לקבל שוב תו כותבים לפני הביטוי <code>(char)</code>.</p>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="box">
+    <h3>ספירת אותיות במערך של 26 מונים</h3>
+<pre>int[] cnt = new int[26];
+for (int i = 0; i &lt; s.Length; i++)
+    if (s[i] &gt;= 'a' &amp;&amp; s[i] &lt;= 'z')
+        cnt[s[i] - 'a']++;</pre>
+    <p class="small">זו תבנית 5 של המערכים. בסוף <code>cnt[0]</code> הוא מספר המופעים של האות a ו־<code>cnt[25]</code> של האות z. לאותיות גדולות מחסירים <code>'A'</code>.</p>
+  </div>
+  <div class="box">
+    <h3>בניית מחרוזת חדשה</h3>
+<pre>string res = "";
+for (int i = s.Length - 1; i &gt;= 0; i--)
+    res += s[i];       <span class="c">// <span dir="rtl">המחרוזת בסדר הפוך</span></span></pre>
+    <p class="small">אי אפשר לשנות תו בתוך מחרוזת קיימת: ההשמה <code>s[i] = 'x'</code> היא שגיאה. במקום זה בונים מחרוזת חדשה תו אחרי תו. כשהתווים אינם נקבעים לפי הסדר מההתחלה לסוף, ממלאים מערך <code>char[] arr</code> ובסוף יוצרים ממנו מחרוזת: <code>new string(arr)</code>.</p>
+  </div>
+</div>
+
+<h2>מספרים וספרות</h2>
+
+<div class="grid2">
+  <div>
+    <table class="tight">
+      <tr><th>הביטוי</th><th>מה מתקבל</th><th style="white-space: nowrap">כש־n הוא 5274</th></tr>
+      <tr><td class="ltr"><code>n % 10</code></td><td>ספרת האחדות</td><td class="c">4</td></tr>
+      <tr><td class="ltr"><code>n / 10</code></td><td>המספר בלי ספרת האחדות</td><td class="c">527</td></tr>
+      <tr><td class="ltr"><code>n / 10 % 10</code></td><td>ספרת העשרות</td><td class="c">7</td></tr>
+      <tr><td class="ltr"><code>n % 100</code></td><td>שתי הספרות הימניות</td><td class="c">74</td></tr>
+      <tr><td class="ltr"><code>n / 100</code></td><td>המספר בלי שתי הספרות הימניות</td><td class="c">52</td></tr>
+      <tr><td class="ltr"><code>n % 2 == 0</code></td><td>האם n זוגי</td><td class="c">true</td></tr>
+      <tr><td class="ltr"><code>n % d == 0</code></td><td>האם d מחלק את n</td><td class="c"></td></tr>
+    </table>
+    <p class="small">כש־p הוא 10 בחזקת k, <code>n % p</code> הוא k הספרות הימניות ו־<code>n / p</code> הוא המספר בלי k הספרות הימניות. את p מחשבים בלולאה: מתחילים מ־1 ומכפילים ב־10 בכל סיבוב, k פעמים.</p>
+    <p class="small"><code>Math.Pow</code> ו־<code>Math.Sqrt</code> מחזירות <code>double</code>. המרה ל־<code>int</code> מוחקת את החלק שאחרי הנקודה ואינה מעגלת: <code>(int)Math.Sqrt(23)</code> הוא 4.</p>
+    <p class="small">את סכום המחלקים של n בלי n עצמו מחשבים כך: <code>d</code> עובר מ־1 עד <code>n - 1</code> ומוסיפים את <code>d</code> לסכום כשמתקיים <code>n % d == 0</code>.</p>
+  </div>
+  <div>
+<pre><span class="c">// <span dir="rtl">עוברים על הספרות מימין לשמאל</span></span>
+int sum = 0, digits = 0, rev = 0;
+while (n &gt; 0)
+{
+    int d = n % 10;
+    sum += d;             <span class="c">// <span dir="rtl">סכום הספרות</span></span>
+    digits++;             <span class="c">// <span dir="rtl">מספר הספרות</span></span>
+    rev = rev * 10 + d;   <span class="c">// <span dir="rtl">המספר בסדר הפוך</span></span>
+    n /= 10;
+}</pre>
+    <p class="small">בסוף הלולאה <code>n</code> הוא 0. כשצריך את המספר המקורי אחרי הלולאה (לדוגמה: כשמשווים אליו את התוצאה), מעתיקים אותו קודם למשתנה אחר ומפרקים את ההעתק.</p>
+<pre>public static bool IsPrime(int n)
+{
+    if (n &lt; 2) return false;
+    for (int d = 2; d * d &lt;= n; d++)
+        if (n % d == 0)
+            return false;
+    return true;
+}</pre>
+    <p class="small">מספיק לבדוק מחלקים עד השורש של n ולכן התנאי הוא <code>d * d &lt;= n</code>.</p>
+  </div>
+</div>
+
+<h2>טבלת מעקב ללולאה</h2>
+
+<div class="grid2">
+  <div>
+    <ol>
+      <li>פותחים עמודה לכל משתנה שהשאלה מבקשת. כשיש <code>if</code> בתוך הלולאה מוסיפים עמודה לתנאי.</li>
+      <li>השורה הראשונה מציגה את הערכים לפני הלולאה. אחריה באה שורה אחת לכל סיבוב.</li>
+      <li>ממלאים כל שורה לפי סדר ההוראות בגוף הלולאה. כשהוראה משתמשת במשתנה, לוקחים את הערך שיש בו באותו רגע.</li>
+      <li>בשורה האחרונה רושמים את הבדיקה שבה תנאי הלולאה אינו מתקיים.</li>
+      <li>אחרי הטבלה כותבים במפורש את מה שנשאל: הפלט, הערך המוחזר או תוכן המערך בסוף.</li>
+    </ol>
+<pre>int[] a = { 2, 5, 4, 8 };
+int s = 0;
+for (int i = 1; i &lt; a.Length; i++)
+{
+    a[i] = a[i] - a[i - 1];
+    s += a[i];
+}</pre>
+  </div>
+  <div>
+    <table>
+      <tr><th class="c"><code>i</code></th><th class="c"><code>a[i - 1]</code></th><th class="c"><code>a[i]</code> אחרי ההשמה</th><th class="c"><code>s</code></th></tr>
+      <tr><td class="c">-</td><td class="c">-</td><td class="c">-</td><td class="c">0</td></tr>
+      <tr><td class="c">1</td><td class="c">2</td><td class="lc">5 - 2 = 3</td><td class="c">3</td></tr>
+      <tr><td class="c">2</td><td class="c">3</td><td class="lc">4 - 3 = 1</td><td class="c">4</td></tr>
+      <tr><td class="c">3</td><td class="c">1</td><td class="lc">8 - 1 = 7</td><td class="c">11</td></tr>
+      <tr><td class="c">4</td><td colspan="3">התנאי <code>4 &lt; 4</code> אינו מתקיים והלולאה מסתיימת</td></tr>
+    </table>
+    <p>בסוף הריצה המערך הוא <span class="big-o">2, 3, 1, 7</span> וערכו של <code>s</code> הוא 11.</p>
+    <p class="small">בסיבוב השני <code>a[1]</code> כבר שווה 3 ולא 5, כי הסיבוב הראשון שינה אותו. מי שמחשב לפי המערך המקורי מקבל <code>4 - 5</code> וטועה מכאן והלאה. כשהקוד משנה את המערך, רושמים את המערך בצד הטבלה ומעדכנים אותו אחרי כל סיבוב.</p>
+  </div>
+</div>
+
+<div class="box exam">
+  <h3>סיבוכיות זמן הריצה של קוד עם לולאות</h3>
+  <p>כששואלים על סיבוכיות זמן הריצה, בודקים כמה פעמים מתבצע גוף הלולאה הפנימית ביותר. לדוגמה: שלוש לולאות מקוננות שעוברות על כל השלשות במערך רצות בזמן <span class="big-o">O(n³)</span>. לולאה על מערך בגודל n ואחריה לולאה על מערך מונים בגודל k רצות יחד בזמן <span class="big-o">O(n + k)</span>. לולאה שעוברת על מספר קבוע של תאים (10 ספרות, 26 אותיות) רצה בזמן <span class="big-o">O(1)</span>.</p>
+</div>
+
+<h2 class="exam">מה חוזר בבגרות בשאלות על מערכים, מחרוזות ומספרים</h2>
+
+<div class="box exam">
+  <p>הנושאים האלה מופיעים בבגרות גם בתוך שאלות על מחלקות ועל מבני נתונים. אלה הדברים שחוזרים:</p>
+  <ul>
+    <li><strong>שאלת מעקב.</strong> נתון קטע קוד קצר עם לולאה אחת והשאלה מבקשת: "עקבו בעזרת טבלת מעקב... בטבלת המעקב יש לכלול עמודה בעבור כל אחד מן המשתנים האלה". הטבלה חייבת לכלול את העמודות שנדרשו.</li>
+    <li><strong>הגדרה חדשה עם שם במירכאות.</strong> השאלה מגדירה מושג שלא למדתם ומבקשת לבדוק אם מספר, מערך או מחרוזת מתאימים להגדרה: "מספר נרקיסיסטי", "מספר מושלם", "קפרקר מאוזן", "מערך ממוין בחיוביים", "מערך הפרשים", "מערך מושלם", "מערך פינה", "איבר שוויון", "מחרוזת כפולה". עובדים רק לפי ההגדרה ולפי הדוגמאות שבשאלה.</li>
+    <li><strong>סעיף ב משתמש בפעולה מסעיף א.</strong> בסעיף א כותבים פעולה שבודקת מספר אחד או תא אחד. בסעיף ב עוברים על טווח או על מערך ומזמנים אותה. בשאלה כתוב "יש להשתמש בפעולה שכתבתם בסעיף א" או "חובה להיעזר".</li>
+    <li><strong>מערך שמלא רק בחלקו.</strong> למחלקה יש מערך ותכונה נוספת שסופרת כמה תאים מלאים (<code>count</code>, <code>amount</code>, <code>current</code>). סורקים עד המונה ולא עד <code>Length</code>.</li>
+  </ul>
+</div>
+
+<div class="grid2">
+  <div class="box exam">
+    <h3>אחרי המעקב: "כתבו דוגמה ל... שבעבורו..."</h3>
+    <p>יש שאלות שבהן בא אחרי המעקב סעיף שמבקש קלט שנותן תוצאה מסוימת. לדוגמה: מערך בגודל 4 של מספרים גדולים מ־0 שעבורו המונה שבקוד יישאר 0. דוגמה אחרת: מספר גדול מ־1 שעבורו יודפס 1.</p>
+    <p>אחרי המעקב כותבים בצד משפט אחד שמתאר מה הלולאה עושה בכל סיבוב: מה היא בודקת ומה היא מוסיפה. לפי המשפט הזה בונים קלט קטן. בודקים שהקלט עומד בכל ההגבלות שבסעיף (הגודל, "גדולים מ־0") ועוקבים בקצרה אחרי הקוד עם הקלט הזה.</p>
+  </div>
+  <div class="box exam">
+    <h3>סעיף ב: עוברים על טווח ומזמנים את הפעולה מסעיף א</h3>
+<pre><span class="c">// <span dir="rtl">מדפיסה כל מספר בטווח שעובר את הבדיקה</span></span>
+public static void PrintAll(int n)
+{
+    for (int x = 1; x &lt;= n; x++)
+        if (IsSpecial(x))
+            Console.WriteLine(x);
+}</pre>
+    <p class="small"><code>PrintAll</code> מדפיסה כל מספר מ־1 עד n (כולל) ש־<code>IsSpecial</code>, הפעולה מסעיף א, מחזירה עבורו <code>true</code>. המילה "כולל" מחייבת <code>&lt;=</code>. אין לכתוב שוב את הבדיקה של סעיף א בתוך הלולאה.</p>
+    <p class="small">כשמבקשים לבדוק טענה על טווח גדול (לדוגמה: שאין עד 999,999 מספר אי־זוגי ששווה לסכום המחלקים שלו שקטנים ממנו), מחזירים <code>false</code> ברגע שנמצא מספר שסותר את הטענה ומחזירים <code>true</code> רק אחרי הלולאה.</p>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="box exam">
+    <h3>המילים שקובעות את סימן ההשוואה</h3>
+    <table class="tight">
+      <tr><th>בשאלה</th><th>בקוד</th></tr>
+      <tr><td>"גבוהה ב־10 לפחות מ־max"</td><td class="ltr"><code>speed &gt;= max + 10</code></td></tr>
+      <tr><td>"גדול מ־num", "מעל 5.0"</td><td class="ltr"><code>&gt;</code></td></tr>
+      <tr><td>"70 ומעלה", "לפחות 3"</td><td class="ltr"><code>&gt;=</code></td></tr>
+      <tr><td>"בין 1 ל־n (כולל)"</td><td class="ltr"><code>x &gt;= 1 &amp;&amp; x &lt;= n</code></td></tr>
+      <tr><td>"ברוב התאים"</td><td class="ltr"><code>2 * count &gt; a.Length</code></td></tr>
+      <tr><td>"לפחות בחצי מהתאים"</td><td class="ltr"><code>2 * count &gt;= a.Length</code></td></tr>
+    </table>
+    <p class="small">ב"רוב" וב"חצי" מכפילים את המונה ב־2 במקום לחלק את גודל המערך ב־2, כי <code>7 / 2</code> הוא 3 ואז 3 מתוך 7 נחשבים בטעות לחצי.</p>
+  </div>
+  <div class="box exam">
+    <h3>מה הפעולה עושה עם המערך</h3>
+    <ul>
+      <li><strong>"מחזירה מערך חדש בגודל זהה" ו"אין לשנות את המערך":</strong> יוצרים <code>new int[arr.Length]</code> וממלאים אותו.</li>
+      <li><strong>"גודל המערך המוחזר הוא כמספר האיברים ש...":</strong> זו תבנית 6, שבה סופרים לפני שיוצרים את המערך.</li>
+      <li><strong>הפעולה היא <code>void</code> ומסדרת את המערך עצמו:</strong> בונים את התוצאה במערך עזר ומעתיקים בחזרה תא אחרי תא.</li>
+      <li><strong>"אם הערך כבר מופיע, המערך יישאר ללא שינוי":</strong> קודם מחפשים את הערך בכל המערך ורק אחרי שהחיפוש הסתיים מתחילים להזיז.</li>
+      <li><strong>הכנסה למערך שמלא רק בחלקו:</strong> בודקים קודם שיש מקום ומחזירים <code>false</code> כשאין. אחרי ההכנסה מגדילים את המונה.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="box exam">
+    <h3>מחרוזות: מה נדרש בפועל</h3>
+    <ul>
+      <li>בדרך כלל מספיקים <code>Length</code>, גישה לתו ב־<code>s[i]</code> והשוואת תווים ב־<code>==</code>.</li>
+      <li>כשמשווים שתי מחרוזות תו מול תו, בודקים קודם שהאורכים שווים. רק אז ניגשים לאותו אינדקס בשתיהן.</li>
+      <li>כשבודקים אם שני החצאים של מחרוזת זהים, מחזירים <code>false</code> מיד כשהאורך אי־זוגי. אחרת משווים את <code>s[i]</code> ל־<code>s[i + s.Length / 2]</code>.</li>
+      <li>יש שאלות שבהן מערך של אינדקסים <code>p</code> קובע את הסדר החדש של תווי המחרוזת <code>s</code> ואת התוצאה בונים במערך תווים <code>res</code>. בודקים על הדוגמה שבשאלה איזו השמה נכונה: <code>res[p[i]] = s[i]</code> או <code>res[i] = s[p[i]]</code>.</li>
+    </ul>
+  </div>
+  <div class="box exam">
+    <h3>משתנה שמתאפס באמצע הסריקה</h3>
+    <p>יש שאלות שבהן המערך מתחלק לקטעים. הצובר מתאפס בסוף כל קטע והתשובה היא התוצאה הגדולה ביותר שהתקבלה בקטע אחד.</p>
+    <ul>
+      <li>הסכום הגדול ביותר של תאים שבין שני אפסים: כשמגיעים לתא שערכו 0 משווים את הסכום שנצבר לסכום הגדול ביותר שנמצא ומאפסים את הצובר. התאים שלפני ה־0 הראשון ואחרי ה־0 האחרון אינם נכללים בחישוב.</li>
+      <li>הרצף העולה הארוך ביותר: כאן המונה חוזר ל־1 בסוף כל רצף (תבנית 4).</li>
+      <li>בשאלות מעקב מופיע גם צובר שמאפסים אותו בכל פעם שערכו נעשה שלילי.</li>
+    </ul>
+  </div>
+</div>
+
+
+
+<h2>טעויות נפוצות</h2>
+<p>כל שורה כאן מתארת טעות שתלמידים עושים ולא הנחיה.</p>
+
+<div class="grid2">
+  <div class="box warn">
+    <h3>אינדקסים וגבולות</h3>
+    <ul>
+      <li>כותבים <code>i &lt;= a.Length</code> וחורגים מהמערך. התא האחרון הוא <code>a[a.Length - 1]</code>.</li>
+      <li>ניגשים ל־<code>a[i + 1]</code> או ל־<code>a[i - 1]</code> בלי לשנות את גבולות הלולאה.</li>
+      <li>בזוג הסימטרי כותבים <code>a[a.Length - i]</code> במקום <code>a[a.Length - 1 - i]</code>.</li>
+      <li>סורקים מערך שמלא רק בחלקו עד <code>Length</code>.</li>
+      <li>משתמשים באינדקס של המערך המקורי גם במערך התוצאה (תבנית 6).</li>
+      <li>במעקב: מחשבים לפי המערך המקורי אחרי שהקוד כבר שינה אותו.</li>
+    </ul>
+  </div>
+  <div class="box warn">
+    <h3>תנאים, חישוב וקריאת השאלה</h3>
+    <ul>
+      <li>ב"האם קיים" מחזירים <code>false</code> בתוך הלולאה כבר כשהתא הראשון אינו מתאים (תבנית 3).</li>
+      <li>מאתחלים את הערך הגדול ביותר במספר 0 במקום ב־<code>a[0]</code> כשייתכנו ערכים שליליים.</li>
+      <li>מתבלבלים בין <code>&gt;</code> ל־<code>&gt;=</code> או בין <code>&amp;&amp;</code> ל־<code>||</code>.</li>
+      <li>כותבים שרשרת של <code>else if</code> כשכל תנאי צריך להיבדק בנפרד וכמה מהם יכולים להתקיים יחד.</li>
+      <li>מפרקים את המספר לספרות ואחר כך משתמשים בו כאילו לא השתנה.</li>
+      <li>מדפיסים את התוצאה כשהשאלה דורשת להחזיר אותה או להפך.</li>
+    </ul>
+  </div>
+</div>
+
+</main>
+</body>
+</html>

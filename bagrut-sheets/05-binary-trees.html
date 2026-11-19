@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>דף עזר: עצים בינאריים</title>
+<link rel="stylesheet" href="sheets.css">
+<style>
+svg.tree { display: block; margin: 0 auto 1.5mm; width: 100%; max-width: 84mm; height: auto; direction: ltr; }
+svg.tree circle { fill: #fff; stroke: var(--ink); stroke-width: .9; }
+svg.tree line { stroke: var(--ink); stroke-width: .8; }
+svg.tree line.miss { stroke: var(--muted); stroke-dasharray: 2 2; }
+svg.tree text { font-family: "JetBrains Mono", Menlo, monospace; font-size: 10px; fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+svg.tree text.lbl { font-family: Heebo, Arial, sans-serif; font-size: 9.5px; fill: var(--accent); direction: rtl; }
+svg.tree text.ret { fill: var(--exam); font-weight: 600; font-size: 9.5px; }
+td.nw { white-space: nowrap; }
+td.n { direction: ltr; text-align: center; }
+table.exams { break-inside: auto; font-size: 8.5pt; line-height: 1.38; }
+table.exams tr { break-inside: avoid; }
+table.exams thead { display: table-header-group; }
+table.trace td, table.trace th { padding: .55mm 2mm; }
+table.exams td { padding: .8mm 1.6mm; }
+ul.tight li { margin-bottom: .5mm; }
+</style>
+</head>
+<body>
+<nav class="site-nav"><a href="./">→ לכל דפי העזר</a><a href="pdf/05-binary-trees.pdf" download="05-עצים בינאריים.pdf">הורדת PDF להדפסה</a></nav>
+<main>
+
+<header class="sheet">
+  <h1>עצים בינאריים</h1>
+  <div class="meta">דף עזר לבגרות במדעי המחשב, שאלון 899271<br>הקוד בשפת C#</div>
+</header>
+
+<h2>מבנה העץ והמינוח</h2>
+
+<div class="grid2">
+  <div>
+    <svg class="tree" viewBox="0 0 290 166" xmlns="http://www.w3.org/2000/svg">
+      <line x1="165" y1="20" x2="105" y2="60"/><line x1="165" y1="20" x2="225" y2="60"/>
+      <line x1="105" y1="60" x2="70" y2="100"/><line x1="105" y1="60" x2="140" y2="100"/>
+      <line x1="225" y1="60" x2="260" y2="100"/><line x1="140" y1="100" x2="115" y2="140"/>
+      <circle cx="165" cy="20" r="11"/><text x="165" y="20">5</text>
+      <circle cx="105" cy="60" r="11"/><text x="105" y="60">9</text>
+      <circle cx="225" cy="60" r="11"/><text x="225" y="60">2</text>
+      <circle cx="70" cy="100" r="11"/><text x="70" y="100">4</text>
+      <circle cx="140" cy="100" r="11"/><text x="140" y="100">7</text>
+      <circle cx="260" cy="100" r="11"/><text x="260" y="100">8</text>
+      <circle cx="115" cy="140" r="11"/><text x="115" y="140">1</text>
+      <text class="lbl" x="198" y="14">שורש</text>
+      <text class="lbl" x="70" y="119">עלה</text>
+      <text class="lbl" x="260" y="119">עלה</text>
+      <text class="lbl" x="115" y="159">עלה</text>
+      <text class="lbl" x="20" y="20">רמה 0</text>
+      <text class="lbl" x="20" y="60">רמה 1</text>
+      <text class="lbl" x="20" y="100">רמה 2</text>
+      <text class="lbl" x="20" y="140">רמה 3</text>
+    </svg>
+    <p class="small">בעץ הזה משתמשים בדוגמאות שבהמשך הדף. יש בו 7 צמתים ו־3 מהם עלים. הגובה שלו 3. בן יחיד שהקו אליו נוטה שמאלה הוא בן שמאלי (1 הוא הבן השמאלי של 7). בן יחיד שהקו אליו נוטה ימינה הוא בן ימני (8 הוא הבן הימני של 2).</p>
+  </div>
+  <div>
+    <ul class="tight">
+      <li><strong>עץ בינארי:</strong> לכל צומת יש לכל היותר שני בנים, בן שמאלי ובן ימני. עץ ריק הוא <code>null</code>.</li>
+      <li><strong>שורש:</strong> הצומת העליון. זהו הצומת היחיד שאין לו הורה.</li>
+      <li><strong>הורה, בן ואח:</strong> הצומת 9 הוא ההורה של 4 ושל 7. הצומת 4 הוא הבן השמאלי שלו והצומת 7 הוא הבן הימני שלו. הצמתים 4 ו־7 הם אחים.</li>
+      <li><strong>עלה:</strong> צומת שאין לו בנים.</li>
+      <li><strong>תת־עץ:</strong> צומת יחד עם כל הצמתים שמתחתיו. תת־העץ השמאלי של 5 הוא העץ ששורשו 9 ויש בו 4 צמתים.</li>
+      <li><strong>מסלול:</strong> רצף של צמתים שכל אחד מהם, חוץ מהראשון, הוא בן של הקודם לו. לדוגמה: 5, 9, 7, 1 הוא מסלול מהשורש לעלה.</li>
+      <li><strong>רמה של צומת:</strong> מספר הקשתות (הקווים שמחברים הורה לבן) במסלול מהשורש אליו. השורש נמצא ברמה 0.</li>
+      <li><strong>גובה העץ:</strong> מספר הקשתות במסלול הארוך ביותר מהשורש לעלה. הגובה של עץ בן צומת אחד הוא 0.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="grid2">
+  <div>
+    <table>
+      <tr><th>הפעולה ב־<code>BinNode&lt;T&gt;</code></th><th>מה היא עושה</th></tr>
+      <tr><td class="ltr"><code>new BinNode&lt;int&gt;(x)</code></td><td>יוצרת צומת שערכו x ואין לו בנים</td></tr>
+      <tr><td class="ltr"><code>new BinNode&lt;int&gt;(l, x, r)</code></td><td>יוצרת צומת שערכו x והבנים שלו הם l ו־r</td></tr>
+      <tr><td class="ltr"><code>t.GetValue()</code></td><td>מחזירה את הערך שבצומת</td></tr>
+      <tr><td class="ltr"><code>t.SetValue(x)</code></td><td>משנה את הערך שבצומת ל־x</td></tr>
+      <tr><td class="ltr"><code>t.GetLeft()</code><br><code>t.GetRight()</code></td><td>מחזירה את הבן השמאלי או את הבן הימני. כשאין בן כזה היא מחזירה <code>null</code></td></tr>
+      <tr><td class="ltr"><code>t.SetLeft(p)</code><br><code>t.SetRight(p)</code></td><td>קובעת ש־p הוא הבן השמאלי או הבן הימני</td></tr>
+      <tr><td class="ltr"><code>t.HasLeft()</code><br><code>t.HasRight()</code></td><td><code>HasLeft</code> מחזירה <code>true</code> כשיש בן שמאלי. <code>HasRight</code> מחזירה <code>true</code> כשיש בן ימני. הזימון <code>t.HasLeft()</code> שקול לבדיקה <code>t.GetLeft() != null</code></td></tr>
+    </table>
+  </div>
+  <div class="box key">
+    <h3>איך מזהים את סוג הצומת בלי שגיאת ריצה</h3>
+    <table>
+      <tr><th>סוג הצומת</th><th>התנאי</th></tr>
+      <tr><td class="nw">עלה</td><td class="ltr"><code>!t.HasLeft() &amp;&amp; !t.HasRight()</code></td></tr>
+      <tr><td class="nw">בן שמאלי בלבד</td><td class="ltr"><code>t.HasLeft() &amp;&amp; !t.HasRight()</code></td></tr>
+      <tr><td class="nw">בן ימני בלבד</td><td class="ltr"><code>!t.HasLeft() &amp;&amp; t.HasRight()</code></td></tr>
+      <tr><td class="nw">שני בנים</td><td class="ltr"><code>t.HasLeft() &amp;&amp; t.HasRight()</code></td></tr>
+    </table>
+    <p>סדר הבדיקות קבוע: קודם בודקים ש־<code>t</code> אינו <code>null</code>, אחר כך בודקים שהבן קיים ורק אז פונים לערך של הבן.</p>
+<pre>if (t.GetLeft() != null &amp;&amp;
+    t.GetLeft().GetValue() == x)</pre>
+    <p class="small">כשהבן השמאלי חסר, החלק הראשון של התנאי הוא שקר ולכן החלק השני אינו נבדק. אם הופכים את סדר החלקים, הפנייה לערך של בן חסר גורמת לשגיאת ריצה.</p>
+  </div>
+</div>
+
+<h2>סריקות של עץ</h2>
+<p>סריקה עוברת על כל צומתי העץ, כל צומת פעם אחת. בשלוש הסריקות הרקורסיביות תת־העץ השמאלי נסרק תמיד לפני הימני. ההבדל ביניהן הוא רק המקום שבו מטפלים בשורש: לפני שתי הקריאות הרקורסיביות, ביניהן או אחריהן.</p>
+
+<table>
+  <tr><th>הסריקה</th><th>הסדר בכל תת־עץ</th><th>הפלט בעץ שבסרטוט</th></tr>
+  <tr><td>תחילית (preorder)</td><td>שורש, שמאל, ימין</td><td class="ltr nw">5 9 4 7 1 2 8</td></tr>
+  <tr><td>תוכית (inorder)</td><td>שמאל, שורש, ימין</td><td class="ltr nw">4 9 1 7 5 2 8</td></tr>
+  <tr><td>סופית (postorder)</td><td>שמאל, ימין, שורש</td><td class="ltr nw">4 1 7 9 8 2 5</td></tr>
+  <tr><td>לפי רמות</td><td>רמה אחרי רמה, משמאל לימין</td><td class="ltr nw">5 9 2 4 7 8 1</td></tr>
+</table>
+
+<div class="grid2">
+  <div>
+<pre>public static void Scan(BinNode&lt;int&gt; t)
+{
+    if (t == null) return;
+    <span class="c">// <span dir="rtl">סדר תחילי: מטפלים בשורש כאן</span></span>
+    Scan(t.GetLeft());
+    <span class="c">// <span dir="rtl">סדר תוכי: מטפלים בשורש כאן</span></span>
+    Scan(t.GetRight());
+    <span class="c">// <span dir="rtl">סדר סופי: מטפלים בשורש כאן</span></span>
+}</pre>
+    <p class="small">הטיפול בשורש הוא בדרך כלל הדפסה. לדוגמה: <code>Console.Write(t.GetValue() + " ");</code></p>
+    <p class="small">כשסורקים ביד, מסיימים תת־עץ שלם לפני שעוברים לתת־העץ הבא. בסדר תוכי כותבים את 5 רק אחרי שכל ארבעת הצמתים שמשמאלו נכתבו.</p>
+  </div>
+  <div>
+    <p><strong>סריקה לפי רמות</strong> אינה רקורסיבית. היא משתמשת בתור של צמתים שעדיין לא טופלו.</p>
+<pre>public static void PrintLevels(BinNode&lt;int&gt; t)
+{
+    if (t == null) return;
+    Queue&lt;BinNode&lt;int&gt;&gt; q =
+        new Queue&lt;BinNode&lt;int&gt;&gt;();
+    q.Insert(t);
+    while (!q.IsEmpty())
+    {
+        BinNode&lt;int&gt; cur = q.Remove();
+        Console.Write(cur.GetValue() + " ");
+        if (cur.GetLeft() != null)
+            q.Insert(cur.GetLeft());
+        if (cur.GetRight() != null)
+            q.Insert(cur.GetRight());
+    }
+}</pre>
+    <p class="small">סריקה לפי רמות בעץ שבסרטוט: מכניסים לתור את 5. מוציאים את 5 ומכניסים את 9 ואת 2. מוציאים את 9 ומכניסים את 4 ואת 7. מוציאים את 2 ומכניסים את 8. כך ממשיכים עד שהתור ריק.</p>
+    <p class="small">צומת שנכנס לתור ראשון יוצא ממנו ראשון. לכן כל הצמתים של רמה אחת יוצאים מהתור לפני הצמתים של הרמה שמתחתיה. מכניסים לתור רק בנים שקיימים. אם מכניסים <code>null</code>, הזימון <code>cur.GetValue()</code> גורם לשגיאת ריצה.</p>
+  </div>
+</div>
+
+<h2>איך כותבים פעולה רקורסיבית על עץ</h2>
+
+<div class="box key">
+  <p>חושבים רק על השורש של העץ שהפעולה קיבלה ועונים על שלוש השאלות מדף הרקורסיה:</p>
+  <ol class="steps">
+    <li><strong><span class="hl1">מה מחזירים עבור עץ ריק?</span></strong> זהו תנאי העצירה <code>t == null</code>. בוחרים ערך שאינו משפיע על החישוב בצומת שמעליו. לדוגמה: 0 בסכום.</li>
+    <li><strong><span class="hl2">מה מקבלים משתי הקריאות?</span></strong> קוראים לפעולה פעם אחת על תת־העץ השמאלי ופעם אחת על הימני. מניחים ששתיהן מחזירות תשובה נכונה.</li>
+    <li><strong><span class="hl3">מה עושים עם השורש ועם שתי התוצאות?</span></strong> לחישוב הזה קוראים בדף "השילוב". פעולות שונות נבדלות זו מזו בעיקר בשילוב.</li>
+  </ol>
+</div>
+
+<div class="grid2" style="grid-template-columns: 40% 1fr">
+  <div>
+<pre>public static int F(BinNode&lt;int&gt; t)
+{
+    <span class="hl1">if (t == null)
+        return 0;</span>
+    int left = <span class="hl2">F(t.GetLeft())</span>;
+    int right = <span class="hl2">F(t.GetRight())</span>;
+    <span class="hl3">return 1 + left + right;</span>
+}</pre>
+    <p class="small">השלד הזה סופר את הצמתים. כדי לקבל פעולה אחרת מחליפים את הערך שמוחזר עבור עץ ריק ואת שורת השילוב לפי הטבלה. בפעולה שמחזירה אמת או שקר מחליפים גם את <code>int</code> ב־<code>bool</code>. בטבלה <code>cond</code> הוא התנאי שבודקים בשורש. הקוד המלא של "האם קיים" ושל גובה העץ נמצא בדף הרקורסיה (תבניות 2 ו־4).</p>
+  </div>
+  <div>
+    <table>
+      <tr><th>מה מחשבים</th><th>עץ ריק</th><th>השילוב</th></tr>
+      <tr><td>מספר הצמתים</td><td class="ltr"><code>0</code></td><td class="ltr"><code>1 + left + right</code></td></tr>
+      <tr><td>סכום הערכים</td><td class="ltr"><code>0</code></td><td class="ltr"><code>t.GetValue() + left + right</code></td></tr>
+      <tr><td>כמה צמתים מקיימים תנאי</td><td class="ltr"><code>0</code></td><td><code>left + right</code> ועוד 1 כשהשורש מקיים את התנאי</td></tr>
+      <tr><td>גובה העץ</td><td class="ltr"><code>-1</code></td><td class="ltr"><code>1 + Math.Max(left, right)</code></td></tr>
+      <tr><td>האם קיים צומת שמקיים תנאי</td><td class="ltr"><code>false</code></td><td class="ltr"><code>cond || left || right</code></td></tr>
+      <tr><td>האם כל הצמתים מקיימים תנאי</td><td class="ltr"><code>true</code></td><td class="ltr"><code>cond &amp;&amp; left &amp;&amp; right</code></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="grid2">
+  <div>
+    <p><strong>כמה תוצאות באותה סריקה.</strong> כשצריך לספור שני דברים או יותר באותה סריקה, יוצרים מערך של מונים פעם אחת לפני הזימון ומעבירים אותו כפרמטר. המערך משותף לכל הקריאות ולכן כולן מעדכנות את אותם מונים. הפעולה הרקורסיבית אינה מחזירה ערך.</p>
+    <p class="small">קודם יוצרים את המערך: <code>int[] c = new int[2];</code> ואחר כך מזמנים את <code>Count(t, c)</code>. בסיום <code>c[0]</code> הוא מספר הערכים הזוגיים ו־<code>c[1]</code> הוא מספר האי־זוגיים. הדוגמה מניחה שאין בעץ ערכים שליליים, כי השארית של מספר שלילי אי־זוגי היא <span class="big-o">-1</span> ואין במערך תא כזה.</p>
+  </div>
+  <div>
+<pre>public static void Count(BinNode&lt;int&gt; t, int[] c)
+{
+    if (t == null) return;
+    c[t.GetValue() % 2]++;
+    Count(t.GetLeft(), c);
+    Count(t.GetRight(), c);
+}</pre>
+  </div>
+</div>
+
+<h2>שמונה דוגמאות לפעולות רקורסיביות על עץ</h2>
+
+<div class="grid2">
+  <div class="box">
+    <h3>דוגמה 1. ספירת עלים: מקרה נפרד לעלה</h3>
+    <p>בודקים אם הצומת הוא עלה מיד אחרי שבודקים אם העץ ריק.</p>
+<pre>public static int Leaves(BinNode&lt;int&gt; t)
+{
+    if (t == null) return 0;
+    if (t.GetLeft() == null &amp;&amp;
+        t.GetRight() == null)
+        return 1;
+    return Leaves(t.GetLeft())
+         + Leaves(t.GetRight());
+}</pre>
+  </div>
+  <div class="box">
+    <h3>דוגמה 2. מקסימום: אין ערך מתאים לעץ ריק</h3>
+    <p>מניחים שהעץ שהפעולה מקבלת אינו ריק וקוראים לה רק על בנים שקיימים.</p>
+<pre>public static int Max(BinNode&lt;int&gt; t)
+{
+    int max = t.GetValue();
+    if (t.GetLeft() != null)
+        max = Math.Max(max, Max(t.GetLeft()));
+    if (t.GetRight() != null)
+        max = Math.Max(max, Max(t.GetRight()));
+    return max;
+}</pre>
+  </div>
+  <div class="box">
+    <h3>דוגמה 3. השוואה של כל צומת לבנים שלו</h3>
+    <p>הפעולה <code>Bigger</code> בודקת אם כל צומת גדול מהבנים שלו. בודקים כל בן רק אם הוא קיים.</p>
+<pre>public static bool Bigger(BinNode&lt;int&gt; t)
+{
+    if (t == null) return true;
+    BinNode&lt;int&gt; l = t.GetLeft();
+    BinNode&lt;int&gt; r = t.GetRight();
+    if (l != null &amp;&amp; l.GetValue() &gt;= t.GetValue())
+        return false;
+    if (r != null &amp;&amp; r.GetValue() &gt;= t.GetValue())
+        return false;
+    return Bigger(l) &amp;&amp; Bigger(r);
+}</pre>
+  </div>
+  <div class="box">
+    <h3>דוגמה 4. פרמטר שעובר מההורה לבנים: מספר הצמתים ברמה k</h3>
+    <p>הפרמטר <code>k</code> אומר כמה רמות עוד צריך לרדת. בכל ירידה לבן מקטינים אותו ב־1.</p>
+<pre>public static int AtLevel(BinNode&lt;int&gt; t, int k)
+{
+    if (t == null) return 0;
+    if (k == 0) return 1;
+    return AtLevel(t.GetLeft(), k - 1)
+         + AtLevel(t.GetRight(), k - 1);
+}</pre>
+    <p class="small">באותה דרך מעבירים לבנים את הערך של ההורה או את הסכום שנצבר עד כה.</p>
+  </div>
+  <div class="box">
+    <h3>דוגמה 5. מסלול מהשורש לעלה</h3>
+    <p>הפעולה <code>Path</code> בודקת אם יש מסלול מהשורש לעלה שסכום ערכיו <code>sum</code>. מעבירים לבנים את הסכום שעוד חסר ובודקים אם הוא 0 רק כשמגיעים לעלה.</p>
+<pre>public static bool Path(BinNode&lt;int&gt; t, int sum)
+{
+    if (t == null) return false;
+    sum = sum - t.GetValue();
+    if (t.GetLeft() == null &amp;&amp;
+        t.GetRight() == null)
+        return sum == 0;
+    return Path(t.GetLeft(), sum)
+        || Path(t.GetRight(), sum);
+}</pre>
+  </div>
+  <div class="box">
+    <h3>דוגמה 6. יורדים בשני עצים יחד</h3>
+    <p>הפעולה <code>Same</code> בודקת אם שני העצים זהים בצורה ובערכים. מטפלים קודם במקרים שבהם לפחות אחד מהעצים ריק.</p>
+<pre>public static bool Same(BinNode&lt;int&gt; a,
+                        BinNode&lt;int&gt; b)
+{
+    if (a == null &amp;&amp; b == null) return true;
+    if (a == null || b == null) return false;
+    return a.GetValue() == b.GetValue()
+        &amp;&amp; Same(a.GetLeft(), b.GetLeft())
+        &amp;&amp; Same(a.GetRight(), b.GetRight());
+}</pre>
+  </div>
+  <div class="box">
+    <h3>דוגמה 7. בניית עץ חדש</h3>
+    <p>הפעולה מחזירה את השורש של העץ שבנתה. לדוגמה: העתק של עץ.</p>
+<pre>public static BinNode&lt;int&gt; Copy(BinNode&lt;int&gt; t)
+{
+    if (t == null) return null;
+    return new BinNode&lt;int&gt;(Copy(t.GetLeft()),
+        t.GetValue(), Copy(t.GetRight()));
+}</pre>
+  </div>
+  <div class="box">
+    <h3>דוגמה 8. שינוי של עץ קיים</h3>
+    <p>הפעולה אינה מחזירה ערך. לדוגמה: הכפלת כל הערכים ב־2.</p>
+<pre>public static void Twice(BinNode&lt;int&gt; t)
+{
+    if (t == null) return;
+    t.SetValue(t.GetValue() * 2);
+    Twice(t.GetLeft());
+    Twice(t.GetRight());
+}</pre>
+    <p class="small">צומת חדש מוסיפים כך: <code>t.SetLeft(new BinNode&lt;int&gt;(x))</code></p>
+  </div>
+</div>
+
+<h2>מעקב אחרי פעולה רקורסיבית על הסרטוט של העץ</h2>
+
+<div class="grid2">
+  <div>
+    <ol>
+      <li>מעתיקים את העץ למחברת. צמתים שיש להם אותו ערך מסמנים באותיות שונות כדי להבדיל ביניהם.</li>
+      <li>מתחילים בעלים. ליד כל עלה רושמים את הערך שהפעולה מחזירה עבורו. אם הפעולה נקראת גם על בן חסר, רושמים במקומו את הערך שהיא מחזירה עבור <code>null</code>.</li>
+      <li>ממשיכים מהעלים כלפי מעלה. צומת מקבל ערך רק אחרי ששני הבנים שלו קיבלו ערך.</li>
+      <li>הערך שנרשם ליד השורש הוא התשובה.</li>
+    </ol>
+    <p>הקריאות נפתחות מהשורש כלפי מטה, אבל הערכים חוזרים מהעלים כלפי מעלה. הערכים חוזרים בסדר של הסריקה הסופית (postorder). לפי הסדר הזה ממלאים את טבלת המעקב.</p>
+    <p><strong>פעולה שמחזירה אמת או שקר:</strong> ב־<code>A &amp;&amp; B</code>, כש־<code>A</code> החזירה שקר, הקריאה <code>B</code> אינה מתבצעת. ב־<code>A || B</code>, כש־<code>A</code> החזירה אמת, הקריאה <code>B</code> אינה מתבצעת. במעקב מציינים אילו תתי־עצים לא נסרקו.</p>
+    <p><strong>פעולה שמזמנת פעולת עזר בכל צומת:</strong> כשכתוב בשאלה שאין צורך לעקוב אחרי פעולת העזר, רושמים ליד כל צומת רק את הערך שהיא מחזירה עבור תת־העץ שלו.</p>
+  </div>
+  <div>
+    <p>בדוגמה עוקבים אחרי הפעולה <code>Height</code>, שמחזירה את גובה העץ. עבור עץ ריק היא מחזירה <span class="big-o">-1</span>. הקווים המקווקווים מסמנים את הבנים החסרים של 7 ושל 2. גם עבור כל בן חסר של עלה הפעולה מחזירה <span class="big-o">-1</span>.</p>
+    <svg class="tree" viewBox="40 0 250 156" xmlns="http://www.w3.org/2000/svg" style="max-width:58mm">
+      <line x1="165" y1="20" x2="105" y2="60"/><line x1="165" y1="20" x2="225" y2="60"/>
+      <line x1="105" y1="60" x2="70" y2="100"/><line x1="105" y1="60" x2="140" y2="100"/>
+      <line x1="225" y1="60" x2="260" y2="100"/><line x1="140" y1="100" x2="115" y2="140"/>
+      <line class="miss" x1="140" y1="100" x2="163" y2="134"/>
+      <line class="miss" x1="225" y1="60" x2="198" y2="92"/>
+      <circle cx="165" cy="20" r="11"/><text x="165" y="20">5</text>
+      <circle cx="105" cy="60" r="11"/><text x="105" y="60">9</text>
+      <circle cx="225" cy="60" r="11"/><text x="225" y="60">2</text>
+      <circle cx="70" cy="100" r="11"/><text x="70" y="100">4</text>
+      <circle cx="140" cy="100" r="11"/><text x="140" y="100">7</text>
+      <circle cx="260" cy="100" r="11"/><text x="260" y="100">8</text>
+      <circle cx="115" cy="140" r="11"/><text x="115" y="140">1</text>
+      <text class="ret" x="184" y="11">3</text>
+      <text class="ret" x="86" y="51">2</text>
+      <text class="ret" x="244" y="51">1</text>
+      <text class="ret" x="52" y="91">0</text>
+      <text class="ret" x="159" y="91">1</text>
+      <text class="ret" x="278" y="91">0</text>
+      <text class="ret" x="97" y="131">0</text>
+      <text class="ret" x="168" y="142">-1</text>
+      <text class="ret" x="193" y="100">-1</text>
+    </svg>
+    <table class="trace">
+      <tr><th class="c">הצומת</th><th class="c">חזר משמאל</th><th class="c">חזר מימין</th><th class="c">מוחזר</th></tr>
+      <tr><td class="n">4</td><td class="n">-1</td><td class="n">-1</td><td class="n">0</td></tr>
+      <tr><td class="n">1</td><td class="n">-1</td><td class="n">-1</td><td class="n">0</td></tr>
+      <tr><td class="n">7</td><td class="n">0</td><td class="n">-1</td><td class="n">1</td></tr>
+      <tr><td class="n">9</td><td class="n">0</td><td class="n">1</td><td class="n">2</td></tr>
+      <tr><td class="n">8</td><td class="n">-1</td><td class="n">-1</td><td class="n">0</td></tr>
+      <tr><td class="n">2</td><td class="n">-1</td><td class="n">0</td><td class="n">1</td></tr>
+      <tr><td class="n">5</td><td class="n">2</td><td class="n">1</td><td class="n"><strong>3</strong></td></tr>
+    </table>
+  </div>
+</div>
+
+<h2>סיבוכיות זמן הריצה של פעולות על עץ</h2>
+<p>מסמנים ב־n את מספר הצמתים בעץ. הכלל מדף הרקורסיה נכון גם כאן: הסיבוכיות היא מספר הקריאות כפול העבודה שנעשית בכל קריאה. בעץ בן n צמתים יש n קריאות על צמתים ועוד n+1 קריאות על בנים חסרים, כלומר מספר הקריאות הוא <span class="big-o">O(n)</span>.</p>
+
+<table>
+  <tr><th>מה הפעולה עושה</th><th>סיבוכיות</th></tr>
+  <tr><td>מבקרת בכל צומת פעם אחת ועושה בו מספר קבוע של צעדים. כך גם סריקה לפי רמות בעזרת תור</td><td class="nw"><span class="big-o">O(n)</span></td></tr>
+  <tr><td>מזמנת בכל צומת פעולת עזר שסורקת את תת־העץ של אותו צומת</td><td class="nw"><span class="big-o">O(n²)</span> במקרה הגרוע</td></tr>
+  <tr><td>מזמנת בכל צומת של עץ אחד פעולת עזר שסורקת עץ אחר בן m צמתים</td><td class="nw"><span class="big-o">O(n·m)</span></td></tr>
+  <tr><td>יורדת במסלול אחד מהשורש, קריאה אחת בכל רמה</td><td class="nw">לפי גובה העץ. במקרה הגרוע <span class="big-o">O(n)</span></td></tr>
+</table>
+
+<div class="grid2">
+  <div>
+    <p><strong>דוגמה עם שני עצים:</strong> הפעולה <code>Shared</code> מחזירה כמה מהערכים של <code>t1</code> נמצאים גם ב־<code>t2</code>. עבור כל צומת של <code>t1</code> היא מזמנת את <code>Exists</code>, פעולה שבודקת אם ערך נמצא בעץ (הקוד שלה בדף הרקורסיה). כל זימון כזה סורק את <code>t2</code>.</p>
+<pre>public static int Shared(BinNode&lt;int&gt; t1,
+                         BinNode&lt;int&gt; t2)
+{
+    if (t1 == null) return 0;
+    int c = 0;
+    if (Exists(t2, t1.GetValue()))
+        c = 1;
+    return c + Shared(t1.GetLeft(), t2)
+             + Shared(t1.GetRight(), t2);
+}</pre>
+    <p class="small">התשובה <span class="big-o">O(n+m)</span> שגויה כאן, כי הסריקה של <code>t2</code> חוזרת עבור כל צומת של <code>t1</code>. כשנתון ששני העצים באותו גודל כותבים <span class="big-o">O(n²)</span>.</p>
+  </div>
+  <div>
+    <p><strong>צורת העץ במקרה הגרוע:</strong> עץ שבו לכל צומת חוץ מהעלה יש בן יחיד. הגובה שלו הוא n-1 והגדלים של תתי־העצים הם n, n-1, n-2 וכן הלאה עד 1. פעולת עזר שסורקת כל אחד מהם עושה בסך הכול כ־n²/2 צעדים.</p>
+    <p>עצירה מוקדמת בגלל <code>&amp;&amp;</code> או <code>||</code> חוסכת חלק מהקריאות הרקורסיביות אך אינה משנה את הסיבוכיות במקרה הגרוע.</p>
+    <div class="box">
+    <h3>איך מנסחים את התשובה לפעולה <code>Shared</code></h3>
+    <p>"נסמן ב־n את מספר הצמתים ב־<code>t1</code> וב־m את מספר הצמתים ב־<code>t2</code>. הפעולה מבקרת פעם אחת בכל צומת של <code>t1</code>. בכל ביקור היא מזמנת את <code>Exists</code>, שסורקת במקרה הגרוע את כל <code>t2</code> בזמן <span class="big-o">O(m)</span>. לכן סיבוכיות זמן הריצה היא <span class="big-o">O(n·m)</span>."</p>
+    </div>
+  </div>
+</div>
+
+<h2 class="exam">מה חוזר בשאלות העצים בבגרות</h2>
+
+<div class="box exam">
+  <ul>
+    <li><strong>הפעולה שכותבים בשאלת עצים קצרה בדרך כלל.</strong> הקושי הוא בבחירת הערך לעץ ריק ובטיפול בצומת שיש לו בן אחד.</li>
+    <li><strong>יש שאלות שבהן הקוד נתון.</strong> מבקשים בהן לעקוב אחרי הפעולה ולהסביר במילים מה היא עושה. יש בהן גם סעיפי חשיבה הפוכה, שמוסברים בהמשך הדף. בשאלות אחרות נדרשים סרטוט של עץ וכתיבת פעולה.</li>
+    <li><strong>יש שאלות שמגדירות סוג חדש של עץ ומביאות דוגמאות לעצים מהסוג הזה.</strong> שמות של סוגים כאלה: "עץ מספרים", "עץ טווחים מסודר", "עץ שאריות שוויוני", "עץ K־שמאלי". קוראים את ההגדרה מילה במילה ובודקים מה כל דוגמה מוסיפה. יש שאלות שבהן רק אחת מהדוגמאות מראה פרט שאינו ברור מההגדרה.</li>
+  </ul>
+</div>
+
+  <div class="box exam">
+    <h3>מסלול מהשורש לעלה</h3>
+    <p>בשאלות האלה יורדים בעץ ומעבירים לכל בן מידע על המסלול מהשורש עד אליו (דוגמה 5 בדף). לדוגמה:</p>
+    <ul>
+      <li>האם יש מסלול מהשורש לעלה שערכיו עולים. משווים כל צומת לבן שאליו יורדים.</li>
+      <li>מדפיסים לכל מסלול את המספר שהספרות שלו הן ערכי הצמתים במסלול. הפרמטר <code>num</code> הוא המספר שנצבר עד הצומת. בכל צומת מחשבים <code>num * 10 + t.GetValue()</code>.</li>
+      <li>האם יש מסלול מהשורש שהתווים שבצמתים שלו יוצרים מחרוזת נתונה. הפרמטר הוא החלק של המחרוזת שעוד לא נבדק.</li>
+      <li>האם בכל מסלול יש לכל היותר K קשתות שמאליות. קשת שמאלית היא ירידה לבן שמאלי. הפרמטר הוא מספר הקשתות השמאליות שעוד מותרות. מקטינים את הפרמטר רק בירידה שמאלה.</li>
+    </ul>
+    <p class="small">כשדי במסלול אחד שמקיים את התנאי, מחזירים <code>false</code> עבור עץ ריק ומחברים ב־<code>||</code>. כשהתנאי חל על כל המסלולים, מחזירים <code>true</code> עבור עץ ריק ומחברים ב־<code>&amp;&amp;</code>.</p>
+  </div>
+  <div class="box exam">
+    <h3>פעולה שמזמנת פעולת עזר בכל צומת</h3>
+    <p>פעולת העזר מחשבת משהו על עץ שלם. הפעולה הראשית עוברת על העץ ומזמנת את פעולת העזר על תת־העץ של כל צומת.</p>
+    <ul>
+      <li>בשאלת מעקב כתוב בדרך כלל שאין צורך לעקוב אחרי פעולת העזר (ראו בפרק המעקב).</li>
+      <li>פעולת העזר יכולה להחזיר 0 עבור העץ כולו וערך אחר עבור תת־עץ. לדוגמה: פעולת העזר מחזירה את מספר הצמתים בתת־העץ השמאלי פחות מספרם בימני. הפעולה הראשית בודקת שהתוצאה היא 0 בכל צומת. כשלשורש שני בנים ולכל אחד מהם רק בן שמאלי, מתקבל 0 עבור השורש (2 פחות 2) אבל 1 עבור כל בן. לכן הפעולה הראשית מחזירה <code>false</code>.</li>
+      <li>יש שאלות כתיבה שבהן פעולת העזר סורקת עץ שני ומבקשים גם את הסיבוכיות, שהיא <span class="big-o">O(n·m)</span>.</li>
+    </ul>
+  </div>
+
+<div class="grid2">
+  <div class="box exam">
+    <h3>סעיפי חשיבה הפוכה: מסרטטים עץ או כותבים זימון</h3>
+    <p>סעיפים אופייניים:</p>
+    <ul>
+      <li>מציאת הערך הגדול ביותר והערך הקטן ביותר שהפעולה מחזירה עבור עץ בן 6 צמתים.</li>
+      <li>הצגת עץ בן יותר מ־3 צמתים שעבורו הפעולה מחזירה תוצאה הפוכה מזו שהתקבלה במעקב.</li>
+      <li>כתיבת זימון שמחזיר ערך שונה מזה שהתקבל במעקב או זימון שמחזיר ערך נתון, כמו 50.</li>
+      <li>סרטוט עץ מהסוג החדש לפי דרישות הסעיף. לדוגמה: "עץ 1־שמאלי" בן 8 צמתים שיש בו לכל היותר 4 רמות.</li>
+    </ul>
+    <p>מתחילים מהמשפט שמתאר מה הפעולה עושה ושואלים איזה סוג צומת מגדיל את התוצאה ואיזה מקטין אותה. לדוגמה: בפעולה שבה צומת שיש לו רק בן ימני מוסיף 1 ועלה אינו מוסיף דבר, הערך הגדול ביותר לעץ בן 6 צמתים הוא 5 ולא 6, כי בכל עץ יש לפחות עלה אחד. העץ שנותן את הערך הזה הוא שרשרת של בנים ימניים.</p>
+    <p class="small">אחרי הסרטוט סופרים שוב את הצמתים ואת הרמות מול הדרישה ועוקבים אחרי הפעולה על העץ החדש.</p>
+  </div>
+  <div class="box exam">
+    <h3>"מה הפעולה מחזירה?": התשובה תלויה בסוג הצומת</h3>
+    <p>בודקים מה הפעולה מחזירה בכל אחד מהמקרים: עץ ריק, עלה, בן שמאלי בלבד, בן ימני בלבד, שני בנים. מהמקרים האלה מרכיבים משפט אחד. לדוגמה:</p>
+    <ul>
+      <li>כשהקוד אינו מזמן את <code>GetValue</code>, הערכים שבצמתים אינם משפיעים. תשובה אופיינית: מספר הצמתים שיש להם רק בן ימני פחות מספר הצמתים שיש להם רק בן שמאלי.</li>
+      <li>פעולה שמקבלת עץ ומספר x מחזירה את סכום הערכים של הצמתים שיש להם בן שערכו x. היא סוכמת את ערכי ההורים ולא את ערכי הצמתים שערכם x.</li>
+      <li>פעולה אחרת מחזירה 0 עבור עץ ריק ואת ערך הצומת עבור עלה. בכל צומת אחר היא מוסיפה את ערך הצומת לגדולה משתי התוצאות. התשובה היא הסכום הגדול ביותר של מסלול מהשורש לעלה. כשיש בעץ ערכים שליליים התשובה הזאת אינה מדויקת, כי ה־0 שחוזר מבן חסר משתתף בהשוואה ועשוי להיבחר.</li>
+    </ul>
+  </div>
+</div>
+
+<h2>טעויות נפוצות</h2>
+<p>כל שורה כאן מתארת טעות שתלמידים עושים ולא הנחיה.</p>
+
+<div class="grid2">
+  <div class="box warn">
+    <h3>בכתיבת פעולה</h3>
+    <ul>
+      <li>פונים ל־<code>t.GetLeft().GetValue()</code> בלי לבדוק קודם שהבן השמאלי קיים.</li>
+      <li>מטפלים בעץ ריק כאילו הוא עלה או שוכחים שלצומת יכול להיות בן אחד בלבד.</li>
+      <li>בודקים את התנאי בשורש בלבד ושוכחים לקרוא לפעולה על שני תתי־העצים.</li>
+      <li>מחברים ב־<code>||</code> כשהתנאי צריך להתקיים בכל הצמתים או ב־<code>&amp;&amp;</code> כשדי בצומת אחד.</li>
+      <li>מחזירים 0 עבור עץ ריק בפעולת מקסימום כשייתכנו בעץ ערכים שליליים.</li>
+      <li>מחפשים ערך רק בתת־עץ אחד. העץ אינו ממוין ולכן צריך לחפש בשניהם.</li>
+      <li>בפעולה שמוסיפה צמתים קוראים לה גם על הצומת שנוסף זה עתה ואז היא מוסיפה צמתים גם לו.</li>
+    </ul>
+  </div>
+  <div class="box warn">
+    <h3>במעקב, בהסבר ובסרטוט</h3>
+    <ul>
+      <li>מחשבים לפי הערכים שבצמתים גם כשהקוד אינו מזמן את <code>GetValue</code>.</li>
+      <li>מתבלבלים בין בן שמאלי יחיד ובין בן ימני יחיד. צריך לבדוק בסרטוט לאיזה צד הקו נוטה.</li>
+      <li>רושמים קריאות שלא התבצעו בגלל העצירה המוקדמת של <code>&amp;&amp;</code> או של <code>||</code>.</li>
+      <li>שוכחים את הקריאות על בנים חסרים. כשהפעולה מחזירה עבור עץ ריק ערך שאינו 0, הערך הזה משתתף בחישוב של ההורה.</li>
+      <li>מתבלבלים בין שני צמתים שיש להם אותו ערך.</li>
+      <li>מסרטטים עץ שאינו עומד בדרישות הסעיף, כמו מספר הצמתים או מספר הרמות.</li>
+      <li>בסיבוכיות שוכחים להגדיר את n או כותבים <span class="big-o">O(n)</span> לפעולה שמזמנת בכל צומת פעולת עזר שסורקת תת־עץ.</li>
+    </ul>
+  </div>
+</div>
+
+</main>
+</body>
+</html>
